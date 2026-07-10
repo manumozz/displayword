@@ -258,7 +258,7 @@ const DW_T = {
     cmp_offline:     "Works offline",
     cmp_theme:       "Light &amp; dark theme",
     cmp_updates:     "Free updates",
-    cmp_os:          "Windows 10 / 11",
+    cmp_os:          "Windows 10 / 11 · macOS",
 
     faq_title: "Frequently asked questions",
     faq1_q: "Is the free version really free?",
@@ -270,7 +270,7 @@ const DW_T = {
     faq4_q: "Can I upgrade from Church to Connect later?",
     faq4_a: "Yes. When you're ready, purchase a Connect or Team license — your songs, song books, and settings all carry over. You don't start from scratch.",
     faq5_q: "What operating systems are supported?",
-    faq5_a: "DisplayWord runs on Windows 10 and Windows 11. It requires .NET 6 (installed automatically if missing). Mac and Linux versions are not planned at this time.",
+    faq5_a: "DisplayWord runs on Windows 10, Windows 11, and macOS. It requires .NET 6 (installed automatically if missing). Linux support is not planned at this time.",
     faq6_q: "My church can't afford even $29. Is there help available?",
     faq6_a: "Yes. If your church is in a low-income country or has genuine financial need, reach out to us at <a href=\"mailto:hello@displayword.com\" style=\"color:var(--accent);\">hello@displayword.com</a>. We want DisplayWord to serve every church, regardless of resources.",
 
@@ -280,11 +280,11 @@ const DW_T = {
     pr_cta_btn2:  "See all features",
 
     // ── DOWNLOAD PAGE ─────────────────────────────────────────
-    dl_badge:       "🎵 Windows · Free",
+    dl_badge:       "🎵 Windows &amp; Mac · Free",
     dl_h1:          "Download<br /><span class=\"text-gold\">DisplayWord</span>",
-    dl_p:           "Worship presentation software for Christian churches — lyrics, chords, three screens, musician cues. Free forever for small congregations.",
+    dl_p:           "Worship presentation software for Christian churches — lyrics, chords, up to 4 screens, musician cues. Free forever for small congregations.",
     dl_edition:     "DisplayWord · Church Edition",
-    dl_platform:    "Windows 10 / 11 · .NET 6 · ~35 MB",
+    dl_platform:    "Windows 10 / 11 · macOS · .NET 6 · ~35 MB",
     dl_btn_text:    "Download DisplayWord Free",
     dl_coming_main: "<strong>The program is not yet available for download — the first release is coming soon.</strong><br />Subscribe below to be the first to know when it's ready.",
     dl_notify_h:    "Notify me when it's ready",
@@ -578,7 +578,7 @@ const DW_T = {
     cmp_offline:     "Работает без интернета",
     cmp_theme:       "Светлая и тёмная темы",
     cmp_updates:     "Бесплатные обновления",
-    cmp_os:          "Windows 10 / 11",
+    cmp_os:          "Windows 10 / 11 · macOS",
 
     faq_title: "Часто задаваемые вопросы",
     faq1_q: "Бесплатная версия действительно бесплатна?",
@@ -590,7 +590,7 @@ const DW_T = {
     faq4_q: "Можно ли перейти с Church на Connect позже?",
     faq4_a: "Да. Когда будете готовы, купите лицензию Connect или Team — ваши песни, песенники и настройки сохранятся. Начинать с нуля не придётся.",
     faq5_q: "Какие операционные системы поддерживаются?",
-    faq5_a: "DisplayWord работает на Windows 10 и Windows 11. Требуется .NET 6 (устанавливается автоматически при отсутствии). Версии для Mac и Linux не планируются.",
+    faq5_a: "DisplayWord работает на Windows 10, Windows 11 и macOS. Требуется .NET 6 (устанавливается автоматически при отсутствии). Поддержка Linux не планируется.",
     faq6_q: "Наша церковь не может позволить себе даже $29. Есть ли помощь?",
     faq6_a: "Да. Если ваша церковь находится в стране с низким доходом или имеет реальную финансовую потребность, напишите нам на <a href=\"mailto:hello@displayword.com\" style=\"color:var(--accent);\">hello@displayword.com</a>. Мы хотим, чтобы DisplayWord служил каждой церкви, независимо от ресурсов.",
 
@@ -600,11 +600,11 @@ const DW_T = {
     pr_cta_btn2:  "Все возможности",
 
     // ── DOWNLOAD PAGE ─────────────────────────────────────────
-    dl_badge:       "🎵 Windows · Бесплатно",
+    dl_badge:       "🎵 Windows &amp; Mac · Бесплатно",
     dl_h1:          "Скачать<br /><span class=\"text-gold\">DisplayWord</span>",
-    dl_p:           "Программа управления экранами для христианских церквей — тексты, аккорды, три экрана, сигналы для музыкантов. Бесплатно для небольших общин навсегда.",
+    dl_p:           "Программа управления экранами для христианских церквей — тексты, аккорды, до 4 экранов, сигналы для музыкантов. Бесплатно для небольших общин навсегда.",
     dl_edition:     "DisplayWord · версия Church",
-    dl_platform:    "Windows 10 / 11 · .NET 6 · ~35 МБ",
+    dl_platform:    "Windows 10 / 11 · macOS · .NET 6 · ~35 МБ",
     dl_btn_text:    "Скачать DisplayWord бесплатно",
     dl_coming_main: "<strong>Программа пока не доступна для скачивания — первый релиз выйдет скоро.</strong><br />Подпишитесь ниже чтобы узнать первыми, когда она будет готова.",
     dl_notify_h:    "Уведомить меня о готовности",

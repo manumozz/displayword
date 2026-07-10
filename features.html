@@ -71,6 +71,21 @@
 
     .cta-row { display: flex; gap: 16px; justify-content: center; padding: 80px 5%; flex-wrap: wrap; }
 
+    /* ── MULTI-DEVICE SCREENS MOCKUP ──────────────────────────── */
+    .screens-mockup { display: flex; gap: 14px; align-items: flex-end; width: 100%; }
+    .screen-col { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+    .mock-screen { background: #080f1c; border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; width: 100%; aspect-ratio: 16/9; }
+    .mock-label { font-size: clamp(0.55rem, 1.1vw, 0.78rem); color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; padding: 7px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+    .mock-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px 14px; gap: 8px; }
+    .chord-pair { width: 100%; text-align: center; }
+    .chord-row { display: flex; gap: 10px; justify-content: center; font-size: clamp(0.48rem, 0.95vw, 0.75rem); color: var(--gold); font-family: monospace; font-weight: 700; line-height: 1.3; margin-bottom: 2px; }
+    .lyric-row { font-size: clamp(0.55rem, 1.1vw, 0.9rem); color: #fff; font-weight: 600; line-height: 1.4; text-align: center; }
+    .hall-lyric { font-size: clamp(0.65rem, 1.4vw, 1.1rem); font-weight: 700; text-align: center; line-height: 1.6; color: #fff; }
+    .mock-preacher .mock-body { align-items: stretch; padding: 10px 16px; }
+    .preacher-verse { font-size: clamp(0.5rem, 1vw, 0.82rem); color: #fff; font-weight: 500; text-align: left; line-height: 1.6; }
+    .preacher-ref { font-size: clamp(0.52rem, 1vw, 0.84rem); color: var(--gold); font-weight: 700; text-align: right; margin-top: 6px; }
+    .screen-device-label { font-size: 0.76rem; color: var(--gray); text-align: center; margin-top: 10px; letter-spacing: 0.02em; }
+
     @media (max-width: 768px) {
       .feature-block { grid-template-columns: 1fr; gap: 40px; }
       .feature-block.reverse .feat-visual { order: 0; }
@@ -102,38 +117,56 @@
   <p data-i18n="feat_p">DisplayWord is designed around how real services run — built by someone who has sat at the operator console himself.</p>
 </section>
 
-<!-- FEATURE 1: THREE SCREENS -->
-<div style="border-top: 1px solid rgba(255,255,255,0.06);">
-  <div class="feature-block">
-    <div class="feat-text">
-      <div class="feat-label" data-i18n="f_sc_label">Three Screens</div>
-      <h2 class="feat-title" data-i18n="f_sc_title">One operator.<br />Three independent displays.</h2>
-      <p class="feat-desc" data-i18n="f_sc_desc">The Hall, Stage, and Preacher screens each show exactly what they should — simultaneously. Your congregation sees clean lyrics. Musicians see chords. The preacher sees what's coming next.</p>
-      <ul class="feat-list">
-        <li data-i18n="f_sc_l1">Hall screen: lyrics for the congregation</li>
-        <li data-i18n="f_sc_l2">Stage screen: chords, musician cues, key info</li>
-        <li data-i18n="f_sc_l3">Preacher screen: coming slide, verse reference</li>
-        <li data-i18n="f_sc_l4">Blackout button — removes all screens instantly</li>
-        <li data-i18n="f_sc_l5">Works with any combination of monitors &amp; projectors</li>
-      </ul>
-    </div>
-    <div class="feat-visual">
-      <div class="screens-diagram">
-        <div class="sd-screen">
-          <div class="sd-label" data-i18n="sd_stage">Stage</div>
-          <div class="sd-chord">Am — F — C — G</div>
-          <div class="sd-lyric">Amazing grace<br />how sweet</div>
-          <div class="sd-cue">A CAPPELLA</div>
+<!-- FEATURE 1: MULTI-DEVICE SCREENS -->
+<div style="border-top: 1px solid rgba(255,255,255,0.06); padding: 72px 5% 60px;">
+  <div style="max-width: 760px; margin: 0 auto 56px; text-align: center;">
+    <div class="feat-label" data-i18n="f_sc_label">Multi-Device Control</div>
+    <h2 class="feat-title" style="text-align:center;" data-i18n="f_sc_title">Worship leader, preacher, operator —<br />each controls their own screen.</h2>
+    <p class="feat-desc" style="text-align:center; max-width:640px; margin:0 auto 20px;" data-i18n="f_sc_desc">The worship leader manages the Stage screen from their tablet — chords and cues for musicians. The preacher controls their own display. The operator runs the Hall from the computer. Three roles, three devices, all connected over Wi-Fi.</p>
+    <ul class="feat-list" style="display:inline-block; text-align:left; max-width:540px;">
+      <li data-i18n="f_sc_l1">Stage screen — worship leader's tablet: chords &amp; cues for musicians</li>
+      <li data-i18n="f_sc_l2">Preacher screen — speaker's tablet: their personal display</li>
+      <li data-i18n="f_sc_l3">Hall screen — operator's computer: lyrics for the congregation</li>
+      <li data-i18n="f_sc_l4">All connected over Wi-Fi — no extra cables between roles</li>
+      <li data-i18n="f_sc_l5">Works with any combination of monitors &amp; projectors</li>
+    </ul>
+  </div>
+  <div style="display:flex; justify-content:center;">
+    <div class="screens-mockup">
+      <div class="screen-col">
+        <div class="mock-screen mock-stage">
+          <div class="mock-label" data-i18n="scr_stage">Stage Screen</div>
+          <div class="mock-body">
+            <div class="chord-pair">
+              <div class="chord-row"><span>C</span><span>C7</span><span>F</span><span>C</span></div>
+              <div class="lyric-row">Amazing grace, how sweet the sound</div>
+            </div>
+            <div class="chord-pair">
+              <div class="chord-row"><span>Am</span><span>D9</span><span>G9sus4</span><span>G7</span></div>
+              <div class="lyric-row">that saved a wretch like me</div>
+            </div>
+          </div>
         </div>
-        <div class="sd-screen main">
-          <div class="sd-label" data-i18n="sd_hall">Hall</div>
-          <div class="sd-lyric" style="font-size:1rem;">Amazing grace,<br />how sweet the sound<br />that saved a wretch like me</div>
+        <div class="screen-device-label" data-i18n="dev_screen_stage">Worship leader's tablet</div>
+      </div>
+      <div class="screen-col">
+        <div class="mock-screen mock-hall">
+          <div class="mock-label" data-i18n="scr_hall">Hall Screen</div>
+          <div class="mock-body">
+            <div class="hall-lyric">Amazing grace,<br>how sweet the sound<br>that saved a wretch like me</div>
+          </div>
         </div>
-        <div class="sd-screen">
-          <div class="sd-label" data-i18n="sd_preacher">Preacher</div>
-          <div class="sd-lyric">Romans 5:8</div>
-          <div class="sd-next" data-i18n="scr_next">Next: Verse 2</div>
+        <div class="screen-device-label" data-i18n="dev_screen_hall">Operator's computer</div>
+      </div>
+      <div class="screen-col">
+        <div class="mock-screen mock-preacher">
+          <div class="mock-label" data-i18n="scr_preacher">Preacher Screen</div>
+          <div class="mock-body">
+            <div class="preacher-verse">But God demonstrates his own love for us: While we were still sinners, Christ died for us.</div>
+            <div class="preacher-ref">Romans 5:8</div>
+          </div>
         </div>
+        <div class="screen-device-label" data-i18n="dev_screen_preacher">Preacher's tablet</div>
       </div>
     </div>
   </div>

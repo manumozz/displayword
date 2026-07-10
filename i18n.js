@@ -32,7 +32,7 @@ const DW_T = {
     // ── HOME · HERO ───────────────────────────────────────────
     home_badge: "🎵 For churches · Coming soon",
     home_h1:    "The Living Word<br /><span class=\"text-gold\">on Every Screen</span>",
-    home_p:     "Control your church's screens from multiple devices simultaneously: worship leader's tablet, speaker's tablet, and the operator's computer.<br />Display lyrics, chords, Bible verses, media, and messages on screens.",
+    home_p:     "Control your church's screens from multiple devices simultaneously:<br />worship leader's tablet, speaker's tablet, and the operator's computer.<br />Display lyrics, chords, Bible verses, media, and messages on screens.",
     home_dl:    "⬇ Download Free",
     home_price: "View Pricing",
 
@@ -355,7 +355,7 @@ const DW_T = {
     // ── HOME · HERO ───────────────────────────────────────────
     home_badge: "🎵 Для церквей · Скоро",
     home_h1:    "Живое слово<br /><span class=\"text-gold\">на каждый экран</span>",
-    home_p:     "Управление экранами общины с нескольких устройств одновременно: с планшета лидера поклонения, спикера, с компьютера оператора.<br />Вывод текстов, аккордов, стихов Библии, медиафайлов, сообщений.",
+    home_p:     "Управление экранами общины с нескольких устройств одновременно:<br />с планшета лидера поклонения, спикера, с компьютера оператора.<br />Вывод текстов, аккордов, стихов Библии, медиафайлов, сообщений.",
     home_dl:    "⬇ Скачать бесплатно",
     home_price: "Тарифы",
 

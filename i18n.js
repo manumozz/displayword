@@ -31,7 +31,7 @@ const DW_T = {
 
     // ── HOME · HERO ───────────────────────────────────────────
     home_badge: "🎵 For churches · Coming soon",
-    home_h1:    "Your Worship Service,<br /><span class=\"text-gold\">Beautifully Displayed</span>",
+    home_h1:    "The Living Word —<br /><span class=\"text-gold\">on Every Screen</span>",
     home_p:     "Control your congregation's screens from multiple devices simultaneously — worship leader's tablet, speaker's tablet, or the operator's computer. Display lyrics, chords, Bible verses, media, and messages.",
     home_dl:    "⬇ Download Free",
     home_price: "View Pricing",

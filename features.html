@@ -91,10 +91,6 @@
     </ul>
   </div>
   <div class="nav-right">
-    <div class="lang-toggle">
-      <button class="lang-btn" data-lang="en" onclick="dwSwitch('en')">EN</button>
-      <button class="lang-btn" data-lang="ru" onclick="dwSwitch('ru')">RU</button>
-    </div>
     <a href="/download" class="btn btn-gold" data-i18n="nav_btn">Download Free</a>
   </div>
 </nav>
@@ -345,6 +341,19 @@
       <div class="footer-col">
         <h4 data-i18n="footer_contact">Contact</h4>
         <a href="mailto:hello@displayword.com">hello@displayword.com</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_lang">Language</h4>
+        <div class="lang-drop">
+          <button class="lang-drop-btn" id="dwLangBtn" onclick="dwToggleLang()">
+            <span id="dwLangLabel">🌐 English</span>
+            <svg viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
+          </button>
+          <div class="lang-menu" id="dwLangMenu">
+            <button class="lang-menu-item" data-lang="en" onclick="dwSwitch('en')"><span class="lang-code">EN</span> English</button>
+            <button class="lang-menu-item" data-lang="ru" onclick="dwSwitch('ru')"><span class="lang-code">RU</span> Русский</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

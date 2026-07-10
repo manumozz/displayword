@@ -14,6 +14,7 @@ const DW_T = {
     footer_product:  "Product",
     footer_editions: "Editions",
     footer_contact:  "Contact",
+    footer_lang:     "Language",
     footer_copy:     "© 2026 DisplayWord. Free worship presentation software.",
     footer_ed1: "DisplayWord Church",
     footer_ed2: "DisplayWord Connect",
@@ -294,12 +295,12 @@ const DW_T = {
     dl_email_ph:    "your@church.com",
 
     req_title:      "System requirements",
-    req_os_label:   "Operating System",   req_os_value:   "Windows 10 or 11",     req_os_sub:   "64-bit recommended",
-    req_fw_label:   "Framework",          req_fw_value:   ".NET 6 Runtime",        req_fw_sub:   "Installed automatically if missing",
-    req_disk_label: "Disk Space",         req_disk_value: "~200 MB",               req_disk_sub: "Plus space for your song library",
-    req_disp_label: "Display",            req_disp_value: "1 monitor minimum",     req_disp_sub: "2–3 monitors for full setup",
-    req_ram_label:  "RAM",                req_ram_value:  "2 GB RAM",              req_ram_sub:  "4 GB+ recommended for video backgrounds",
-    req_net_label:  "Internet",           req_net_value:  "Not required",          req_net_sub:  "Runs fully offline during services",
+    req_os_label:   "Operating System",   req_os_value:   "Windows 10 / 11 or macOS",  req_os_sub:   "64-bit",
+    req_fw_label:   "Framework",          req_fw_value:   ".NET 6 Runtime",             req_fw_sub:   "Installed automatically if missing",
+    req_disk_label: "Disk Space",         req_disk_value: "~200 MB",                    req_disk_sub: "Plus space for your song library",
+    req_disp_label: "Display",            req_disp_value: "1–4 monitors",               req_disp_sub: "Hall · Stage · Speaker · operator console",
+    req_ram_label:  "RAM",                req_ram_value:  "2 GB RAM",                   req_ram_sub:  "4 GB+ recommended for video backgrounds",
+    req_net_label:  "Internet",           req_net_value:  "Not required",               req_net_sub:  "Runs fully offline during services",
 
     v1_title: "What's in v1.0",
     v1_l1:  "Hall, Stage, and Preacher screens",
@@ -333,6 +334,7 @@ const DW_T = {
     footer_product:  "Продукт",
     footer_editions: "Версии",
     footer_contact:  "Контакты",
+    footer_lang:     "Язык",
     footer_copy:     "© 2026 DisplayWord. Бесплатная программа для богослужений.",
     footer_ed1: "DisplayWord Church",
     footer_ed2: "DisplayWord Connect",
@@ -613,12 +615,12 @@ const DW_T = {
     dl_email_ph:    "ваш@email.com",
 
     req_title:      "Системные требования",
-    req_os_label:   "Операционная система", req_os_value:   "Windows 10 или 11",  req_os_sub:   "64-bit рекомендуется",
-    req_fw_label:   "Среда выполнения",      req_fw_value:   ".NET 6 Runtime",     req_fw_sub:   "Устанавливается автоматически при отсутствии",
-    req_disk_label: "Диск",                  req_disk_value: "~200 МБ",             req_disk_sub: "Плюс место для библиотеки песен",
-    req_disp_label: "Дисплей",               req_disp_value: "Минимум 1 монитор",  req_disp_sub: "2–3 монитора для полного комплекта",
-    req_ram_label:  "RAM",                   req_ram_value:  "2 ГБ RAM",            req_ram_sub:  "4 ГБ+ рекомендуется для видеофонов",
-    req_net_label:  "Интернет",              req_net_value:  "Не требуется",        req_net_sub:  "Полностью офлайн во время служений",
+    req_os_label:   "Операционная система", req_os_value:   "Windows 10 / 11 или macOS",  req_os_sub:   "64-bit",
+    req_fw_label:   "Среда выполнения",      req_fw_value:   ".NET 6 Runtime",              req_fw_sub:   "Устанавливается автоматически при отсутствии",
+    req_disk_label: "Диск",                  req_disk_value: "~200 МБ",                     req_disk_sub: "Плюс место для библиотеки песен",
+    req_disp_label: "Дисплей",               req_disp_value: "1–4 монитора",                req_disp_sub: "Зал · Сцена · Спикер · пульт оператора",
+    req_ram_label:  "RAM",                   req_ram_value:  "2 ГБ RAM",                    req_ram_sub:  "4 ГБ+ рекомендуется для видеофонов",
+    req_net_label:  "Интернет",              req_net_value:  "Не требуется",                req_net_sub:  "Полностью офлайн во время служений",
 
     v1_title: "Что включено в v1.0",
     v1_l1:  "Экраны Зала, Сцены и Проповедника",
@@ -642,6 +644,8 @@ const DW_T = {
 };
 
 /* ── Engine ──────────────────────────────────────────────── */
+const DW_LANG_NAMES = { en: '🌐 English', ru: '🌐 Русский', es: '🌐 Español', pt: '🌐 Português', de: '🌐 Deutsch', zh: '🌐 中文' };
+
 function dwApply(lang) {
   const t = DW_T[lang]; if (!t) return;
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -650,13 +654,39 @@ function dwApply(lang) {
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     const v = t[el.dataset.i18nPh]; if (v !== undefined) el.placeholder = v;
   });
-  document.querySelectorAll('.lang-btn').forEach(b =>
+  const label = document.getElementById('dwLangLabel');
+  if (label) label.textContent = DW_LANG_NAMES[lang] || ('🌐 ' + lang.toUpperCase());
+  document.querySelectorAll('.lang-menu-item').forEach(b =>
     b.classList.toggle('lang-active', b.dataset.lang === lang)
   );
   document.documentElement.lang = lang;
   localStorage.setItem('dw_lang', lang);
 }
-function dwSwitch(lang) { dwApply(lang); }
+
+function dwSwitch(lang) {
+  dwApply(lang);
+  const btn  = document.getElementById('dwLangBtn');
+  const menu = document.getElementById('dwLangMenu');
+  if (btn)  btn.classList.remove('open');
+  if (menu) menu.classList.remove('open');
+}
+
+function dwToggleLang() {
+  const btn  = document.getElementById('dwLangBtn');
+  const menu = document.getElementById('dwLangMenu');
+  if (!btn || !menu) return;
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.lang-drop')) {
+    const btn  = document.getElementById('dwLangBtn');
+    const menu = document.getElementById('dwLangMenu');
+    if (btn)  btn.classList.remove('open');
+    if (menu) menu.classList.remove('open');
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   const saved   = localStorage.getItem('dw_lang');

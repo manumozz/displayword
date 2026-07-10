@@ -24,13 +24,19 @@
     .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
 
     .screens-section { padding: 0 5% 80px; display: flex; justify-content: center; }
-    .screens-mockup { display: flex; gap: 12px; align-items: flex-end; max-width: 820px; width: 100%; }
-    .screen { border-radius: 10px; background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; padding: 20px 14px; flex: 1; }
-    .screen-main { flex: 2; padding: 30px 20px; }
-    .screen-label { font-size: 0.68rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
-    .screen-lyric { font-size: clamp(0.75rem, 2vw, 1rem); font-weight: 600; text-align: center; line-height: 1.5; }
-    .screen-chord { font-size: 0.75rem; color: var(--gold); font-weight: 600; font-family: monospace; }
-    .screen-signal { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); border-radius: 8px; padding: 8px 14px; font-size: 0.75rem; font-weight: 700; color: #f87171; }
+    .screens-mockup { display: flex; gap: 10px; align-items: flex-end; max-width: 960px; width: 100%; }
+    .mock-screen { background: #080f1c; border: 1px solid rgba(255,255,255,0.13); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    .mock-stage, .mock-preacher { flex: 1; aspect-ratio: 16/9; }
+    .mock-hall { flex: 1.7; aspect-ratio: 16/9; }
+    .mock-label { font-size: 0.52rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 9px; border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+    .mock-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 8px 12px; gap: 8px; }
+    .mock-stage .mock-body { align-items: flex-start; gap: 6px; }
+    .chord-pair { width: 100%; }
+    .chord-row { display: flex; gap: 10px; font-size: 0.58rem; color: var(--gold); font-family: monospace; font-weight: 700; line-height: 1.3; }
+    .lyric-row { font-size: 0.72rem; color: #fff; font-weight: 600; line-height: 1.35; }
+    .hall-lyric { font-size: clamp(0.9rem, 2.2vw, 1.25rem); font-weight: 700; text-align: center; line-height: 1.65; color: #fff; }
+    .preacher-verse { font-size: 0.63rem; color: #fff; font-weight: 500; text-align: center; line-height: 1.55; }
+    .preacher-ref { font-size: 0.65rem; color: var(--gold); font-weight: 700; text-align: center; margin-top: 4px; }
 
     .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
     .feature-icon { width: 48px; height: 48px; background: rgba(74,144,226,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px; }
@@ -113,20 +119,34 @@
 <!-- SCREENS MOCKUP -->
 <section class="screens-section">
   <div class="screens-mockup">
-    <div class="screen">
-      <div class="screen-label" data-i18n="scr_stage">Stage Screen</div>
-      <div class="screen-chord">Am — F — C — G</div>
-      <div class="screen-lyric">Amazing grace<br />how sweet the sound</div>
-      <div class="screen-signal">A CAPPELLA</div>
+    <!-- Stage screen -->
+    <div class="mock-screen mock-stage">
+      <div class="mock-label" data-i18n="scr_stage">Stage Screen</div>
+      <div class="mock-body">
+        <div class="chord-pair">
+          <div class="chord-row"><span>C</span><span>C7</span><span>F</span><span>C</span></div>
+          <div class="lyric-row">Amazing grace, how sweet the sound</div>
+        </div>
+        <div class="chord-pair">
+          <div class="chord-row"><span>Am</span><span>D9</span><span>G9sus4</span><span>G7</span></div>
+          <div class="lyric-row">that saved a wretch like me</div>
+        </div>
+      </div>
     </div>
-    <div class="screen screen-main">
-      <div class="screen-label" data-i18n="scr_hall">Hall Screen</div>
-      <div class="screen-lyric" style="font-size:1.2rem;">Amazing grace,<br />how sweet the sound<br />that saved a wretch like me</div>
+    <!-- Hall screen -->
+    <div class="mock-screen mock-hall">
+      <div class="mock-label" data-i18n="scr_hall">Hall Screen</div>
+      <div class="mock-body">
+        <div class="hall-lyric">Amazing grace,<br>how sweet the sound<br>that saved a wretch like me</div>
+      </div>
     </div>
-    <div class="screen">
-      <div class="screen-label" data-i18n="scr_preacher">Preacher Screen</div>
-      <div class="screen-lyric">Romans 5:8</div>
-      <div class="screen-chord" style="color:var(--gray); font-size:0.7rem; font-family:inherit;" data-i18n="scr_next">Next: Verse 2</div>
+    <!-- Preacher screen -->
+    <div class="mock-screen mock-preacher">
+      <div class="mock-label" data-i18n="scr_preacher">Preacher Screen</div>
+      <div class="mock-body">
+        <div class="preacher-verse">But God demonstrates his own love for us: While we were still sinners, Christ died for us.</div>
+        <div class="preacher-ref">Romans 5:8</div>
+      </div>
     </div>
   </div>
 </section>

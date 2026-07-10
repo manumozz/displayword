@@ -30,9 +30,9 @@ const DW_T = {
     full_price_link:"Full pricing details &amp; comparison →",
 
     // ── HOME · HERO ───────────────────────────────────────────
-    home_badge: "🎵 Free for churches · Coming soon",
+    home_badge: "🎵 For churches · Coming soon",
     home_h1:    "Your Worship Service,<br /><span class=\"text-gold\">Beautifully Displayed</span>",
-    home_p:     "A free presentation console for Christian worship services — lyrics, chords, multiple screens, and instant cues for your musicians. All from one operator.",
+    home_p:     "Control your congregation's screens from multiple devices simultaneously — worship leader's tablet, speaker's tablet, or the operator's computer. Display lyrics, chords, Bible verses, media, and messages.",
     home_dl:    "⬇ Download Free",
     home_price: "View Pricing",
 
@@ -350,9 +350,9 @@ const DW_T = {
     full_price_link:"Полное сравнение тарифов →",
 
     // ── HOME · HERO ───────────────────────────────────────────
-    home_badge: "🎵 Бесплатно для церквей · Скоро",
+    home_badge: "🎵 Для церквей · Скоро",
     home_h1:    "Живое слово —<br /><span class=\"text-gold\">на каждый экран общины</span>",
-    home_p:     "Бесплатный пульт управления экранами для богослужений — тексты, аккорды, несколько экранов и мгновенные сигналы для музыкантов. Всё от одного оператора.",
+    home_p:     "Управление экранами общины с нескольких устройств одновременно: с планшета лидера поклонения, спикера, с компьютера оператора. Вывод текстов, аккордов, стихов Библии, медиафайлов, сообщений.",
     home_dl:    "⬇ Скачать бесплатно",
     home_price: "Тарифы",
 

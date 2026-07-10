@@ -37,7 +37,25 @@ nav {
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 .nav-left  { display: flex; align-items: center; gap: 40px; }
-.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+
+/* ── LANG TOGGLE ─────────────────────────────── */
+.lang-toggle {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; overflow: hidden;
+}
+.lang-btn {
+  background: none; border: none;
+  padding: 5px 10px;
+  font-size: 0.76rem; font-weight: 700;
+  color: var(--gray); cursor: pointer;
+  font-family: inherit; letter-spacing: 0.04em;
+  transition: color 0.2s, background 0.2s;
+}
+.lang-btn.lang-active { background: rgba(255,255,255,0.12); color: var(--white); }
+.lang-btn:hover:not(.lang-active) { color: var(--white); }
 
 .logo { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; color: var(--white); }
 .logo span { color: var(--gold); }

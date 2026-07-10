@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features — DisplayWord Worship Software</title>
+  <meta name="description" content="Three screens, chord sheets, live modulation, special musician cues, media backgrounds, and more. See everything DisplayWord can do for your worship team." />
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFI0lEQVR4AbxWXWxURRT+5i4r3e2y2wrlpy0CbWkg/TFtQ7TVahRJI8YHoy+g8QE1MTw0aDXqg4kJ+qBCTCBgUDQ+GI0m6psRE2oMCCagVVLTpn82hUpbS+h2+78/4/nm3ru7/bUiy2TOnTNnvnO+c2fOnV0Ly2y5uUWhYH7lnlB++Yeh/IqLoYLy4VBBRcwW0WmTtaBgiF1mWPxrAqsKtpWG8ss/SvizryqlP4NSz0KhBlCrAXhsEZ02WSOGWPrQV9aX7IsnUFjrCxVUHrLgbYVS+wD4RJbbffSxxJcxILGwSFswgWDh9q3BxNgFQDeJn1fkRrv46ibGYsyFgsxLILRhe7XSnnNKoWwhhxuxMRZjMvZc/1kJmCwtzylArcFNbxJTYhuOtNipBHhOiRXfICPkcJokQQ5yOZZkAiE9fpBb5dgzNpCDXC6BScD+XHSja8z8qBttTtj3gKVXvCKkUrHyvDXd63DCypUbDkrtIW9R3jS+3t+dlK9E/2RfLxp3DmFNIEaIkfWhqMEce7LPzN3HCo/GF8/34EsRr+iunePxp/qMz/pglFOQM1e4rbgvsBvOJePzJlCzeQLVmyZw58YJVN0xgQe2RdDUMIgfXu7A/aURgQKDYS82rp7BI5VhrE5LrFrwdxeN4y6Rmk3jBssHk99dEUbh7TMYHE1utI/clkLiQYLS5Xx3Nopfq0DRqxXYcXAbjjXnIZAVx4mn+8Bd0gL+qTMAKSjUFo/JzO73bk3p9Wk6McSeFR/62miA3FKEqgpLtKGIF+98tx5HT6+F77YEXtw1aNAMRqWuOPWm6aT1palkah3M2a4AXdJEVVlQenOaZVH1xI95mI4pPFQWAc/XDVbn7EBQdojH1vP3SnQNrURFwSRy/HETr65kDFo07poMqS7cFqBysIw2Pm2hc3AlWCf5OVEMSB2QaEveDDZIUdYKiUeinekIgLtjiX6P2Li2Zc0MusQ37fwdRpUjMPyHpgzWfsIQ0VAru+Bu/xk5Zwrt9VsjyRphUrTNFUlAj8w1LjT3y/mXrJ3CVFShf8RrIMljKBkHE4jFFVjAP3dngzrroE7WCHax1FOiRyxo1ZsyLK49d98wsrwap9tWISpERBqihEJD2Sg2yza3XPZhbNpjhHphbhQPl4dNMsTSZ5YIN3egZZZxziTXH8MLUvkHRPj2732/LomITHlwSUiDPrvYeP7uorvlgawEfhMME3PXUqNusTSs5pTB1niZtL/Ziva3WtHyRhsO7BrCxIyF/Z9uQudQlg1yni4Rp+n6QskQky7ktjyTY9+KcVJEztcyb9Ta75OKz0LnQBbOybfLO2Dnu6Vm+4lLl+b2Vcbnwp9+eVN/cun3y35c7PWbNWKSCyllktzW9es9YWj9Oe3d8g0/erQE6bL3gy04dGodBlJXKKFJaenzG/wT7xcjLvXgLsREf/x4sVljMq49OQonuS0aEir2tozOr4Rome9Rh9P+OY70t3cA6ghuWVNHbE7YCZA3rLJf1xp/UM+kkINcLoc5AjO5cn4SVuwx+Ss+bOYZeehhw0EuJ34qATGMXmnrRCLekJkkhFxiGw7hcvusBGgMX237Vat4HbeK85shjMWYjD033rwECGCWo1ZgB6AOA/g/X4f4qsOMxZgSa15fMAGDknMK9196KYFoudwTH4vNXFYyLqdP0oe+jAGJtZjT4gk4Hvxcwn+1PmNNjG/QWu2VwCeh8YvUyTWB8EdARF8zNq1PEkMsfegrmCX7PwAAAP//TN0GuwAAAAZJREFUAwD3/hixLPQA6QAAAABJRU5ErkJggg==" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 140px 5% 80px;
+      text-align: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 65%);
+    }
+    .page-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800; letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+    .page-hero p { font-size: 1.1rem; color: var(--gray); max-width: 580px; margin: 0 auto; }
+
+    /* ── FEATURE BLOCK (alternating) ── */
+    .feature-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+      padding: 80px 5%;
+      max-width: 1080px; margin: 0 auto;
+    }
+    .feature-block.reverse .feat-visual { order: -1; }
+    .feat-label { font-size: 0.78rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+    .feat-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; line-height: 1.2; }
+    .feat-desc  { font-size: 0.95rem; color: var(--gray); line-height: 1.75; margin-bottom: 20px; }
+    .feat-list  { list-style: none; }
+    .feat-list li { font-size: 0.9rem; color: var(--gray); padding: 6px 0; display: flex; gap: 10px; align-items: flex-start; }
+    .feat-list li::before { content: "✓"; color: var(--green); flex-shrink: 0; font-weight: 700; }
+
+    /* ── SCREEN DIAGRAM ── */
+    .screens-diagram {
+      display: flex; gap: 8px; align-items: flex-end;
+    }
+    .sd-screen {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 16px 12px;
+      flex: 1;
+      display: flex; flex-direction: column; gap: 6px; align-items: center;
+    }
+    .sd-screen.main { flex: 1.6; }
+    .sd-label { font-size: 0.65rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
+    .sd-lyric { font-size: 0.85rem; font-weight: 600; text-align: center; line-height: 1.45; }
+    .sd-chord { font-size: 0.75rem; color: var(--gold); font-weight: 600; font-family: monospace; }
+    .sd-cue   { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); border-radius: 6px; padding: 5px 10px; font-size: 0.68rem; font-weight: 700; color: #f87171; }
+    .sd-next  { font-size: 0.68rem; color: var(--gray); }
+
+    /* ── CHORD VISUAL ── */
+    .chord-visual {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 24px;
+    }
+    .chord-line { display: flex; align-items: flex-end; gap: 0; margin-bottom: 4px; }
+    .chord-badge {
+      background: rgba(240,165,0,0.15);
+      border: 1px solid rgba(240,165,0,0.3);
+      border-radius: 6px; padding: 3px 10px;
+      font-size: 0.8rem; font-weight: 700; color: var(--gold);
+      font-family: monospace; margin-right: 8px;
+    }
+    .chord-text { font-size: 0.95rem; color: var(--white); line-height: 1.8; }
+    .modulation-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 20px; padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .mod-label { font-size: 0.78rem; color: var(--gray); }
+    .mod-key {
+      background: var(--blue); border: 1px solid var(--accent);
+      border-radius: 8px; padding: 6px 16px;
+      font-size: 0.9rem; font-weight: 700; color: var(--white);
+    }
+    .mod-btn {
+      width: 30px; height: 30px; border-radius: 6px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: var(--gray); font-weight: 700;
+    }
+
+    /* ── SPECIAL BLOCKS VISUAL ── */
+    .cue-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .cue-btn {
+      border-radius: 8px; padding: 12px 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      font-size: 0.75rem; font-weight: 700; text-align: center;
+    }
+    .cue-icon { font-size: 1.4rem; }
+    .cue-red    { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.35); color: #f87171; }
+    .cue-amber  { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.35); color: #fbbf24; }
+    .cue-blue   { background: rgba(74,144,226,0.15); border: 1px solid rgba(74,144,226,0.35); color: #60a5fa; }
+    .cue-purple { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.35); color: #a78bfa; }
+    .cue-green  { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.35); color: #4ade80; }
+    .cue-teal   { background: rgba(20,184,166,0.15); border: 1px solid rgba(20,184,166,0.35); color: #2dd4bf; }
+
+    /* ── LIBRARY VISUAL ── */
+    .library-visual {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; overflow: hidden;
+    }
+    .lib-header {
+      background: rgba(255,255,255,0.04);
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .lib-header span { font-size: 0.82rem; font-weight: 600; }
+    .lib-search {
+      padding: 10px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .lib-search input {
+      width: 100%; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px; padding: 7px 12px;
+      color: var(--gray); font-size: 0.82rem;
+      font-family: inherit; outline: none;
+    }
+    .lib-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.85rem;
+    }
+    .lib-row:last-child { border-bottom: none; }
+    .lib-row.selected { background: rgba(74,144,226,0.1); }
+    .lib-key { font-size: 0.75rem; color: var(--gold); font-family: monospace; font-weight: 600; }
+
+    /* ── CONNECT SECTION ── */
+    .connect-section {
+      background: linear-gradient(135deg, rgba(26,58,107,0.4) 0%, rgba(15,27,45,0) 100%);
+      border: 1px solid rgba(74,144,226,0.2);
+      border-radius: 16px;
+      padding: 50px;
+      text-align: center;
+      margin: 0 5%;
+    }
+    .connect-badge { display: inline-block; background: rgba(74,144,226,0.15); color: var(--accent); border: 1px solid rgba(74,144,226,0.3); font-size: 0.78rem; font-weight: 600; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .connect-devices { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 36px; }
+    .device-card {
+      background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+      padding: 24px 28px; text-align: center; min-width: 160px;
+    }
+    .device-icon { font-size: 2rem; margin-bottom: 10px; }
+    .device-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+    .device-desc { font-size: 0.8rem; color: var(--gray); }
+
+    /* ── CTA ROW ── */
+    .cta-row {
+      display: flex; gap: 16px; justify-content: center;
+      padding: 80px 5%;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .feature-block { grid-template-columns: 1fr; gap: 40px; }
+      .feature-block.reverse .feat-visual { order: 0; }
+      .connect-section { padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <a href="/" class="logo">Display<span>Word</span></a>
+    <ul class="nav-links">
+      <li><a href="/features" class="active">Features</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/download">Download</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <a href="/download" class="btn btn-gold">Download Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="badge badge-blue">Features</div>
+  <h1>Everything your worship<br />team actually needs</h1>
+  <p>DisplayWord is designed around how real services run — built by someone who has sat at the operator console himself.</p>
+</section>
+
+<!-- FEATURE 1: THREE SCREENS -->
+<div style="border-top: 1px solid rgba(255,255,255,0.06);">
+  <div class="feature-block">
+    <div class="feat-text">
+      <div class="feat-label">Three Screens</div>
+      <h2 class="feat-title">One operator.<br />Three independent displays.</h2>
+      <p class="feat-desc">The Hall, Stage, and Preacher screens each show exactly what they should — simultaneously. Your congregation sees clean lyrics. Musicians see chords. The preacher sees what's coming next.</p>
+      <ul class="feat-list">
+        <li>Hall screen: lyrics for the congregation</li>
+        <li>Stage screen: chords, musician cues, key info</li>
+        <li>Preacher screen: coming slide, verse reference</li>
+        <li>Blackout button — removes all screens instantly</li>
+        <li>Works with any combination of monitors &amp; projectors</li>
+      </ul>
+    </div>
+    <div class="feat-visual">
+      <div class="screens-diagram">
+        <div class="sd-screen">
+          <div class="sd-label">Stage</div>
+          <div class="sd-chord">Am — F — C — G</div>
+          <div class="sd-lyric">Amazing grace<br />how sweet</div>
+          <div class="sd-cue">A CAPPELLA</div>
+        </div>
+        <div class="sd-screen main">
+          <div class="sd-label">Hall</div>
+          <div class="sd-lyric" style="font-size:1rem;">Amazing grace,<br />how sweet the sound<br />that saved a wretch like me</div>
+        </div>
+        <div class="sd-screen">
+          <div class="sd-label">Preacher</div>
+          <div class="sd-lyric">Romans 5:8</div>
+          <div class="sd-next">Next: Verse 2</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURE 2: CHORDS + MODULATION -->
+<div style="background: var(--navy2); border-top: 1px solid rgba(255,255,255,0.05);">
+  <div class="feature-block reverse">
+    <div class="feat-text">
+      <div class="feat-label">Chords &amp; Modulation</div>
+      <h2 class="feat-title">Every song in<br />any key, instantly.</h2>
+      <p class="feat-desc">Songs are stored with chords positioned above the lyrics. The worship leader decides the key — DisplayWord transposes everything in real time. Mid-song modulation is a single + or − button.</p>
+      <ul class="feat-list">
+        <li>Chords displayed above each line of lyrics</li>
+        <li>One-click transposition to any key</li>
+        <li>Live modulation block: raise or lower key mid-song</li>
+        <li>Supports standard and Hebrew/RTL notation</li>
+        <li>Auto-detects key from chord set</li>
+      </ul>
+    </div>
+    <div class="feat-visual">
+      <div class="chord-visual">
+        <div class="chord-line">
+          <span class="chord-badge">Am</span>
+          <span class="chord-text">Amazing grace,</span>
+        </div>
+        <div class="chord-line">
+          <span class="chord-badge">F</span>
+          <span class="chord-text">how sweet the sound</span>
+        </div>
+        <div class="chord-line">
+          <span class="chord-badge">C</span>
+          <span class="chord-text" style="margin-right:8px;"></span>
+          <span class="chord-badge" style="margin-left:40px;">G</span>
+          <span class="chord-text">that saved a wretch like me</span>
+        </div>
+        <div class="modulation-row">
+          <span class="mod-label">Key:</span>
+          <div class="mod-btn">−</div>
+          <div class="mod-key">Am</div>
+          <div class="mod-btn">+</div>
+          <span class="mod-label" style="margin-left:8px; color: var(--green); font-size:0.78rem;">↑ Live modulation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURE 3: SPECIAL CUES -->
+<div style="border-top: 1px solid rgba(255,255,255,0.05);">
+  <div class="feature-block">
+    <div class="feat-text">
+      <div class="feat-label">Special Cues</div>
+      <h2 class="feat-title">Instant signals<br />to your musicians.</h2>
+      <p class="feat-desc">During worship the operator sends cues to the stage screen — A Cappella, Drums Only, Repeat, Quiet — as bright banners that appear for a few seconds. The congregation never sees them.</p>
+      <ul class="feat-list">
+        <li>Pre-built cues with icons and colors</li>
+        <li>Custom cues: create your own with any icon, text, color</li>
+        <li>Two modes: brief banner or full-screen</li>
+        <li>Accent mode: louder, bolder, attention-grabbing</li>
+        <li>Separate cue sets for Worship and Sermon</li>
+      </ul>
+    </div>
+    <div class="feat-visual">
+      <div class="card" style="padding: 20px;">
+        <div style="font-size:0.78rem; color: var(--gray); margin-bottom:14px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em;">Worship Cues</div>
+        <div class="cue-grid">
+          <div class="cue-btn cue-red"><span class="cue-icon">🎤</span>A Cappella</div>
+          <div class="cue-btn cue-amber"><span class="cue-icon">🥁</span>Drums Only</div>
+          <div class="cue-btn cue-blue"><span class="cue-icon">🔁</span>Repeat</div>
+          <div class="cue-btn cue-purple"><span class="cue-icon">🔇</span>Quiet</div>
+          <div class="cue-btn cue-green"><span class="cue-icon">⬆️</span>Key Up</div>
+          <div class="cue-btn cue-teal"><span class="cue-icon">⏹️</span>Stop</div>
+        </div>
+        <div style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.07); font-size:0.78rem; color:var(--accent); text-align:center;">+ Create your own cues</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURE 4: SONG LIBRARY -->
+<div style="background: var(--navy2); border-top: 1px solid rgba(255,255,255,0.05);">
+  <div class="feature-block reverse">
+    <div class="feat-text">
+      <div class="feat-label">Song Library</div>
+      <h2 class="feat-title">All your songs,<br />organized and ready.</h2>
+      <p class="feat-desc">Store your full song catalog with lyrics, chords, keys, and notes. Multiple song books for different communities or languages. Build a service setlist in minutes.</p>
+      <ul class="feat-list">
+        <li>Multiple song books (communities, languages)</li>
+        <li>Full song editor with chord placement</li>
+        <li>Filter and search by title, key, vocalist</li>
+        <li>One-click setlist building — click to add, click again to remove</li>
+        <li>Print chord sheets as PDF for musicians</li>
+      </ul>
+    </div>
+    <div class="feat-visual">
+      <div class="library-visual">
+        <div class="lib-header">
+          <span>Song Library</span>
+          <span style="font-size:0.75rem; color:var(--accent);">+ New Song</span>
+        </div>
+        <div class="lib-search">
+          <input type="text" placeholder="🔍  Search songs..." disabled />
+        </div>
+        <div class="lib-row selected">
+          <span>Amazing Grace</span><span class="lib-key">Am</span>
+        </div>
+        <div class="lib-row">
+          <span>How Great Thou Art</span><span class="lib-key">G</span>
+        </div>
+        <div class="lib-row">
+          <span>Holy Spirit</span><span class="lib-key">D</span>
+        </div>
+        <div class="lib-row">
+          <span>Oceans (Where Feet May Fail)</span><span class="lib-key">Em</span>
+        </div>
+        <div class="lib-row">
+          <span>Way Maker</span><span class="lib-key">Bb</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURE 5: MEDIA & BACKGROUNDS -->
+<div style="border-top: 1px solid rgba(255,255,255,0.05);">
+  <div class="feature-block">
+    <div class="feat-text">
+      <div class="feat-label">Media &amp; Backgrounds</div>
+      <h2 class="feat-title">Beautiful slides<br />for every moment.</h2>
+      <p class="feat-desc">Add photo and video backgrounds to your slides. Manage a media library, show announcements, or display Bible verses — all from the same operator console.</p>
+      <ul class="feat-list">
+        <li>Photo and video backgrounds for any slide</li>
+        <li>Background library with instant preview</li>
+        <li>Quick messages to any screen (announcements, alerts)</li>
+        <li>Message history for one-click resend</li>
+        <li>Light and dark theme for the operator console</li>
+      </ul>
+    </div>
+    <div class="feat-visual">
+      <div class="card" style="padding:24px; text-align:center;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+          <div style="height:70px; background:linear-gradient(135deg,#1a3a6b,#0f1b2d); border-radius:8px; border:2px solid var(--accent); display:flex;align-items:center;justify-content:center; font-size:0.7rem; color:var(--gray);">🌅 Sunrise</div>
+          <div style="height:70px; background:linear-gradient(135deg,#2d1b4e,#0f1b2d); border-radius:8px; border:1px solid rgba(255,255,255,0.1); display:flex;align-items:center;justify-content:center; font-size:0.7rem; color:var(--gray);">✝ Cross</div>
+          <div style="height:70px; background:linear-gradient(135deg,#0d3320,#0f1b2d); border-radius:8px; border:1px solid rgba(255,255,255,0.1); display:flex;align-items:center;justify-content:center; font-size:0.7rem; color:var(--gray);">🌿 Nature</div>
+          <div style="height:70px; background:linear-gradient(135deg,#3a2000,#0f1b2d); border-radius:8px; border:1px solid rgba(255,255,255,0.1); display:flex;align-items:center;justify-content:center; font-size:0.7rem; color:var(--gray);">▶ Video</div>
+        </div>
+        <div style="font-size:0.8rem; color:var(--gray);">Drag your own photos &amp; videos here</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECT / WEB SCREENS -->
+<section class="section" style="padding-top: 40px; padding-bottom: 80px;">
+  <div class="connect-section">
+    <div class="connect-badge">DisplayWord Connect</div>
+    <h2 class="section-title">Musicians' phones become<br />stage screens</h2>
+    <p style="color:var(--gray); max-width:520px; margin:0 auto; font-size:1.05rem;">In the Connect edition, every musician sees their own screen on their phone or tablet — chords, cues, key — over Wi-Fi. No cables, no extra monitors, no hardware.</p>
+    <div class="connect-devices">
+      <div class="device-card">
+        <div class="device-icon">📱</div>
+        <div class="device-name">Guitarist</div>
+        <div class="device-desc">Chords in their key on their phone</div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">🎹</div>
+        <div class="device-name">Keyboardist</div>
+        <div class="device-desc">Chord chart + live transposition</div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">🎤</div>
+        <div class="device-name">Lead Vocalist</div>
+        <div class="device-desc">Lyrics, key, cues on a tablet</div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">💻</div>
+        <div class="device-name">Sound Engineer</div>
+        <div class="device-desc">What's live, what's coming next</div>
+      </div>
+    </div>
+    <div style="margin-top:32px;">
+      <a href="/pricing" class="btn btn-outline" style="margin-right:12px;">See Connect pricing</a>
+      <a href="/download" class="btn btn-gold">Start with Free →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<div class="cta-row">
+  <a href="/download" class="btn btn-gold btn-lg">⬇ Download Free</a>
+  <a href="/pricing" class="btn btn-outline btn-lg">View Pricing</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="logo">Display<span>Word</span></a>
+      <p>Free worship presentation software for Christian churches worldwide.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/features">Features</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/download">Download</a>
+      </div>
+      <div class="footer-col">
+        <h4>Editions</h4>
+        <a href="/pricing">DisplayWord Free</a>
+        <a href="/pricing">DisplayWord Church</a>
+        <a href="/pricing">DisplayWord Connect</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@displayword.com">hello@displayword.com</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 DisplayWord. Free worship presentation software.</p>
+    <a href="mailto:hello@displayword.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

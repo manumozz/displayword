@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download — DisplayWord Worship Software</title>
+  <meta name="description" content="Download DisplayWord worship presentation software for Windows. Free for small churches. Join the early access list to be notified when the first release is ready." />
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFI0lEQVR4AbxWXWxURRT+5i4r3e2y2wrlpy0CbWkg/TFtQ7TVahRJI8YHoy+g8QE1MTw0aDXqg4kJ+qBCTCBgUDQ+GI0m6psRE2oMCCagVVLTpn82hUpbS+h2+78/4/nm3ru7/bUiy2TOnTNnvnO+c2fOnV0Ly2y5uUWhYH7lnlB++Yeh/IqLoYLy4VBBRcwW0WmTtaBgiF1mWPxrAqsKtpWG8ss/SvizryqlP4NSz0KhBlCrAXhsEZ02WSOGWPrQV9aX7IsnUFjrCxVUHrLgbYVS+wD4RJbbffSxxJcxILGwSFswgWDh9q3BxNgFQDeJn1fkRrv46ibGYsyFgsxLILRhe7XSnnNKoWwhhxuxMRZjMvZc/1kJmCwtzylArcFNbxJTYhuOtNipBHhOiRXfICPkcJokQQ5yOZZkAiE9fpBb5dgzNpCDXC6BScD+XHSja8z8qBttTtj3gKVXvCKkUrHyvDXd63DCypUbDkrtIW9R3jS+3t+dlK9E/2RfLxp3DmFNIEaIkfWhqMEce7LPzN3HCo/GF8/34EsRr+iunePxp/qMz/pglFOQM1e4rbgvsBvOJePzJlCzeQLVmyZw58YJVN0xgQe2RdDUMIgfXu7A/aURgQKDYS82rp7BI5VhrE5LrFrwdxeN4y6Rmk3jBssHk99dEUbh7TMYHE1utI/clkLiQYLS5Xx3Nopfq0DRqxXYcXAbjjXnIZAVx4mn+8Bd0gL+qTMAKSjUFo/JzO73bk3p9Wk6McSeFR/62miA3FKEqgpLtKGIF+98tx5HT6+F77YEXtw1aNAMRqWuOPWm6aT1palkah3M2a4AXdJEVVlQenOaZVH1xI95mI4pPFQWAc/XDVbn7EBQdojH1vP3SnQNrURFwSRy/HETr65kDFo07poMqS7cFqBysIw2Pm2hc3AlWCf5OVEMSB2QaEveDDZIUdYKiUeinekIgLtjiX6P2Li2Zc0MusQ37fwdRpUjMPyHpgzWfsIQ0VAru+Bu/xk5Zwrt9VsjyRphUrTNFUlAj8w1LjT3y/mXrJ3CVFShf8RrIMljKBkHE4jFFVjAP3dngzrroE7WCHax1FOiRyxo1ZsyLK49d98wsrwap9tWISpERBqihEJD2Sg2yza3XPZhbNpjhHphbhQPl4dNMsTSZ5YIN3egZZZxziTXH8MLUvkHRPj2732/LomITHlwSUiDPrvYeP7uorvlgawEfhMME3PXUqNusTSs5pTB1niZtL/Ziva3WtHyRhsO7BrCxIyF/Z9uQudQlg1yni4Rp+n6QskQky7ktjyTY9+KcVJEztcyb9Ta75OKz0LnQBbOybfLO2Dnu6Vm+4lLl+b2Vcbnwp9+eVN/cun3y35c7PWbNWKSCyllktzW9es9YWj9Oe3d8g0/erQE6bL3gy04dGodBlJXKKFJaenzG/wT7xcjLvXgLsREf/x4sVljMq49OQonuS0aEir2tozOr4Rome9Rh9P+OY70t3cA6ghuWVNHbE7YCZA3rLJf1xp/UM+kkINcLoc5AjO5cn4SVuwx+Ss+bOYZeehhw0EuJ34qATGMXmnrRCLekJkkhFxiGw7hcvusBGgMX237Vat4HbeK85shjMWYjD033rwECGCWo1ZgB6AOA/g/X4f4qsOMxZgSa15fMAGDknMK9196KYFoudwTH4vNXFYyLqdP0oe+jAGJtZjT4gk4Hvxcwn+1PmNNjG/QWu2VwCeh8YvUyTWB8EdARF8zNq1PEkMsfegrmCX7PwAAAP//TN0GuwAAAAZJREFUAwD3/hixLPQA6QAAAABJRU5ErkJggg==" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── DOWNLOAD HERO ── */
+    .dl-hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 140px 5% 80px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 68%);
+    }
+    .dl-hero-inner { max-width: 680px; }
+    .dl-hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 800; letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .dl-hero p { font-size: 1.1rem; color: var(--gray); max-width: 500px; margin: 0 auto 48px; }
+
+    /* ── MAIN DOWNLOAD CARD ── */
+    .dl-card {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 44px 40px;
+      max-width: 560px; margin: 0 auto 60px;
+      position: relative;
+    }
+    .dl-edition { font-size: 0.8rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+    .dl-name { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
+    .dl-platform { font-size: 0.85rem; color: var(--gray); margin-bottom: 32px; }
+
+    /* The "coming soon" download button */
+    .dl-btn-wrap { margin-bottom: 16px; }
+    .dl-btn-main {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%; padding: 16px 28px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 2px dashed rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.4);
+      font-size: 1.05rem; font-weight: 700;
+      cursor: not-allowed;
+      font-family: inherit;
+    }
+    .dl-btn-icon { font-size: 1.4rem; opacity: 0.5; }
+    .dl-coming-note {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(240,165,0,0.08);
+      border: 1px solid rgba(240,165,0,0.25);
+      border-radius: 10px; padding: 14px 18px;
+      margin-bottom: 28px; text-align: left;
+    }
+    .dl-coming-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .dl-coming-text { font-size: 0.88rem; color: var(--gray); line-height: 1.5; }
+    .dl-coming-text strong { color: var(--gold); }
+
+    /* Subscribe inside card */
+    .dl-notify { text-align: left; }
+    .dl-notify h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .dl-notify p  { font-size: 0.85rem; color: var(--gray); margin-bottom: 16px; }
+
+    /* ── REQUIREMENTS ── */
+    .req-section { padding: 0 5% 80px; }
+    .req-inner { max-width: 800px; margin: 0 auto; }
+    .req-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 28px; }
+    .req-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .req-card {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 22px;
+    }
+    .req-icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .req-label { font-size: 0.75rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+    .req-value { font-size: 0.95rem; font-weight: 600; }
+    .req-sub   { font-size: 0.8rem; color: var(--gray); margin-top: 3px; }
+
+    /* ── WHAT'S IN V1 ── */
+    .v1-section { padding: 0 5% 80px; }
+    .v1-inner { max-width: 800px; margin: 0 auto; }
+    .v1-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 24px; }
+    .v1-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .v1-list li { font-size: 0.9rem; color: var(--gray); display: flex; gap: 10px; align-items: flex-start; }
+    .v1-list li::before { content: "✓"; color: var(--green); flex-shrink: 0; font-weight: 700; }
+
+    /* ── EDITIONS COMPARISON (mini) ── */
+    .editions-section { padding: 0 5% 80px; }
+    .editions-inner { max-width: 800px; margin: 0 auto; }
+    .editions-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 24px; }
+    .editions-row {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .edition-card {
+      flex: 1; min-width: 200px;
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 24px;
+    }
+    .edition-card.ec-church { border-color: rgba(240,165,0,0.3); }
+    .edition-name { font-size: 0.8rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .edition-price { font-size: 1.8rem; font-weight: 800; margin-bottom: 4px; }
+    .edition-price.gold { color: var(--gold); }
+    .edition-desc { font-size: 0.82rem; color: var(--gray); margin-bottom: 16px; }
+    .edition-link {
+      display: block; text-align: center;
+      padding: 10px; border-radius: 8px;
+      font-size: 0.88rem; font-weight: 700;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .edition-link:hover { opacity: 0.85; }
+    .edition-link.gold-btn { background: var(--gold); color: var(--navy); }
+    .edition-link.out-btn  { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.18); }
+
+    @media (max-width: 600px) {
+      .dl-card { padding: 28px 22px; }
+      .v1-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <a href="/" class="logo">Display<span>Word</span></a>
+    <ul class="nav-links">
+      <li><a href="/features">Features</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/download" class="active">Download</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <a href="/download" class="btn btn-gold">Download Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="dl-hero">
+  <div class="dl-hero-inner">
+    <div class="badge badge-gold">🎵 Windows · Free</div>
+    <h1>Download<br /><span class="text-gold">DisplayWord</span></h1>
+    <p>Worship presentation software for Christian churches — lyrics, chords, three screens, musician cues. Free forever for small congregations.</p>
+
+    <!-- MAIN DOWNLOAD CARD -->
+    <div class="dl-card">
+      <div class="dl-edition">DisplayWord · Free Edition</div>
+      <div class="dl-name">DisplayWord v1.0</div>
+      <div class="dl-platform">Windows 10 / 11 · .NET 6 · ~35 MB</div>
+
+      <!-- DISABLED DOWNLOAD BUTTON -->
+      <div class="dl-btn-wrap">
+        <button class="dl-btn-main" disabled>
+          <span class="dl-btn-icon">⬇</span>
+          Download DisplayWord Free
+        </button>
+      </div>
+
+      <!-- COMING SOON NOTE -->
+      <div class="dl-coming-note">
+        <div class="dl-coming-icon">🕐</div>
+        <div class="dl-coming-text">
+          <strong>The program is not yet available for download — the first release is coming soon.</strong><br />
+          Subscribe below to be the first to know when it's ready.
+        </div>
+      </div>
+
+      <!-- NOTIFY ME -->
+      <div class="dl-notify">
+        <h3>Notify me when it's ready</h3>
+        <p>Leave your email and we'll send you a single message the moment download is available.</p>
+        <div class="form-row">
+          <input type="email" id="emailDl" placeholder="your@church.com" />
+          <button class="btn btn-gold" onclick="handleSubscribeDl()">Notify Me</button>
+        </div>
+        <div class="subscribe-note">No spam. One email at launch, that's it.</div>
+        <div class="success-msg" id="successDl">✓ You're on the list! We'll be in touch as soon as it's ready.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM REQUIREMENTS -->
+<section class="req-section">
+  <div class="req-inner">
+    <div class="req-title">System requirements</div>
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-icon">🪟</div>
+        <div class="req-label">Operating System</div>
+        <div class="req-value">Windows 10 or 11</div>
+        <div class="req-sub">64-bit recommended</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🧠</div>
+        <div class="req-label">Framework</div>
+        <div class="req-value">.NET 6 Runtime</div>
+        <div class="req-sub">Installed automatically if missing</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">💾</div>
+        <div class="req-label">Disk Space</div>
+        <div class="req-value">~200 MB</div>
+        <div class="req-sub">Plus space for your song library</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🖥️</div>
+        <div class="req-label">Display</div>
+        <div class="req-value">1 monitor minimum</div>
+        <div class="req-sub">2–3 monitors for full setup</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🧮</div>
+        <div class="req-label">RAM</div>
+        <div class="req-value">2 GB RAM</div>
+        <div class="req-sub">4 GB+ recommended for video backgrounds</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🌐</div>
+        <div class="req-label">Internet</div>
+        <div class="req-value">Not required</div>
+        <div class="req-sub">Runs fully offline during services</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S IN V1.0 -->
+<section class="v1-section">
+  <div class="v1-inner">
+    <div class="v1-title">What's in v1.0</div>
+    <ul class="v1-list">
+      <li>Hall, Stage, and Preacher screens</li>
+      <li>Full song library with song books</li>
+      <li>Song editor with chord placement</li>
+      <li>Live key modulation</li>
+      <li>Special musician cues</li>
+      <li>Custom cue builder</li>
+      <li>Media tab with photo &amp; video backgrounds</li>
+      <li>Quick messages &amp; announcement panel</li>
+      <li>Blackout &amp; screen controls</li>
+      <li>Print chord sheets as PDF</li>
+      <li>Light &amp; dark theme</li>
+      <li>Fully offline operation</li>
+    </ul>
+  </div>
+</section>
+
+<!-- UPGRADE TO CHURCH / CONNECT -->
+<section class="editions-section">
+  <div class="editions-inner">
+    <div class="editions-title">Need more screens or Wi-Fi musician views?</div>
+    <div class="editions-row">
+      <div class="edition-card">
+        <div class="edition-name">DisplayWord Free</div>
+        <div class="edition-price">$0</div>
+        <div class="edition-desc">1 screen · song library · works offline</div>
+        <a href="#" class="edition-link out-btn" style="opacity:0.5; cursor:not-allowed;">Coming Soon</a>
+      </div>
+      <div class="edition-card ec-church">
+        <div class="edition-name">DisplayWord Church</div>
+        <div class="edition-price gold">$29</div>
+        <div class="edition-desc">All 3 screens · chords · musician cues · media</div>
+        <a href="/pricing" class="edition-link gold-btn">View Church Edition</a>
+      </div>
+      <div class="edition-card">
+        <div class="edition-name">DisplayWord Connect</div>
+        <div class="edition-price">$59</div>
+        <div class="edition-desc">Church + web screens on phones &amp; tablets via Wi-Fi</div>
+        <a href="/pricing" class="edition-link out-btn">View Connect Edition</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="logo">Display<span>Word</span></a>
+      <p>Free worship presentation software for Christian churches worldwide.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/features">Features</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/download">Download</a>
+      </div>
+      <div class="footer-col">
+        <h4>Editions</h4>
+        <a href="/pricing">DisplayWord Free</a>
+        <a href="/pricing">DisplayWord Church</a>
+        <a href="/pricing">DisplayWord Connect</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@displayword.com">hello@displayword.com</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 DisplayWord. Free worship presentation software.</p>
+    <a href="mailto:hello@displayword.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+  const BREVO_API_KEY = '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';
+  const BREVO_LIST_ID = 2;
+
+  async function subscribe(email, successId) {
+    if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+    try {
+      const res = await fetch('https://api.brevo.com/v3/contacts', {
+        method: 'POST',
+        headers: { 'accept': 'application/json', 'content-type': 'application/json', 'api-key': BREVO_API_KEY },
+        body: JSON.stringify({ email, listIds: [BREVO_LIST_ID], updateEnabled: true })
+      });
+      if (res.ok || res.status === 204) {
+        document.getElementById(successId).style.display = 'block';
+      } else {
+        const data = await res.json();
+        if (data.code === 'duplicate_parameter') { document.getElementById(successId).style.display = 'block'; }
+        else { alert('Something went wrong. Please try again.'); }
+      }
+    } catch(e) { alert('Connection error. Please try again.'); }
+  }
+
+  function handleSubscribeDl() { subscribe(document.getElementById('emailDl').value, 'successDl'); }
+</script>
+</body>
+</html>

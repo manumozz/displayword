@@ -9,7 +9,7 @@ const DW_T = {
     nav_features: "Features",
     nav_pricing:  "Pricing",
     nav_download: "Download",
-    nav_btn:      "Download Free",
+    nav_btn:      "Download",
     footer_tagline:  "Free worship presentation software for Christian churches worldwide.",
     footer_product:  "Product",
     footer_editions: "Editions",
@@ -21,7 +21,7 @@ const DW_T = {
     footer_ed3: "DisplayWord Team",
 
     // ── SHARED ────────────────────────────────────────────────
-    download_free:  "Download Free",
+    download_free:  "Download",
     view_pricing:   "View Pricing",
     one_time:       "One-time payment · lifetime updates",
     most_popular:   "Most Popular",
@@ -33,7 +33,7 @@ const DW_T = {
     home_badge: "🎵 For churches · Coming soon",
     home_h1:    "The Living Word<br /><span class=\"text-gold\">on Every Screen</span>",
     home_p:     "Control your church's screens from multiple devices simultaneously:<br />worship leader's tablet, speaker's tablet, and the operator's computer.<br />Display lyrics, chords, Bible verses, media, and messages on screens.",
-    home_dl:    "⬇ Download Free",
+    home_dl:    "Download",
     home_price: "View Pricing",
 
     // ── HOME · SCREENS ────────────────────────────────────────
@@ -187,7 +187,7 @@ const DW_T = {
     dev_sound:        "Sound Engineer",dev_sound_desc:   "What's live, what's coming next",
     team_pricing_link:"See Team pricing",
     start_free_btn:   "Start with Free →",
-    feat_dl_btn:      "⬇ Download Free",
+    feat_dl_btn:      "⬇ Download",
     feat_pr_btn:      "View Pricing",
 
     // ── PRICING PAGE ──────────────────────────────────────────
@@ -197,7 +197,7 @@ const DW_T = {
 
     church_always: "Always free · no credit card required",
     church_desc:   "Perfect for house churches, small gatherings, or getting started with worship presentation.",
-    church_cta:    "Download Free",
+    church_cta:    "Download",
     church_pf1: "Hall screen (congregation display)",
     church_pf2: "Song library &amp; setlists",
     church_pf3: "Full song editor with chords",
@@ -279,7 +279,7 @@ const DW_T = {
 
     pr_cta_title: "Ready to get started?",
     pr_cta_sub:   "Download free and see how DisplayWord transforms your worship service.",
-    pr_cta_btn1:  "⬇ Download Free",
+    pr_cta_btn1:  "⬇ Download",
     pr_cta_btn2:  "See all features",
 
     // ── DOWNLOAD PAGE ─────────────────────────────────────────
@@ -288,7 +288,7 @@ const DW_T = {
     dl_p:           "Worship presentation software for Christian churches — lyrics, chords, up to 4 screens, musician cues. Free forever for small congregations.",
     dl_edition:     "DisplayWord · Church Edition",
     dl_platform:    "Windows 10 / 11 · macOS · .NET 6 · ~35 MB",
-    dl_btn_text:    "Download DisplayWord Free",
+    dl_btn_text:    "Download DisplayWord",
     dl_coming_main: "<strong>The program is not yet available for download — the first release is coming soon.</strong><br />Subscribe below to be the first to know when it's ready.",
     dl_notify_h:    "Notify me when it's ready",
     dl_notify_p:    "Leave your email and we'll send you a single message the moment download is available.",
@@ -323,6 +323,10 @@ const DW_T = {
     ed_church_name:  "DisplayWord Church",   ed_church_price: "$0",   ed_church_desc:  "1 screen · song library · works offline",   ed_church_btn:  "Coming Soon",
     ed_connect_name: "DisplayWord Connect",  ed_connect_price:"$29",  ed_connect_desc: "All 3 screens · chords · musician cues · media", ed_connect_btn: "View Connect Edition",
     ed_team_name:    "DisplayWord Team",     ed_team_price:   "$59",  ed_team_desc:    "Connect + web screens on phones &amp; tablets via Wi-Fi", ed_team_btn: "View Team Edition",
+
+    modal_dl_title: "Choose your edition",
+    modal_dl_sub:   "Windows 10/11 · macOS · Free updates",
+    modal_coming:   "Coming soon",
   },
 
   /* ====================================================== */
@@ -332,7 +336,7 @@ const DW_T = {
     nav_features: "Возможности",
     nav_pricing:  "Цены",
     nav_download: "Скачать",
-    nav_btn:      "Скачать бесплатно",
+    nav_btn:      "Скачать",
     footer_tagline:  "Бесплатная программа управления экранами для христианских церквей.",
     footer_product:  "Продукт",
     footer_editions: "Версии",
@@ -344,7 +348,7 @@ const DW_T = {
     footer_ed3: "DisplayWord Team",
 
     // ── SHARED ────────────────────────────────────────────────
-    download_free:  "Скачать бесплатно",
+    download_free:  "Скачать",
     view_pricing:   "Тарифы",
     one_time:       "Разовый платёж · обновления навсегда",
     most_popular:   "Популярный",
@@ -356,7 +360,7 @@ const DW_T = {
     home_badge: "🎵 Для церквей · Скоро",
     home_h1:    "Живое слово<br /><span class=\"text-gold\">на каждый экран</span>",
     home_p:     "Управление экранами общины с нескольких устройств одновременно:<br />с планшета лидера поклонения, спикера, с компьютера оператора.<br />Вывод текстов, аккордов, стихов Библии, медиафайлов, сообщений.",
-    home_dl:    "⬇ Скачать бесплатно",
+    home_dl:    "Скачать",
     home_price: "Тарифы",
 
     // ── HOME · SCREENS ────────────────────────────────────────
@@ -510,7 +514,7 @@ const DW_T = {
     dev_sound:        "Звукорежиссёр",   dev_sound_desc:   "Что сейчас, что следующее",
     team_pricing_link:"Тарифы Team",
     start_free_btn:   "Начать бесплатно →",
-    feat_dl_btn:      "⬇ Скачать бесплатно",
+    feat_dl_btn:      "⬇ Скачать",
     feat_pr_btn:      "Тарифы",
 
     // ── PRICING PAGE ──────────────────────────────────────────
@@ -520,7 +524,7 @@ const DW_T = {
 
     church_always: "Всегда бесплатно · без карты",
     church_desc:   "Идеально для домашних церквей, небольших собраний или для начала работы с презентацией богослужения.",
-    church_cta:    "Скачать бесплатно",
+    church_cta:    "Скачать",
     church_pf1: "Экран зала (для прихожан)",
     church_pf2: "Библиотека песен и сет-листы",
     church_pf3: "Полный редактор песен с аккордами",
@@ -602,7 +606,7 @@ const DW_T = {
 
     pr_cta_title: "Готовы начать?",
     pr_cta_sub:   "Скачайте бесплатно и посмотрите, как DisplayWord преображает богослужение.",
-    pr_cta_btn1:  "⬇ Скачать бесплатно",
+    pr_cta_btn1:  "⬇ Скачать",
     pr_cta_btn2:  "Все возможности",
 
     // ── DOWNLOAD PAGE ─────────────────────────────────────────
@@ -611,7 +615,7 @@ const DW_T = {
     dl_p:           "Программа управления экранами для христианских церквей — тексты, аккорды, до 4 экранов, сигналы для музыкантов. Бесплатно для небольших общин навсегда.",
     dl_edition:     "DisplayWord · версия Church",
     dl_platform:    "Windows 10 / 11 · macOS · .NET 6 · ~35 МБ",
-    dl_btn_text:    "Скачать DisplayWord бесплатно",
+    dl_btn_text:    "Скачать DisplayWord",
     dl_coming_main: "<strong>Программа пока не доступна для скачивания — первый релиз выйдет скоро.</strong><br />Подпишитесь ниже чтобы узнать первыми, когда она будет готова.",
     dl_notify_h:    "Уведомить меня о готовности",
     dl_notify_p:    "Оставьте email — мы пришлём одно сообщение в момент выхода.",
@@ -646,6 +650,10 @@ const DW_T = {
     ed_church_name:  "DisplayWord Church",  ed_church_price: "$0",   ed_church_desc:  "1 экран · библиотека песен · без интернета",     ed_church_btn:  "Скоро",
     ed_connect_name: "DisplayWord Connect", ed_connect_price:"$29",  ed_connect_desc: "3 экрана · аккорды · сигналы · медиа",           ed_connect_btn: "Посмотреть Connect",
     ed_team_name:    "DisplayWord Team",    ed_team_price:   "$59",  ed_team_desc:    "Connect + веб-экраны на телефонах через Wi-Fi",   ed_team_btn:    "Посмотреть Team",
+
+    modal_dl_title: "Выберите версию",
+    modal_dl_sub:   "Windows 10/11 · macOS · обновления навсегда",
+    modal_coming:   "Скоро",
   }
 };
 

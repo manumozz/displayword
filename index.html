@@ -76,6 +76,30 @@
     .cta-section p  { color: var(--gray); margin-bottom: 40px; font-size: 1.05rem; }
     .subscribe-box.centered { margin: 0 auto; max-width: 420px; }
 
+    .dl-arr { font-size: 1.2em; line-height: 1; }
+
+    /* ── DOWNLOAD MODAL ─────────────────────────── */
+    #dl-modal { display:none; position:fixed; inset:0; background:rgba(4,10,22,0.88); z-index:500; align-items:center; justify-content:center; padding:20px; }
+    #dl-modal.open { display:flex; }
+    .dl-modal-box { background:var(--navy); border:1px solid rgba(255,255,255,0.1); border-radius:18px; padding:40px 36px 36px; max-width:900px; width:100%; position:relative; max-height:90vh; overflow-y:auto; }
+    .dl-modal-close { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--gray); font-size:1.5rem; cursor:pointer; line-height:1; padding:4px 8px; }
+    .dl-modal-close:hover { color:#fff; }
+    .dl-modal-box h3 { font-size:1.4rem; font-weight:800; text-align:center; margin-bottom:6px; }
+    .dl-modal-sub { text-align:center; color:var(--gray); font-size:0.85rem; margin-bottom:30px; }
+    .dl-editions { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .dl-ed { background:var(--navy2); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:22px; display:flex; flex-direction:column; }
+    .dl-ed.featured { border-color:var(--gold); }
+    .dl-ed-popular { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); margin-bottom:6px; }
+    .dl-ed-name { font-size:0.75rem; font-weight:600; color:var(--gray); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+    .dl-ed-price { font-size:2rem; font-weight:800; line-height:1; margin-bottom:4px; }
+    .dl-ed-note { font-size:0.76rem; color:var(--gray); margin-bottom:16px; }
+    .dl-ed-list { list-style:none; font-size:0.84rem; flex:1; margin-bottom:18px; }
+    .dl-ed-list li { padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--gray); display:flex; gap:8px; align-items:flex-start; }
+    .dl-ed-list li::before { content:"✓"; color:var(--green); flex-shrink:0; margin-top:1px; }
+    .dl-ed-list li:last-child { border-bottom:none; }
+    .dl-ed-platform { font-size:0.75rem; color:var(--gray); margin-bottom:14px; }
+    @media (max-width: 680px) { .dl-editions { grid-template-columns:1fr; } .dl-modal-box { padding:28px 20px; } }
+
     @media (max-width: 600px) {
       .steps { flex-direction: column; }
       .step { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); padding: 24px 0 0; }
@@ -97,7 +121,7 @@
     </ul>
   </div>
   <div class="nav-right">
-    <a href="/download" class="btn btn-gold" data-i18n="nav_btn">Download Free</a>
+    <button onclick="openDlModal()" class="btn btn-gold" data-i18n="nav_btn">Download</button>
   </div>
 </nav>
 
@@ -108,7 +132,7 @@
     <h1 data-i18n="home_h1">Your Worship Service,<br /><span class="text-gold">Beautifully Displayed</span></h1>
     <p data-i18n="home_p">A free presentation console for Christian worship services — lyrics, chords, multiple screens, and instant cues for your musicians. All from one operator.</p>
     <div class="hero-ctas">
-      <a href="/download" class="btn btn-gold btn-lg" data-i18n="home_dl">⬇ Download Free</a>
+      <button onclick="openDlModal()" class="btn btn-gold btn-lg"><span class="dl-arr">⬇</span> <span data-i18n="home_dl">Download</span> <span class="dl-arr">⬇</span></button>
       <a href="/pricing" class="btn btn-outline btn-lg" data-i18n="home_price">View Pricing</a>
     </div>
   </div>
@@ -364,6 +388,59 @@
   </div>
 </footer>
 
+<!-- DOWNLOAD MODAL -->
+<div id="dl-modal" onclick="if(event.target===this)closeDlModal()">
+  <div class="dl-modal-box">
+    <button class="dl-modal-close" onclick="closeDlModal()">✕</button>
+    <h3 data-i18n="modal_dl_title">Choose your edition</h3>
+    <p class="dl-modal-sub" data-i18n="modal_dl_sub">Windows 10/11 · macOS · Free updates</p>
+    <div class="dl-editions">
+      <!-- Church -->
+      <div class="dl-ed">
+        <div class="dl-ed-name" data-i18n="footer_ed1">DisplayWord Church</div>
+        <div class="dl-ed-price" data-i18n="church_price">Free</div>
+        <div class="dl-ed-note" data-i18n="church_note">Always free · no credit card</div>
+        <ul class="dl-ed-list">
+          <li data-i18n="church_f1">Hall screen (1 display)</li>
+          <li data-i18n="church_f2">Song library &amp; setlists</li>
+          <li data-i18n="church_f3">Works offline</li>
+        </ul>
+        <div class="dl-ed-platform">🪟 Windows · 🍎 macOS</div>
+        <a href="/download" class="btn btn-outline" data-i18n="modal_coming">Coming soon</a>
+      </div>
+      <!-- Connect -->
+      <div class="dl-ed featured">
+        <div class="dl-ed-popular" data-i18n="connect_popular">MOST POPULAR</div>
+        <div class="dl-ed-name" data-i18n="footer_ed2">DisplayWord Connect</div>
+        <div class="dl-ed-price">$29</div>
+        <div class="dl-ed-note" data-i18n="connect_note">One-time payment</div>
+        <ul class="dl-ed-list">
+          <li data-i18n="connect_f1">All 3 screens (Hall, Stage, Preacher)</li>
+          <li data-i18n="connect_f2">Chords + live modulation</li>
+          <li data-i18n="connect_f3">Special cues for musicians</li>
+          <li data-i18n="connect_f4">Media &amp; slide backgrounds</li>
+        </ul>
+        <div class="dl-ed-platform">🪟 Windows · 🍎 macOS</div>
+        <a href="/download" class="btn btn-gold" data-i18n="modal_coming">Coming soon</a>
+      </div>
+      <!-- Team -->
+      <div class="dl-ed">
+        <div class="dl-ed-name" data-i18n="footer_ed3">DisplayWord Team</div>
+        <div class="dl-ed-price">$59</div>
+        <div class="dl-ed-note" data-i18n="team_always">One-time payment · lifetime updates</div>
+        <ul class="dl-ed-list">
+          <li data-i18n="team_f1">Everything in Connect</li>
+          <li data-i18n="team_f2">Web screens on phones &amp; tablets</li>
+          <li data-i18n="team_f3">Musicians' screens via Wi-Fi</li>
+          <li data-i18n="team_f4">No extra hardware needed</li>
+        </ul>
+        <div class="dl-ed-platform">🪟 Windows · 🍎 macOS</div>
+        <a href="/download" class="btn btn-outline" data-i18n="modal_coming">Coming soon</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="i18n.js"></script>
 <script>
   const BREVO_API_KEY = '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';
@@ -393,6 +470,16 @@
   }
 
   function handleSubscribe2() { subscribe(document.getElementById('emailInput2').value, 'successMsg2'); }
+
+  function openDlModal() {
+    document.getElementById('dl-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDlModal() {
+    document.getElementById('dl-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDlModal(); });
 </script>
 </body>
 </html>

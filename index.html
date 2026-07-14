@@ -24,17 +24,25 @@
     .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
 
     .screens-section { padding: 0 5% 80px; display: flex; justify-content: center; }
-    .screens-mockup { display: flex; gap: 14px; align-items: flex-end; max-width: 1420px; width: 100%; }
-    .mock-screen { background: #080f1c; border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; width: 450px; flex-shrink: 1; flex-grow: 0; aspect-ratio: 16/9; }
-    .mock-label { font-size: 0.72rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; padding: 7px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
-    .mock-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 14px 18px; gap: 10px; }
+    .screens-mockup { display: flex; flex-direction: column; align-items: center; gap: 20px; max-width: 860px; width: 100%; }
+    .mock-screen { background: #080f1c; border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; width: 100%; aspect-ratio: 16/9; }
+    .mock-label { font-size: 0.78rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; padding: 8px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+    .mock-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 28px; gap: 14px; }
     .chord-pair { width: 100%; text-align: center; }
-    .chord-row { display: flex; gap: 16px; justify-content: center; font-size: 0.82rem; color: var(--gold); font-family: monospace; font-weight: 700; line-height: 1.3; margin-bottom: 3px; }
-    .lyric-row { font-size: 1rem; color: #fff; font-weight: 600; line-height: 1.4; text-align: center; }
-    .hall-lyric { font-size: 1.3rem; font-weight: 700; text-align: center; line-height: 1.7; color: #fff; }
-    .mock-preacher .mock-body { align-items: stretch; padding: 14px 20px; }
-    .preacher-verse { font-size: 0.88rem; color: #fff; font-weight: 500; text-align: left; line-height: 1.6; }
-    .preacher-ref { font-size: 0.9rem; color: var(--gold); font-weight: 700; text-align: right; margin-top: 8px; }
+    .chord-row { display: flex; gap: 24px; justify-content: center; font-size: 1.15rem; color: var(--gold); font-family: monospace; font-weight: 700; line-height: 1.3; margin-bottom: 4px; }
+    .lyric-row { font-size: 1.4rem; color: #fff; font-weight: 600; line-height: 1.5; text-align: center; }
+    .hall-lyric { font-size: 1.9rem; font-weight: 700; text-align: center; line-height: 1.7; color: #fff; }
+    .mock-preacher .mock-body { align-items: stretch; padding: 20px 32px; }
+    .preacher-verse { font-size: 1.2rem; color: #fff; font-weight: 500; text-align: left; line-height: 1.7; }
+    .preacher-ref { font-size: 1.1rem; color: var(--gold); font-weight: 700; text-align: right; margin-top: 12px; }
+    @media (max-width: 600px) {
+      .chord-row { font-size: 0.85rem; gap: 14px; }
+      .lyric-row { font-size: 1rem; }
+      .hall-lyric { font-size: 1.3rem; }
+      .preacher-verse { font-size: 0.9rem; }
+      .preacher-ref { font-size: 0.9rem; }
+      .mock-body { padding: 12px 16px; gap: 8px; }
+    }
 
     .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
     .feature-icon { width: 48px; height: 48px; background: rgba(74,144,226,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px; }
@@ -103,7 +111,7 @@
     @media (max-width: 768px) {
       .hero { padding: 100px 5% 60px; min-height: auto; }
       .hero p { font-size: 1rem; }
-      .screens-section { display: none; }
+      .screens-section { padding: 0 4% 50px; }
       .cta-section { padding: 60px 5%; }
     }
     @media (max-width: 600px) {

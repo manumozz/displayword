@@ -97,7 +97,8 @@ const DW_T = {
     church_f1:      "Hall screen (1 display)",
     church_f2:      "Song library &amp; setlists",
     church_f3:      "Works offline",
-    connect_note:    "One-time payment",
+    connect_note:    "from $30/mo · cancel anytime",
+    team_note:       "from $50/mo · cancel anytime",
     connect_popular: "MOST POPULAR",
     connect_f1:      "All 3 screens (Hall, Stage, Preacher)",
     connect_f2:      "Chords + live modulation",
@@ -434,7 +435,8 @@ const DW_T = {
     church_f1:      "Экран зала (1 дисплей)",
     church_f2:      "Библиотека песен и сет-листы",
     church_f3:      "Работает без интернета",
-    connect_note:    "Разовый платёж",
+    connect_note:    "от $30/мес · можно отменить",
+    team_note:       "от $50/мес · можно отменить",
     connect_popular: "ПОПУЛЯРНЫЙ",
     connect_f1:      "Все 3 экрана (Зал, Сцена, Проповедник)",
     connect_f2:      "Аккорды + живая модуляция",
@@ -720,10 +722,33 @@ document.addEventListener('click', e => {
     if (btn)  btn.classList.remove('open');
     if (menu) menu.classList.remove('open');
   }
+  if (!e.target.closest('nav')) {
+    const ham      = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    if (ham)      ham.classList.remove('open');
+    if (navLinks) navLinks.classList.remove('open');
+  }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
   const saved   = localStorage.getItem('dw_lang');
   const browser = (navigator.language || '').startsWith('ru') ? 'ru' : 'en';
   dwApply(saved || browser);
+
+  // Hamburger nav toggle
+  const ham      = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  if (ham && navLinks) {
+    ham.addEventListener('click', e => {
+      e.stopPropagation();
+      ham.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => {
+        ham.classList.remove('open');
+        navLinks.classList.remove('open');
+      })
+    );
+  }
 });

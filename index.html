@@ -20,7 +20,7 @@
     }
     .hero-inner { max-width: 1100px; }
     .hero h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -2px; margin-bottom: 22px; }
-    .hero p  { font-size: 1.15rem; color: var(--gray); max-width: 100%; margin: 0 auto 40px; white-space: nowrap; }
+    .hero p  { font-size: 1.15rem; color: var(--gray); max-width: 640px; margin: 0 auto 40px; }
     .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
 
     .screens-section { padding: 0 5% 80px; display: flex; justify-content: center; }
@@ -100,11 +100,16 @@
     .dl-ed-platform { font-size:0.75rem; color:var(--gray); margin-bottom:14px; }
     @media (max-width: 680px) { .dl-editions { grid-template-columns:1fr; } .dl-modal-box { padding:28px 20px; } }
 
+    @media (max-width: 768px) {
+      .hero { padding: 100px 5% 60px; min-height: auto; }
+      .hero p { font-size: 1rem; }
+      .screens-section { display: none; }
+      .cta-section { padding: 60px 5%; }
+    }
     @media (max-width: 600px) {
       .steps { flex-direction: column; }
       .step { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); padding: 24px 0 0; }
       .step:first-child { border-top: none; padding-top: 0; }
-      .screens-mockup { flex-direction: column; }
     }
   </style>
 </head>
@@ -122,6 +127,7 @@
   </div>
   <div class="nav-right">
     <button onclick="openDlModal()" class="btn btn-gold" data-i18n="nav_btn">Download</button>
+    <button class="hamburger" id="navHam" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -301,8 +307,8 @@
       <div class="price-card featured" style="position:relative;">
         <div class="popular-badge" data-i18n="connect_popular">MOST POPULAR</div>
         <div class="price-name">DisplayWord Connect</div>
-        <div class="price-amount text-gold">$29</div>
-        <div class="price-note" data-i18n="connect_note">One-time payment</div>
+        <div class="price-amount text-gold">$30<span style="font-size:1.1rem;font-weight:500">/mo</span></div>
+        <div class="price-note" data-i18n="connect_note">from $30/mo · or $249/yr</div>
         <ul class="price-features">
           <li><span class="chk">✓</span> <span data-i18n="connect_f1">All 3 screens (Hall, Stage, Preacher)</span></li>
           <li><span class="chk">✓</span> <span data-i18n="connect_f2">Chords + live modulation</span></li>
@@ -313,8 +319,8 @@
       <!-- Team ($59) -->
       <div class="price-card">
         <div class="price-name">DisplayWord Team</div>
-        <div class="price-amount">$59</div>
-        <div class="price-note" data-i18n="one_time">One-time payment · lifetime updates</div>
+        <div class="price-amount">$50<span style="font-size:1.1rem;font-weight:500">/mo</span></div>
+        <div class="price-note" data-i18n="team_note">from $50/mo · or $399/yr</div>
         <ul class="price-features">
           <li><span class="chk">✓</span> <span data-i18n="team_f1">Everything in Connect</span></li>
           <li><span class="chk">✓</span> <span data-i18n="team_f2">Web screens on phones &amp; tablets</span></li>

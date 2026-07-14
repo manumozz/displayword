@@ -29,6 +29,16 @@ const DW_T = {
     see_all_feat:   "See all features →",
     full_price_link:"Full pricing details &amp; comparison →",
 
+    // ── BILLING TOGGLE ────────────────────────────────────────
+    bill_monthly: "Monthly",
+    bill_annual:  "Annual",
+    bill_lifetime:"Lifetime",
+    bill_save:    "Save 30%",
+    bill_best:    "Best Value",
+
+    // ── REGIONAL NOTE ─────────────────────────────────────────
+    regional_note: "Prices shown in USD (USA). Regional pricing available for Israel 🇮🇱, Europe 🇪🇺, and developing countries — <a href=\"mailto:hello@displayword.com\">contact us</a>.",
+
     // ── HOME · HERO ───────────────────────────────────────────
     home_badge: "🎵 For churches · Coming soon",
     home_h1:    "The Living Word<br /><span class=\"text-gold\">on Every Screen</span>",
@@ -193,7 +203,7 @@ const DW_T = {
     // ── PRICING PAGE ──────────────────────────────────────────
     pr_badge: "Pricing",
     pr_h1:    "Simple, honest pricing.<br />Start free forever.",
-    pr_p:     "No subscriptions. No per-church fees. Pay once for Connect or Team — that's it. Free edition stays free, always.",
+    pr_p:     "Subscribe monthly or annually, or pay once for lifetime access. Free edition stays free, always.",
 
     church_always: "Always free · no credit card required",
     church_desc:   "Perfect for house churches, small gatherings, or getting started with worship presentation.",
@@ -266,15 +276,15 @@ const DW_T = {
     faq_title: "Frequently asked questions",
     faq1_q: "Is the free version really free?",
     faq1_a: "Yes, completely. DisplayWord Church has no trial period, no expiry, no ads, and no credit card required. It includes the Hall screen and full song library — suitable for many smaller churches and house groups.",
-    faq2_q: "Is this a subscription? Do I pay every month or year?",
-    faq2_a: "No subscriptions. Connect and Team editions are a single one-time payment. You own the software and receive all future updates at no extra charge.",
+    faq2_q: "Subscription or one-time — which is better?",
+    faq2_a: "Both options are available. A monthly or annual subscription lets you start with a lower upfront cost and cancel anytime. The lifetime purchase (about 2–2.5 years of annual payments) makes sense if you plan to use DisplayWord long-term — you pay once and receive all future updates at no extra charge.",
     faq3_q: "What does \"web screens via Wi-Fi\" mean in Team?",
     faq3_a: "In Team, DisplayWord acts as a local server. Musicians open a URL on their phone or tablet and see their own custom screen — chords, cues, key — in a regular browser. No app installation needed. Everything stays on your local network; no internet required.",
     faq4_q: "Can I upgrade from Church to Connect later?",
     faq4_a: "Yes. When you're ready, purchase a Connect or Team license — your songs, song books, and settings all carry over. You don't start from scratch.",
     faq5_q: "What operating systems are supported?",
     faq5_a: "DisplayWord runs on Windows 10, Windows 11, and macOS. It requires .NET 6 (installed automatically if missing). Linux support is not planned at this time.",
-    faq6_q: "My church can't afford even $29. Is there help available?",
+    faq6_q: "My church can't afford a subscription. Is there help available?",
     faq6_a: "Yes. If your church is in a low-income country or has genuine financial need, reach out to us at <a href=\"mailto:hello@displayword.com\" style=\"color:var(--accent);\">hello@displayword.com</a>. We want DisplayWord to serve every church, regardless of resources.",
 
     pr_cta_title: "Ready to get started?",
@@ -355,6 +365,16 @@ const DW_T = {
     coming_soon:    "Скоро",
     see_all_feat:   "Все возможности →",
     full_price_link:"Полное сравнение тарифов →",
+
+    // ── BILLING TOGGLE ────────────────────────────────────────
+    bill_monthly: "Ежемесячно",
+    bill_annual:  "Ежегодно",
+    bill_lifetime:"Навсегда",
+    bill_save:    "−30%",
+    bill_best:    "Выгоднее",
+
+    // ── REGIONAL NOTE ─────────────────────────────────────────
+    regional_note: "Цены указаны в долларах США. Региональные цены для Израиля 🇮🇱, Европы 🇪🇺 и развивающихся стран — <a href=\"mailto:hello@displayword.com\">напишите нам</a>.",
 
     // ── HOME · HERO ───────────────────────────────────────────
     home_badge: "🎵 Для церквей · Скоро",
@@ -520,7 +540,7 @@ const DW_T = {
     // ── PRICING PAGE ──────────────────────────────────────────
     pr_badge: "Тарифы",
     pr_h1:    "Простые и честные тарифы.<br />Начните бесплатно навсегда.",
-    pr_p:     "Без подписок. Без платы за церковь. Заплатите один раз за Connect или Team — и всё. Бесплатная версия остаётся бесплатной навсегда.",
+    pr_p:     "Подпишитесь на месяц или год, либо купите навсегда. Бесплатная версия остаётся бесплатной всегда.",
 
     church_always: "Всегда бесплатно · без карты",
     church_desc:   "Идеально для домашних церквей, небольших собраний или для начала работы с презентацией богослужения.",
@@ -593,15 +613,15 @@ const DW_T = {
     faq_title: "Часто задаваемые вопросы",
     faq1_q: "Бесплатная версия действительно бесплатна?",
     faq1_a: "Да, полностью. DisplayWord Church не имеет пробного периода, не истекает, без рекламы и без карты. Включает экран зала и полную библиотеку песен — подходит для многих небольших церквей и домашних групп.",
-    faq2_q: "Это подписка? Платить каждый месяц или год?",
-    faq2_a: "Без подписок. Connect и Team — это разовый платёж. Вы владеете программой и получаете все будущие обновления бесплатно.",
+    faq2_q: "Подписка или разовая покупка — что лучше?",
+    faq2_a: "Оба варианта доступны. Месячная или годовая подписка позволяет начать с меньших вложений и отменить в любое время. Пожизненная лицензия (около 2–2.5 годовых платежей) выгодна тем, кто планирует пользоваться программой долго — платите один раз и получаете все обновления навсегда.",
     faq3_q: "Что означают «веб-экраны через Wi-Fi» в Team?",
     faq3_a: "В версии Team DisplayWord работает как локальный сервер. Музыканты открывают URL на телефоне или планшете и видят свой экран — аккорды, сигналы, тональность — в обычном браузере. Установка приложений не нужна. Всё работает в локальной сети; интернет не требуется.",
     faq4_q: "Можно ли перейти с Church на Connect позже?",
     faq4_a: "Да. Когда будете готовы, купите лицензию Connect или Team — ваши песни, песенники и настройки сохранятся. Начинать с нуля не придётся.",
     faq5_q: "Какие операционные системы поддерживаются?",
     faq5_a: "DisplayWord работает на Windows 10, Windows 11 и macOS. Требуется .NET 6 (устанавливается автоматически при отсутствии). Поддержка Linux не планируется.",
-    faq6_q: "Наша церковь не может позволить себе даже $29. Есть ли помощь?",
+    faq6_q: "Наша церковь не может позволить себе подписку. Есть ли помощь?",
     faq6_a: "Да. Если ваша церковь находится в стране с низким доходом или имеет реальную финансовую потребность, напишите нам на <a href=\"mailto:hello@displayword.com\" style=\"color:var(--accent);\">hello@displayword.com</a>. Мы хотим, чтобы DisplayWord служил каждой церкви, независимо от ресурсов.",
 
     pr_cta_title: "Готовы начать?",

@@ -86,6 +86,21 @@
 
     .dl-arr { font-size: 1.2em; line-height: 1; }
 
+    .about-creator-section { background: var(--navy2); }
+    .about-creator-card { display: flex; gap: 24px; align-items: flex-start; max-width: 780px; margin: 0 auto; background: rgba(255,255,255,0.03); border: 1px solid rgba(240,165,0,0.2); border-radius: 16px; padding: 40px; position: relative; }
+    .about-creator-quote { font-size: 7rem; line-height: 0.6; color: rgba(240,165,0,0.18); font-family: Georgia, serif; flex-shrink: 0; margin-top: 10px; }
+    .about-creator-body { flex: 1; }
+    .about-creator-text { font-size: 1.1rem; color: var(--white); line-height: 1.75; font-style: italic; margin-bottom: 28px; }
+    .about-creator-author { display: flex; align-items: center; gap: 16px; }
+    .about-creator-avatar { width: 48px; height: 48px; background: rgba(240,165,0,0.15); border: 1px solid rgba(240,165,0,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+    .about-creator-name { font-size: 1rem; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .about-creator-role { font-size: 0.82rem; color: var(--gray); line-height: 1.5; }
+    @media (max-width: 600px) {
+      .about-creator-card { flex-direction: column; padding: 28px 22px; gap: 12px; }
+      .about-creator-quote { font-size: 5rem; margin-top: 0; }
+      .about-creator-text { font-size: 1rem; }
+    }
+
     /* ── DOWNLOAD MODAL ─────────────────────────── */
     #dl-modal { display:none; position:fixed; inset:0; background:rgba(4,10,22,0.88); z-index:500; align-items:center; justify-content:center; padding:20px; }
     #dl-modal.open { display:flex; }
@@ -341,6 +356,25 @@
   </div>
 </section>
 
+<!-- ABOUT CREATOR -->
+<section class="section about-creator-section">
+  <div class="section-inner">
+    <div class="about-creator-card">
+      <div class="about-creator-quote">"</div>
+      <div class="about-creator-body">
+        <p class="about-creator-text" data-i18n="creator_quote">I've spent years behind the operator's console at real worship services. I built DisplayWord because no existing tool did exactly what we needed — and I knew every detail of what was missing.</p>
+        <div class="about-creator-author">
+          <div class="about-creator-avatar">🎵</div>
+          <div>
+            <div class="about-creator-name">David Willart</div>
+            <div class="about-creator-role" data-i18n="creator_role">Musician · Vocalist · Sound Engineer · Media Ministry Leader<br />Beit Kerem Community, Haifa coast, Israel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- BOTTOM CTA -->
 <section class="cta-section">
   <h2 data-i18n="cta_title">Ready to transform<br />your worship services?</h2>
@@ -398,6 +432,7 @@
   </div>
   <div class="footer-bottom">
     <p data-i18n="footer_copy">© 2026 DisplayWord. Free worship presentation software.</p>
+    <p style="font-size:0.8rem;color:var(--gray);">Developed by <a href="mailto:hello@displayword.com" style="color:var(--gray);text-decoration:none;">David Willart</a></p>
     <a href="mailto:hello@displayword.com">Contact</a>
   </div>
 </footer>

@@ -109,6 +109,10 @@ const DW_T = {
     team_f3: "Musicians' screens via Wi-Fi",
     team_f4: "No extra hardware needed",
 
+    // ── HOME · ABOUT CREATOR ─────────────────────────────────
+    creator_quote: "I've been leading worship for years — playing, singing, running sound, managing the screen. I know exactly what happens when the operator misses a cue, when the key changes mid-song and nobody's ready, when the preacher needs his text and it's not there. DisplayWord is everything I wished I had at the console. Built from real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.",
+    creator_role:  "Musician · Vocalist · Sound Engineer · Media Ministry Leader<br />Beit Kerem Community, Haifa coast, Israel",
+
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Ready to transform<br />your worship services?",
     cta_p:        "Be first to know when the pilot release drops. Free for all early churches.",
@@ -446,6 +450,10 @@ const DW_T = {
     team_f2: "Веб-экраны на телефонах и планшетах",
     team_f3: "Экраны музыкантов через Wi-Fi",
     team_f4: "Без доп. оборудования",
+
+    // ── HOME · ABOUT CREATOR ─────────────────────────────────
+    creator_quote: "Я веду поклонение уже много лет — играю, пою, сижу за звуком, управляю экранами. Я знаю, что происходит, когда оператор не успел переключить слайд, когда тональность поменялась в середине песни, когда проповеднику нужен текст — а его нет. DisplayWord — это всё, что я сам хотел иметь за пультом. Создано из реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
+    creator_role:  "Музыкант · Певец · Звукооператор · Лидер медиаслужения<br />Община Beit Kerem, побережье Хайфы, Израиль",
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Готовы преобразить<br />ваше богослужение?",

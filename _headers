@@ -1,0 +1,34 @@
+# Cloudflare Pages — HTTP response headers
+# /releases/* is handled by the Pages Function (functions/releases/[[path]].js)
+# and sets its own Cache-Control headers. Rules below apply to static files only.
+
+# HTML — always fresh (no CDN caching)
+/*.html
+  Cache-Control: no-cache, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+
+# Root (index.html served as /)
+/
+  Cache-Control: no-cache, must-revalidate
+
+# JS / CSS — fingerprint via ?v= param, allow short-term cache
+/*.js
+  Cache-Control: public, max-age=86400
+  X-Content-Type-Options: nosniff
+
+/*.css
+  Cache-Control: public, max-age=86400
+  X-Content-Type-Options: nosniff
+
+# Fonts and images — longer cache
+/*.png
+  Cache-Control: public, max-age=604800
+
+/*.ico
+  Cache-Control: public, max-age=604800
+
+# Security headers on all routes
+/*
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=()

@@ -298,13 +298,23 @@ const DW_T = {
     pr_cta_btn2:  "See all features",
 
     // ── DOWNLOAD PAGE ─────────────────────────────────────────
-    dl_badge:       "🎵 Windows &amp; Mac · Free",
+    dl_badge:       "🎵 Windows · Free",
     dl_h1:          "Download<br /><span class=\"text-gold\">DisplayWord</span>",
     dl_p:           "Worship presentation software for Christian churches — lyrics, chords, up to 4 screens, musician cues. Free forever for small congregations.",
     dl_edition:     "DisplayWord · Church Edition",
-    dl_platform:    "Windows 10 / 11 · macOS · .NET 6 · ~35 MB",
-    dl_btn_text:    "Download DisplayWord",
-    dl_coming_main: "<strong>The program is not yet available for download — the first release is coming soon.</strong><br />Subscribe below to be the first to know when it's ready.",
+    dl_platform:    "Windows 10 / 11 · 64-bit · ~265 MB",
+
+    // Live download state
+    dl_btn_installer:     "Download Installer",
+    dl_btn_installer_sub: "Setup.exe · ~265 MB · Recommended",
+    dl_btn_portable:      "Portable ZIP",
+    dl_btn_portable_sub:  "No installation needed · ~260 MB",
+    dl_smartscreen:       "<strong>Windows SmartScreen notice:</strong> When you run Setup.exe, Windows may show a blue \"Unrecognized app\" warning. Click <strong>More info → Run anyway</strong>. This is normal for new software without a code signing certificate. DisplayWord is safe.",
+    dl_sha_title:         "SHA-256 checksums",
+    dl_macos_note:        "macOS version is in development.",
+
+    // Coming soon state
+    dl_coming_main: "<strong>First release coming soon.</strong><br />Subscribe below to be the first to know when it's ready.",
     dl_notify_h:    "Notify me when it's ready",
     dl_notify_p:    "Leave your email and we'll send you a single message the moment download is available.",
     dl_notify_btn:  "Notify Me",
@@ -313,10 +323,10 @@ const DW_T = {
     dl_email_ph:    "your@church.com",
 
     req_title:      "System requirements",
-    req_os_label:   "Operating System",   req_os_value:   "Windows 10 / 11 or macOS",  req_os_sub:   "64-bit",
+    req_os_label:   "Operating System",   req_os_value:   "Windows 10 or 11",           req_os_sub:   "64-bit recommended",
     req_fw_label:   "Framework",          req_fw_value:   ".NET 6 Runtime",             req_fw_sub:   "Installed automatically if missing",
-    req_disk_label: "Disk Space",         req_disk_value: "~200 MB",                    req_disk_sub: "Plus space for your song library",
-    req_disp_label: "Display",            req_disp_value: "1–4 monitors",               req_disp_sub: "Hall · Stage · Speaker · operator console",
+    req_disk_label: "Disk Space",         req_disk_value: "~300 MB",                    req_disk_sub: "Plus space for your song library",
+    req_disp_label: "Display",            req_disp_value: "1 monitor minimum",          req_disp_sub: "2–4 monitors for full setup",
     req_ram_label:  "RAM",                req_ram_value:  "2 GB RAM",                   req_ram_sub:  "4 GB+ recommended for video backgrounds",
     req_net_label:  "Internet",           req_net_value:  "Not required",               req_net_sub:  "Runs fully offline during services",
 
@@ -335,6 +345,7 @@ const DW_T = {
     v1_l12: "Fully offline operation",
 
     ed_title:        "Need more screens or Wi-Fi musician views?",
+    ed_church_btn_dl: "Download Free",
     ed_church_name:  "DisplayWord Church",   ed_church_price: "$0",   ed_church_desc:  "1 screen · song library · works offline",   ed_church_btn:  "Coming Soon",
     ed_connect_name: "DisplayWord Connect",  ed_connect_price:"$29",  ed_connect_desc: "All 3 screens · chords · musician cues · media", ed_connect_btn: "View Connect Edition",
     ed_team_name:    "DisplayWord Team",     ed_team_price:   "$59",  ed_team_desc:    "Connect + web screens on phones &amp; tablets via Wi-Fi", ed_team_btn: "View Team Edition",
@@ -640,13 +651,23 @@ const DW_T = {
     pr_cta_btn2:  "Все возможности",
 
     // ── DOWNLOAD PAGE ─────────────────────────────────────────
-    dl_badge:       "🎵 Windows &amp; Mac · Бесплатно",
+    dl_badge:       "🎵 Windows · Бесплатно",
     dl_h1:          "Скачать<br /><span class=\"text-gold\">DisplayWord</span>",
     dl_p:           "Программа управления экранами для христианских церквей — тексты, аккорды, до 4 экранов, сигналы для музыкантов. Бесплатно для небольших общин навсегда.",
     dl_edition:     "DisplayWord · версия Church",
-    dl_platform:    "Windows 10 / 11 · macOS · .NET 6 · ~35 МБ",
-    dl_btn_text:    "Скачать DisplayWord",
-    dl_coming_main: "<strong>Программа пока не доступна для скачивания — первый релиз выйдет скоро.</strong><br />Подпишитесь ниже чтобы узнать первыми, когда она будет готова.",
+    dl_platform:    "Windows 10 / 11 · 64-bit · ~265 МБ",
+
+    // Live download state
+    dl_btn_installer:     "Скачать установщик",
+    dl_btn_installer_sub: "Setup.exe · ~265 МБ · Рекомендуется",
+    dl_btn_portable:      "Portable ZIP",
+    dl_btn_portable_sub:  "Без установки · ~260 МБ",
+    dl_smartscreen:       "<strong>Предупреждение Windows SmartScreen:</strong> При запуске Setup.exe Windows может показать синее окно «Нераспознанное приложение». Нажмите <strong>Подробнее → Выполнить в любом случае</strong>. Это обычное поведение для новых программ без сертификата подписи. DisplayWord безопасен.",
+    dl_sha_title:         "Контрольные суммы SHA-256",
+    dl_macos_note:        "Версия для macOS находится в разработке.",
+
+    // Coming soon state
+    dl_coming_main: "<strong>Первый релиз выйдет скоро.</strong><br />Подпишитесь ниже чтобы узнать первыми, когда он будет готов.",
     dl_notify_h:    "Уведомить меня о готовности",
     dl_notify_p:    "Оставьте email — мы пришлём одно сообщение в момент выхода.",
     dl_notify_btn:  "Уведомить",
@@ -655,10 +676,10 @@ const DW_T = {
     dl_email_ph:    "ваш@email.com",
 
     req_title:      "Системные требования",
-    req_os_label:   "Операционная система", req_os_value:   "Windows 10 / 11 или macOS",  req_os_sub:   "64-bit",
+    req_os_label:   "Операционная система", req_os_value:   "Windows 10 или 11",            req_os_sub:   "64-bit рекомендуется",
     req_fw_label:   "Среда выполнения",      req_fw_value:   ".NET 6 Runtime",              req_fw_sub:   "Устанавливается автоматически при отсутствии",
-    req_disk_label: "Диск",                  req_disk_value: "~200 МБ",                     req_disk_sub: "Плюс место для библиотеки песен",
-    req_disp_label: "Дисплей",               req_disp_value: "1–4 монитора",                req_disp_sub: "Зал · Сцена · Спикер · пульт оператора",
+    req_disk_label: "Диск",                  req_disk_value: "~300 МБ",                     req_disk_sub: "Плюс место для библиотеки песен",
+    req_disp_label: "Дисплей",               req_disp_value: "Минимум 1 монитор",            req_disp_sub: "2–4 монитора для полного комплекта",
     req_ram_label:  "RAM",                   req_ram_value:  "2 ГБ RAM",                    req_ram_sub:  "4 ГБ+ рекомендуется для видеофонов",
     req_net_label:  "Интернет",              req_net_value:  "Не требуется",                req_net_sub:  "Полностью офлайн во время служений",
 
@@ -677,6 +698,7 @@ const DW_T = {
     v1_l12: "Полностью офлайн",
 
     ed_title:        "Нужно больше экранов или Wi-Fi для музыкантов?",
+    ed_church_btn_dl: "Скачать бесплатно",
     ed_church_name:  "DisplayWord Church",  ed_church_price: "$0",   ed_church_desc:  "1 экран · библиотека песен · без интернета",     ed_church_btn:  "Скоро",
     ed_connect_name: "DisplayWord Connect", ed_connect_price:"$29",  ed_connect_desc: "3 экрана · аккорды · сигналы · медиа",           ed_connect_btn: "Посмотреть Connect",
     ed_team_name:    "DisplayWord Team",    ed_team_price:   "$59",  ed_team_desc:    "Connect + веб-экраны на телефонах через Wi-Fi",   ed_team_btn:    "Посмотреть Team",

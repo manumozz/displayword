@@ -43,8 +43,8 @@ export async function onRequest({ request, env }) {
   const token   = randomToken(32);
   const expires = new Date(Date.now() + TOKEN_TTL_MS).toISOString();
   await env.DB.prepare(
-    'INSERT INTO email_tokens (token, user_id, type, expires_at) VALUES (?, ?, ?, ?)',
-  ).bind(token, id, 'verify', expires).run();
+    'INSERT INTO email_tokens (id, token, user_id, type, expires_at, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+  ).bind(crypto.randomUUID(), token, id, 'verify', expires, now).run();
 
   // Send verification email (non-blocking on failure)
   const origin     = new URL(request.url).origin;

@@ -126,7 +126,7 @@ export async function onRequest({ request, env }) {
   if (existing) {
     // Known device — refresh last_seen, re-issue token
     await env.DB
-      .prepare('UPDATE activations SET last_seen = ?, app_version = ? WHERE key_id = ? AND fingerprint = ?')
+      .prepare('UPDATE activations SET last_seen_at = ?, app_version = ? WHERE key_id = ? AND fingerprint = ?')
       .bind(now, appVersion ?? null, keyId, fingerprint)
       .run();
   } else {
@@ -144,7 +144,7 @@ export async function onRequest({ request, env }) {
     }
 
     await env.DB
-      .prepare('INSERT INTO activations (id, key_id, fingerprint, first_seen, last_seen, app_version) VALUES (?, ?, ?, ?, ?, ?)')
+      .prepare('INSERT INTO activations (id, key_id, fingerprint, last_seen_at, created_at, app_version) VALUES (?, ?, ?, ?, ?, ?)')
       .bind(crypto.randomUUID(), keyId, fingerprint, now, now, appVersion ?? null)
       .run();
   }

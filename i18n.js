@@ -90,8 +90,8 @@ const DW_T = {
 
     // ── HOME · MINI PRICING ───────────────────────────────────
     price_label: "Pricing",
-    price_title: "Simple, honest pricing",
-    price_sub:   "Start free. Upgrade when your church grows.",
+    price_title: "Choose the edition that fits your church.",
+    price_sub:   "Church edition is free — no account needed.",
     church_price:   "Free",
     church_note:    "Always free · no credit card",
     church_f1:      "Hall screen (1 display)",
@@ -443,8 +443,8 @@ const DW_T = {
 
     // ── HOME · MINI PRICING ───────────────────────────────────
     price_label: "Тарифы",
-    price_title: "Простые и честные тарифы",
-    price_sub:   "Начните бесплатно. Расширяйтесь по мере роста.",
+    price_title: "Выберите конфигурацию для вашей общины.",
+    price_sub:   "Редакция Church бесплатна — регистрация не нужна.",
     church_price:   "Бесплатно",
     church_note:    "Всегда бесплатно · без карты",
     church_f1:      "Экран зала (1 дисплей)",

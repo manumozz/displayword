@@ -17,7 +17,7 @@ export async function onRequest(ctx) {
 
   // Keys are linked via user_id stored on the key at issuance time (phase 5).
   // For now, join through approved applications: application.community_name = key.community_name
-  // and application.user_id = session.userId.
+  // and application.user_id = session.user_id.
   const rows = await ctx.env.DB.prepare(
     `SELECT
        lk.key_id,
@@ -40,7 +40,7 @@ export async function onRequest(ctx) {
      WHERE lk.status != 'deleted'
      GROUP BY lk.key_id
      ORDER BY lk.issued_at DESC`
-  ).bind(session.userId).all();
+  ).bind(session.user_id).all();
 
   return json(rows.results ?? [], 200, cors());
 }

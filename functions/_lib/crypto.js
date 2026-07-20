@@ -3,11 +3,11 @@
  * Uses Web Crypto API — no external dependencies.
  */
 
-const PBKDF2_ITERS = 100_000;
+const PBKDF2_ITERS = 100_000; // Cloudflare Workers Web Crypto max
 
 /**
  * Hash a password with PBKDF2-SHA256.
- * Returns a string: pbkdf2:sha256:600000:<saltHex>:<hashHex>
+ * Returns a string: pbkdf2:sha256:100000:<saltHex>:<hashHex>
  */
 export async function hashPassword(password) {
   const salt = crypto.getRandomValues(new Uint8Array(16));

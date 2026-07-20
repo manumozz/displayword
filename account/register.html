@@ -64,8 +64,9 @@
 
       <label for="password2">Повторите пароль</label>
       <div class="input-wrap">
-        <input type="password" id="password2" name="password2" autocomplete="new-password" required placeholder="Ещё раз" />
+        <input type="password" id="password2" name="password2" autocomplete="new-password" required placeholder="Ещё раз" oninput="checkMatch()" />
         <button type="button" class="toggle-pw" onclick="togglePw('password2', this)" title="Показать пароль">👁</button>
+        <span id="matchMark" style="display:none;position:absolute;right:40px;top:50%;transform:translateY(-50%);color:#4ade80;font-size:1rem;">✓</span>
       </div>
 
       <button type="submit" class="btn" id="btn">Создать аккаунт</button>
@@ -78,6 +79,20 @@
     const form = document.getElementById('form');
     const btn  = document.getElementById('btn');
     const msg  = document.getElementById('msg');
+
+    function checkMatch() {
+      const pw1 = document.getElementById('password').value;
+      const pw2 = document.getElementById('password2').value;
+      const mark = document.getElementById('matchMark');
+      const inp2 = document.getElementById('password2');
+      if (pw2.length > 0 && pw1 === pw2) {
+        mark.style.display = 'block';
+        inp2.style.borderColor = '#4ade80';
+      } else {
+        mark.style.display = 'none';
+        inp2.style.borderColor = '';
+      }
+    }
 
     function togglePw(id, el) {
       const inp = document.getElementById(id);

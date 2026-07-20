@@ -28,7 +28,7 @@ async function handleGet({ env }, session) {
      FROM applications
      WHERE user_id = ?
      ORDER BY created_at DESC`
-  ).bind(session.userId).all();
+  ).bind(session.user_id).all();
 
   return json(rows.results ?? [], 200, cors());
 }
@@ -52,7 +52,7 @@ async function handlePost({ env, request }, session) {
   const existing = await env.DB.prepare(
     `SELECT id FROM applications
      WHERE user_id = ? AND community_name = ? AND status = 'pending'`
-  ).bind(session.userId, community_name.trim()).first();
+  ).bind(session.user_id, community_name.trim()).first();
 
   if (existing) return json({ error: 'duplicate_pending' }, 409);
 
@@ -66,7 +66,7 @@ async function handlePost({ env, request }, session) {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)`
   ).bind(
     id,
-    session.userId,
+    session.user_id,
     community_name.trim(),
     city_country.trim(),
     contact_info?.trim() ?? null,

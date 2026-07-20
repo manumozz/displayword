@@ -10,6 +10,6 @@ import { json } from './response.js';
 export async function requireAdmin(env, request) {
   const session = await getSession(env.DB, request);
   if (!session) return { response: json({ error: 'unauthorized' }, 401) };
-  if (!session.isAdmin) return { response: json({ error: 'forbidden' }, 403) };
+  if (!session.is_admin) return { response: json({ error: 'forbidden' }, 403) };
   return { session };
 }

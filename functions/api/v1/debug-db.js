@@ -1,4 +1,3 @@
-import { hashPassword } from './auth/register.js'; // Wait! Register.js imports from crypto.js, but let's just import directly from crypto.js:
 import { hashPassword, randomToken } from '../../_lib/crypto.js';
 
 export async function onRequest({ env }) {

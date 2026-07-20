@@ -1,5 +1,5 @@
 /* ================================================================
-   DisplayWord — i18n translations (EN / RU)
+   DisplayWord — i18n translations (EN / RU) — build 9
    Edition names: Church (Free) · Connect ($24/mo) · Team ($48/mo)
    ================================================================ */
 

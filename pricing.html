@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing — DisplayWord Worship Software</title>
-  <meta name="description" content="DisplayWord is free for small churches. Connect from $30/month or $249/year. One-time lifetime purchase available. Regional pricing for Israel, Europe, and developing countries." />
+  <meta name="description" content="DisplayWord is free for small churches. Connect from $24/month or $199/year. Regional pricing for Israel, Europe, and developing countries." />
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFI0lEQVR4AbxWXWxURRT+5i4r3e2y2wrlpy0CbWkg/TFtQ7TVahRJI8YHoy+g8QE1MTw0aDXqg4kJ+qBCTCBgUDQ+GI0m6psRE2oMCCagVVLTpn82hUpbS+h2+78/4/nm3ru7/bUiy2TOnTNnvnO+c2fOnV0Ly2y5uUWhYH7lnlB++Yeh/IqLoYLy4VBBRcwW0WmTtaBgiF1mWPxrAqsKtpWG8ss/SvizryqlP4NSz0KhBlCrAXhsEZ02WSOGWPrQV9aX7IsnUFjrCxVUHrLgbYVS+wD4RJbbffSxxJcxILGwSFswgWDh9q3BxNgFQDeJn1fkRrv46ibGYsyFgsxLILRhe7XSnnNKoWwhhxuxMRZjMvZc/1kJmCwtzylArcFNbxJTYhuOtNipBHhOiRXfICPkcJokQQ5yOZZkAiE9fpBb5dgzNpCDXC6BScD+XHSja8z8qBttTtj3gKVXvCKkUrHyvDXd63DCypUbDkrtIW9R3jS+3t+dlK9E/2RfLxp3DmFNIEaIkfWhqMEce7LPzN3HCo/GF8/34EsRr+iunePxp/qMz/pglFOQM1e4rbgvsBvOJePzJlCzeQLVmyZw58YJVN0xgQe2RdDUMIgfXu7A/aURgQKDYS82rp7BI5VhrE5LrFrwdxeN4y6Rmk3jBssHk99dEUbh7TMYHE1utI/clkLiQYLS5Xx3Nopfq0DRqxXYcXAbjjXnIZAVx4mn+8Bd0gL+qTMAKSjUFo/JzO73bk3p9Wk6McSeFR/62miA3FKEqgpLtKGIF+98tx5HT6+F77YEXtw1aNAMRqWuOPWm6aT1palkah3M2a4AXdJEVVlQenOaZVH1xI95mI4pPFQWAc/XDVbn7EBQdojH1vP3SnQNrURFwSRy/HETr65kDFo07poMqS7cFqBysIw2Pm2hc3AlWCf5OVEMSB2QaEveDDZIUdYKiUeinekIgLtjiX6P2Li2Zc0MusQ37fwdRpUjMPyHpgzWfsIQ0VAru+Bu/xk5Zwrt9VsjyRphUrTNFUlAj8w1LjT3y/mXrJ3CVFShf8RrIMljKBkHE4jFFVjAP3dngzrroE7WCHax1FOiRyxo1ZsyLK49d98wsrwap9tWISpERBqihEJD2Sg2yza3XPZhbNpjhHphbhQPl4dNMsTSZ5YIN3egZZZxziTXH8MLUvkHRPj2732/LomITHlwSUiDPrvYeP7uorvlgawEfhMME3PXUqNusTSs5pTB1niZtL/Ziva3WtHyRhsO7BrCxIyF/Z9uQudQlg1yni4Rp+n6QskQky7ktjyTY9+KcVJEztcyb9Ta75OKz0LnQBbOybfLO2Dnu6Vm+4lLl+b2Vcbnwp9+eVN/cun3y35c7PWbNWKSCyllktzW9es9YWj9Oe3d8g0/erQE6bL3gy04dGodBlJXKKFJaenzG/wT7xcjLvXgLsREf/x4sVljMq49OQonuS0aEir2tozOr4Rome9Rh9P+OY70t3cA6ghuWVNHbE7YCZA3rLJf1xp/UM+kkINcLoc5AjO5cn4SVuwx+Ss+bOYZeehhw0EuJ34qATGMXmnrRCLekJkkhFxiGw7hcvusBGgMX237Vat4HbeK85shjMWYjD033rwECGCWo1ZgB6AOA/g/X4f4qsOMxZgSa15fMAGDknMK9196KYFoudwTH4vNXFYyLqdP0oe+jAGJtZjT4gk4Hvxcwn+1PmNNjG/QWu2VwCeh8YvUyTWB8EdARF8zNq1PEkMsfegrmCX7PwAAAP//TN0GuwAAAAZJREFUAwD3/hixLPQA6QAAAABJRU5ErkJggg==" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -120,10 +120,6 @@
         <button class="bill-btn" data-period="annual" onclick="setBilling('annual')">
           <span data-i18n="bill_annual">Annual</span>
           <span class="save-tag" data-i18n="bill_save">Save 30%</span>
-        </button>
-        <button class="bill-btn" data-period="lifetime">
-          <span data-i18n="bill_lifetime">Lifetime</span>
-          <span class="best-tag" data-i18n="bill_best">Best Value</span>
         </button>
       </div>
     </div>
@@ -342,33 +338,29 @@
 <script>
 /* ── Billing toggle ──────────────────────────────────────── */
 const PRICES = {
-  connect: { monthly: '$30', annual: '$249', lifetime: '$749' },
-  team:    { monthly: '$50', annual: '$399', lifetime: '$1,199' }
+  connect: { monthly: '$24', annual: '$199' },
+  team:    { monthly: '$48', annual: '$399' }
 };
 
 const PERIODS = {
   en: {
     connect: {
       monthly:  'per month · cancel anytime',
-      annual:   'per year · save $111',
-      lifetime: 'one-time payment · lifetime updates'
+      annual:   'per year · save $89',
     },
     team: {
       monthly:  'per month · cancel anytime',
-      annual:   'per year · save $201',
-      lifetime: 'one-time payment · lifetime updates'
+      annual:   'per year · save $177',
     }
   },
   ru: {
     connect: {
       monthly:  'в месяц · можно отменить в любое время',
-      annual:   'в год · экономия $111',
-      lifetime: 'разовый платёж · обновления навсегда'
+      annual:   'в год · экономия $89',
     },
     team: {
       monthly:  'в месяц · можно отменить в любое время',
-      annual:   'в год · экономия $201',
-      lifetime: 'разовый платёж · обновления навсегда'
+      annual:   'в год · экономия $177',
     }
   }
 };
@@ -399,8 +391,6 @@ window.dwApply = function(lang) {
   updateBillingDisplay();
 };
 
-// Wire up lifetime button (onclick added inline would collide with data-i18n span)
-document.querySelector('[data-period="lifetime"]').addEventListener('click', () => setBilling('lifetime'));
 
 document.addEventListener('DOMContentLoaded', () => {
   setBilling('monthly');

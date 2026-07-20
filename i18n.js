@@ -208,9 +208,9 @@ const DW_T = {
     // ── PRICING PAGE ──────────────────────────────────────────
     pr_badge: "Editions",
     pr_h1:    "Choose the edition that fits your church.",
-    pr_p:     "Church edition is free with no account needed. Connect and Team editions are available by subscription or one-time purchase.",
+    pr_p:     "Each edition is designed for a different scale of ministry.",
 
-    church_always: "Always free · no credit card required",
+    church_always: "No registration required",
     church_desc:   "Perfect for house churches, small gatherings, or getting started with worship presentation.",
     church_cta:    "Download",
     church_pf1: "Hall screen (congregation display)",
@@ -561,9 +561,9 @@ const DW_T = {
     // ── PRICING PAGE ──────────────────────────────────────────
     pr_badge: "Редакции",
     pr_h1:    "Выберите конфигурацию для вашей общины.",
-    pr_p:     "Редакция Church бесплатна и не требует регистрации. Редакции Connect и Team доступны по подписке или за разовый платёж.",
+    pr_p:     "Каждая конфигурация создана для разного масштаба служения.",
 
-    church_always: "Всегда бесплатно · без карты",
+    church_always: "Регистрация не нужна",
     church_desc:   "Идеально для домашних церквей, небольших собраний или для начала работы с презентацией богослужения.",
     church_cta:    "Скачать",
     church_pf1: "Экран зала (для прихожан)",

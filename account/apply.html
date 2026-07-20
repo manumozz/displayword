@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Заявка на ключ — DisplayWord</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(15,27,45,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 100; }
+    .topbar-logo { font-size: 1rem; font-weight: 800; color: var(--accent); text-decoration: none; }
+    .back-link { font-size: 0.85rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .back-link:hover { color: var(--white); }
+    main { padding: 100px 5% 80px; max-width: 600px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+    .sub { color: var(--gray); margin-bottom: 40px; font-size: 0.95rem; line-height: 1.6; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.06em; }
+    label span { color: #f87171; margin-left: 2px; }
+    input, select, textarea {
+      width: 100%; box-sizing: border-box;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 9px; padding: 12px 14px; color: var(--white); font-family: inherit; font-size: 0.95rem;
+      transition: border-color 0.2s; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    select { cursor: pointer; }
+    select option { background: #0f1b2d; }
+    textarea { resize: vertical; min-height: 90px; }
+    .edition-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .edition-card {
+      border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 18px;
+      cursor: pointer; transition: all 0.2s; position: relative;
+    }
+    .edition-card:hover { border-color: rgba(255,255,255,0.25); }
+    .edition-card.selected { border-color: var(--accent); background: rgba(99,102,241,0.08); }
+    .edition-card input[type=radio] { position: absolute; opacity: 0; }
+    .edition-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+    .edition-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.4; }
+    .edition-price { font-size: 0.78rem; color: var(--green); font-weight: 600; margin-top: 6px; }
+    .hint { font-size: 0.8rem; color: var(--gray); margin-top: 6px; }
+    .btn-submit {
+      width: 100%; background: var(--accent); color: #fff;
+      border: none; border-radius: 10px; padding: 14px; font-size: 1rem;
+      font-weight: 700; font-family: inherit; cursor: pointer; transition: opacity 0.2s; margin-top: 8px;
+    }
+    .btn-submit:hover:not(:disabled) { opacity: 0.88; }
+    .btn-submit:disabled { opacity: 0.45; cursor: default; }
+    .msg { border-radius: 9px; padding: 14px 16px; font-size: 0.9rem; margin-bottom: 20px; display: none; }
+    .msg.error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: #fca5a5; }
+    .msg.success { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); color: #86efac; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="/" class="topbar-logo">DisplayWord</a>
+    <a href="/account/" class="back-link">← Кабинет</a>
+  </div>
+
+  <main>
+    <h1>Заявка на лицензионный ключ</h1>
+    <p class="sub">
+      Заполните форму — автор рассмотрит заявку и выдаст ключ для вашей общины.<br>
+      Обычно ответ приходит в течение нескольких дней.
+    </p>
+
+    <div id="msgBox" class="msg"></div>
+
+    <form id="applyForm" novalidate>
+      <!-- Edition -->
+      <div class="form-group">
+        <label>Конфигурация <span>*</span></label>
+        <div class="edition-cards">
+          <label class="edition-card" id="cardChurch">
+            <input type="radio" name="edition" value="church" required />
+            <div class="edition-name">Church</div>
+            <div class="edition-desc">До 3 устройств. Без проверки сервера.</div>
+            <div class="edition-price">Бесплатно</div>
+          </label>
+          <label class="edition-card" id="cardServer">
+            <input type="radio" name="edition" value="server" />
+            <div class="edition-name">Server</div>
+            <div class="edition-desc">Несколько устройств, централизованный контроль.</div>
+            <div class="edition-price">По соглашению</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Community name -->
+      <div class="form-group">
+        <label for="communityName">Название общины <span>*</span></label>
+        <input type="text" id="communityName" name="community_name"
+               placeholder="Например: Дом молитвы Хайфа" maxlength="200" required />
+      </div>
+
+      <!-- City / Country -->
+      <div class="form-group">
+        <label for="cityCountry">Город и страна <span>*</span></label>
+        <input type="text" id="cityCountry" name="city_country"
+               placeholder="Например: Хайфа, Израиль" maxlength="200" required />
+      </div>
+
+      <!-- Members count -->
+      <div class="form-group">
+        <label for="membersCount">Примерное число участников</label>
+        <input type="number" id="membersCount" name="members_count"
+               placeholder="50" min="1" max="100000" />
+      </div>
+
+      <!-- Contact info -->
+      <div class="form-group">
+        <label for="contactInfo">Контакт (телефон / Telegram / сайт)</label>
+        <input type="text" id="contactInfo" name="contact_info"
+               placeholder="+972..." maxlength="300" />
+        <p class="hint">Не обязательно, если вы уже вошли под своим email.</p>
+      </div>
+
+      <!-- Message -->
+      <div class="form-group">
+        <label for="message">Дополнительно</label>
+        <textarea id="message" name="message" placeholder="Расскажите о вашей общине или задайте вопрос…" maxlength="2000"></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSubmit">Отправить заявку</button>
+    </form>
+  </main>
+
+  <script>
+    // Check auth
+    (async () => {
+      const res = await fetch('/api/v1/me', { credentials: 'same-origin' });
+      if (!res.ok) window.location.href = '/account/login?redirect=/account/apply';
+    })();
+
+    // Edition card selection
+    document.querySelectorAll('.edition-card input[type=radio]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.edition-card').forEach(c => c.classList.remove('selected'));
+        radio.closest('.edition-card').classList.add('selected');
+      });
+    });
+
+    // Form submit
+    document.getElementById('applyForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmit');
+      const msgBox = document.getElementById('msgBox');
+      msgBox.style.display = 'none';
+      msgBox.className = 'msg';
+
+      const form = e.target;
+      const edition = form.querySelector('input[name=edition]:checked')?.value;
+      const communityName = form.community_name.value.trim();
+      const cityCountry   = form.city_country.value.trim();
+      const membersCount  = form.members_count.value || null;
+      const contactInfo   = form.contact_info.value.trim() || null;
+      const message       = form.message.value.trim() || null;
+
+      if (!edition)         return showError('Выберите конфигурацию.');
+      if (!communityName)   return showError('Введите название общины.');
+      if (!cityCountry)     return showError('Введите город и страну.');
+
+      btn.disabled = true;
+      btn.textContent = 'Отправка…';
+
+      try {
+        const res = await fetch('/api/v1/applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ community_name: communityName, city_country: cityCountry,
+                                 edition, members_count: membersCount,
+                                 contact_info: contactInfo, message }),
+        });
+        const data = await res.json();
+
+        if (res.status === 201) {
+          showSuccess('Заявка отправлена! Автор уведомлён и рассмотрит её в ближайшие дни.');
+          form.reset();
+          document.querySelectorAll('.edition-card').forEach(c => c.classList.remove('selected'));
+          btn.textContent = 'Заявка отправлена';
+          setTimeout(() => { window.location.href = '/account/'; }, 2500);
+          return;
+        }
+
+        if (data.error === 'duplicate_pending') {
+          showError('У вас уже есть ожидающая заявка для этой общины.');
+        } else {
+          showError('Ошибка: ' + (data.error ?? 'unknown'));
+        }
+      } catch {
+        showError('Сетевая ошибка. Попробуйте ещё раз.');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Отправить заявку';
+    });
+
+    function showError(text) {
+      const b = document.getElementById('msgBox');
+      b.textContent = text;
+      b.className = 'msg error';
+      b.style.display = 'block';
+      b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    function showSuccess(text) {
+      const b = document.getElementById('msgBox');
+      b.textContent = text;
+      b.className = 'msg success';
+      b.style.display = 'block';
+      b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
+</body>
+</html>

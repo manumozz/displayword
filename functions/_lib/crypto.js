@@ -3,7 +3,7 @@
  * Uses Web Crypto API — no external dependencies.
  */
 
-const PBKDF2_ITERS = 600_000;
+const PBKDF2_ITERS = 100_000;
 
 /**
  * Hash a password with PBKDF2-SHA256.

@@ -206,9 +206,9 @@ const DW_T = {
     feat_pr_btn:      "View Pricing",
 
     // ── PRICING PAGE ──────────────────────────────────────────
-    pr_badge: "Pricing",
-    pr_h1:    "Simple, honest pricing.<br />Start free forever.",
-    pr_p:     "Subscribe monthly or annually, or pay once for lifetime access. Free edition stays free, always.",
+    pr_badge: "Editions",
+    pr_h1:    "Choose the edition that fits your church.",
+    pr_p:     "Church edition is free with no account needed. Connect and Team editions are available by subscription or one-time purchase.",
 
     church_always: "Always free · no credit card required",
     church_desc:   "Perfect for house churches, small gatherings, or getting started with worship presentation.",
@@ -559,9 +559,9 @@ const DW_T = {
     feat_pr_btn:      "Тарифы",
 
     // ── PRICING PAGE ──────────────────────────────────────────
-    pr_badge: "Тарифы",
-    pr_h1:    "Простые и честные тарифы.<br />Начните бесплатно навсегда.",
-    pr_p:     "Подпишитесь на месяц или год, либо купите навсегда. Бесплатная версия остаётся бесплатной всегда.",
+    pr_badge: "Редакции",
+    pr_h1:    "Выберите конфигурацию для вашей общины.",
+    pr_p:     "Редакция Church бесплатна и не требует регистрации. Редакции Connect и Team доступны по подписке или за разовый платёж.",
 
     church_always: "Всегда бесплатно · без карты",
     church_desc:   "Идеально для домашних церквей, небольших собраний или для начала работы с презентацией богослужения.",

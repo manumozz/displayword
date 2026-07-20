@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход — DisplayWord</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; align-items: center; justify-content: center; padding: 24px; }
+    .card { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 40px 36px; width: 100%; max-width: 420px; }
+    .logo { font-size: 1.1rem; font-weight: 800; color: var(--accent); text-decoration: none; display: block; margin-bottom: 28px; }
+    h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+    .sub { font-size: 0.9rem; color: var(--gray); margin-bottom: 28px; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; }
+    input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 11px 14px; color: var(--white); font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s; margin-bottom: 18px; }
+    input:focus { border-color: var(--accent); }
+    .btn { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 9px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-top: 4px; font-family: inherit; }
+    .btn:hover { opacity: 0.88; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .msg { font-size: 0.88rem; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: none; }
+    .msg.error { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .msg.success { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .footer-link { text-align: center; margin-top: 24px; font-size: 0.88rem; color: var(--gray); }
+    .footer-link a { color: var(--accent); text-decoration: none; }
+    .footer-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <a href="/" class="logo">DisplayWord</a>
+    <h1>Вход</h1>
+    <p class="sub">Войдите чтобы управлять заявками и ключами</p>
+
+    <div class="msg" id="msg"></div>
+
+    <form id="form">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" required />
+
+      <label for="password">Пароль</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required />
+
+      <button type="submit" class="btn" id="btn">Войти</button>
+    </form>
+
+    <div class="footer-link">Нет аккаунта? <a href="/account/register">Зарегистрироваться</a></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const btn  = document.getElementById('btn');
+    const msg  = document.getElementById('msg');
+
+    // Show message from URL params (e.g. after verification)
+    const params = new URLSearchParams(location.search);
+    if (params.get('verified') === '1') {
+      showMsg('Email подтверждён. Теперь можно войти.', 'success');
+    } else if (params.get('error') === 'token_expired') {
+      showMsg('Ссылка подтверждения истекла. Зарегистрируйтесь снова.', 'error');
+    } else if (params.get('error')) {
+      showMsg('Ссылка недействительна.', 'error');
+    }
+
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = `msg ${type}`;
+      msg.style.display = 'block';
+    }
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Входим…';
+      msg.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+          }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          window.location.href = data.isAdmin ? '/admin/' : '/account/';
+        } else {
+          showMsg(data.message || 'Ошибка входа', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Войти';
+        }
+      } catch {
+        showMsg('Ошибка сети. Попробуйте ещё раз.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Войти';
+      }
+    });
+  </script>
+</body>
+</html>

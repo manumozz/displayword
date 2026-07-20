@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админка — DisplayWord</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(15,27,45,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 100; }
+    .topbar-logo { font-size: 1rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .topbar-nav { display: flex; gap: 20px; align-items: center; }
+    .topbar-nav a { color: var(--gray); text-decoration: none; font-size: 0.88rem; font-weight: 600; transition: color 0.2s; }
+    .topbar-nav a:hover, .topbar-nav a.active { color: var(--white); }
+    .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 6px 14px; border-radius: 7px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    main { padding: 90px 5% 60px; max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 32px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+    .stat-card { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px 24px; }
+    .stat-label { font-size: 0.78rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .stat-value { font-size: 2rem; font-weight: 800; }
+    .stat-value.gold { color: var(--gold); }
+    .stat-value.green { color: var(--green); }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
+    .app-row { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 22px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .app-row:hover { border-color: rgba(255,255,255,0.15); }
+    .app-info { flex: 1; min-width: 0; }
+    .app-community { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+    .app-meta { font-size: 0.82rem; color: var(--gray); }
+    .app-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .btn-approve { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.25); color: var(--green); padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .btn-approve:hover { background: rgba(74,222,128,0.2); }
+    .btn-reject { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); color: #f87171; padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .btn-reject:hover { background: rgba(248,113,113,0.15); }
+    .empty { color: var(--gray); font-size: 0.9rem; padding: 20px 0; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+    .badge-server { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
+    .badge-offline { background: rgba(251,191,36,0.1); color: var(--gold); border: 1px solid rgba(251,191,36,0.2); }
+    /* Modal */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
+    .modal-bg.open { display: flex; }
+    .modal { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: 480px; max-width: 90vw; }
+    .modal h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; }
+    .modal label { display: block; font-size: 0.82rem; color: var(--gray); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .modal input, .modal select, .modal textarea { width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; color: var(--white); font-family: inherit; font-size: 0.9rem; margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
+    .btn-cancel { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-confirm { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .btn-confirm:disabled { opacity: 0.45; }
+    .key-output { font-family: monospace; font-size: 0.72rem; color: var(--green); word-break: break-all; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-top: 8px; display: none; }
+    @media (max-width: 700px) { .stats { grid-template-columns: 1fr 1fr; } .app-row { flex-direction: column; align-items: flex-start; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="/admin/" class="topbar-logo">⚙ DisplayWord Admin</a>
+    <div class="topbar-nav">
+      <a href="/admin/" class="active">Заявки</a>
+      <a href="/admin/keys.html">Ключи</a>
+      <a href="/account/">Кабинет</a>
+      <button class="btn-logout" id="btnLogout">Выйти</button>
+    </div>
+  </div>
+
+  <main>
+    <h1>Панель управления</h1>
+
+    <div class="stats" id="statsBox">
+      <div class="stat-card"><div class="stat-label">Ожидают</div><div class="stat-value gold" id="sPending">—</div></div>
+      <div class="stat-card"><div class="stat-label">Одобрено</div><div class="stat-value green" id="sApproved">—</div></div>
+      <div class="stat-card"><div class="stat-label">Ключей</div><div class="stat-value" id="sKeys">—</div></div>
+      <div class="stat-card"><div class="stat-label">Активаций</div><div class="stat-value" id="sActivations">—</div></div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Входящие заявки</div>
+    </div>
+    <div id="appsList"><div class="empty">Загрузка…</div></div>
+  </main>
+
+  <!-- Approve modal -->
+  <div class="modal-bg" id="modalApprove">
+    <div class="modal">
+      <h2 id="modalTitle">Одобрить заявку</h2>
+      <label>Режим</label>
+      <select id="approveMode">
+        <option value="server">Server</option>
+        <option value="offline">Offline</option>
+      </select>
+      <label>Лимит активаций (Server)</label>
+      <input type="number" id="approveLimit" value="3" min="1" max="100" />
+      <label>Заголовок владельца (необязательно)</label>
+      <input type="text" id="approveOwner" placeholder="Например: Пастор" />
+      <label>Заметка для себя (необязательно)</label>
+      <textarea id="approveNotes" rows="2"></textarea>
+      <div class="key-output" id="keyOutput"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelApprove">Отмена</button>
+        <button class="btn-confirm" id="confirmApprove">Выдать ключ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject modal -->
+  <div class="modal-bg" id="modalReject">
+    <div class="modal">
+      <h2>Отклонить заявку</h2>
+      <label>Причина (отправится пользователю)</label>
+      <textarea id="rejectReason" rows="3" placeholder="Необязательно"></textarea>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelReject">Отмена</button>
+        <button class="btn-confirm" id="confirmReject">Отклонить</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentAppId = null;
+
+    async function load() {
+      // Auth check
+      const me = await fetch('/api/v1/me', { credentials: 'same-origin' }).then(r => r.json()).catch(() => null);
+      if (!me?.isAdmin) { window.location.href = '/account/login'; return; }
+
+      // Load applications
+      const [apps, keys] = await Promise.all([
+        fetch('/api/v1/admin/applications', { credentials: 'same-origin' }).then(r => r.json()),
+        fetch('/api/v1/admin/keys', { credentials: 'same-origin' }).then(r => r.json()),
+      ]);
+
+      const pending  = apps.filter(a => a.status === 'pending');
+      const approved = apps.filter(a => a.status === 'approved');
+      const totalAct = keys.reduce((s, k) => s + (k.activations || 0), 0);
+
+      document.getElementById('sPending').textContent    = pending.length;
+      document.getElementById('sApproved').textContent   = approved.length;
+      document.getElementById('sKeys').textContent       = keys.length;
+      document.getElementById('sActivations').textContent = totalAct;
+
+      const el = document.getElementById('appsList');
+      if (pending.length === 0) {
+        el.innerHTML = '<div class="empty">Нет ожидающих заявок.</div>';
+      } else {
+        el.innerHTML = pending.map(a => `
+          <div class="app-row">
+            <div class="app-info">
+              <div class="app-community">${esc(a.community_name)}
+                <span class="badge badge-${a.edition}">${a.edition}</span>
+              </div>
+              <div class="app-meta">
+                ${esc(a.city_country)} · ${esc(a.user_email)} · ${fmt(a.created_at)}
+                ${a.members_count ? ' · ~' + a.members_count + ' чел.' : ''}
+                ${a.message ? '<br><span style="color:var(--white);opacity:0.7">' + esc(a.message) + '</span>' : ''}
+              </div>
+            </div>
+            <div class="app-actions">
+              <button class="btn-approve" onclick="openApprove('${a.id}','${esc(a.community_name)}','${a.edition}')">Одобрить</button>
+              <button class="btn-reject"  onclick="openReject('${a.id}')">Отклонить</button>
+            </div>
+          </div>`).join('');
+      }
+    }
+
+    function openApprove(id, name, edition) {
+      currentAppId = id;
+      document.getElementById('modalTitle').textContent = 'Одобрить: ' + name;
+      document.getElementById('approveMode').value = edition === 'server' ? 'server' : 'offline';
+      document.getElementById('approveLimit').value = 3;
+      document.getElementById('approveOwner').value = '';
+      document.getElementById('approveNotes').value = '';
+      document.getElementById('keyOutput').style.display = 'none';
+      document.getElementById('confirmApprove').disabled = false;
+      document.getElementById('confirmApprove').textContent = 'Выдать ключ';
+      document.getElementById('modalApprove').classList.add('open');
+    }
+    function openReject(id) {
+      currentAppId = id;
+      document.getElementById('rejectReason').value = '';
+      document.getElementById('modalReject').classList.add('open');
+    }
+
+    document.getElementById('cancelApprove').onclick = () => document.getElementById('modalApprove').classList.remove('open');
+    document.getElementById('cancelReject').onclick  = () => document.getElementById('modalReject').classList.remove('open');
+
+    document.getElementById('confirmApprove').onclick = async () => {
+      const btn = document.getElementById('confirmApprove');
+      btn.disabled = true; btn.textContent = 'Выдаю…';
+      const mode  = document.getElementById('approveMode').value;
+      const limit = parseInt(document.getElementById('approveLimit').value, 10);
+      const owner = document.getElementById('approveOwner').value.trim() || null;
+      const notes = document.getElementById('approveNotes').value.trim() || null;
+
+      const res  = await fetch(`/api/v1/admin/applications/${currentAppId}/approve`, {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode, activationLimit: mode === 'server' ? limit : undefined, ownerTitle: owner, notes }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const out = document.getElementById('keyOutput');
+        out.textContent = data.keyString;
+        out.style.display = 'block';
+        btn.textContent = 'Готово ✓';
+        setTimeout(() => { document.getElementById('modalApprove').classList.remove('open'); load(); }, 2000);
+      } else {
+        btn.textContent = 'Ошибка: ' + (data.error ?? 'unknown');
+        btn.disabled = false;
+      }
+    };
+
+    document.getElementById('confirmReject').onclick = async () => {
+      const btn    = document.getElementById('confirmReject');
+      const reason = document.getElementById('rejectReason').value.trim();
+      btn.disabled = true;
+      await fetch(`/api/v1/admin/applications/${currentAppId}/reject`, {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason }),
+      });
+      document.getElementById('modalReject').classList.remove('open');
+      load();
+    };
+
+    document.getElementById('btnLogout').onclick = async () => {
+      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      window.location.href = '/account/login';
+    };
+
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmt(iso) { return iso ? new Date(iso).toLocaleDateString('ru-RU', { day:'numeric', month:'short', year:'numeric' }) : '—'; }
+
+    load();
+  </script>
+</body>
+</html>

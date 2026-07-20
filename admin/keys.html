@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ключи — DisplayWord Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(15,27,45,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 100; }
+    .topbar-logo { font-size: 1rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .topbar-nav { display: flex; gap: 20px; align-items: center; }
+    .topbar-nav a { color: var(--gray); text-decoration: none; font-size: 0.88rem; font-weight: 600; transition: color 0.2s; }
+    .topbar-nav a:hover, .topbar-nav a.active { color: var(--white); }
+    .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 6px 14px; border-radius: 7px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    main { padding: 90px 5% 60px; max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 32px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
+    .btn-new { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { font-size: 0.75rem; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+    td { padding: 12px 14px; font-size: 0.88rem; vertical-align: middle; }
+    .mono { font-family: monospace; font-size: 0.75rem; color: var(--gray); word-break: break-all; }
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; }
+    .badge-server  { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
+    .badge-offline { background: rgba(251,191,36,0.1); color: var(--gold); border: 1px solid rgba(251,191,36,0.2); }
+    .badge-active  { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+    .badge-revoked { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    /* Modal */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
+    .modal-bg.open { display: flex; }
+    .modal { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: 480px; max-width: 90vw; }
+    .modal h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .field input, .field select { width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; color: var(--white); font-family: inherit; font-size: 0.9rem; }
+    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
+    .btn-cancel  { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-confirm { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .btn-confirm:disabled { opacity: 0.45; }
+    .key-output { font-family: monospace; font-size: 0.72rem; color: var(--green); word-break: break-all; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-top: 12px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="/admin/" class="topbar-logo">⚙ DisplayWord Admin</a>
+    <div class="topbar-nav">
+      <a href="/admin/">Заявки</a>
+      <a href="/admin/keys.html" class="active">Ключи</a>
+      <a href="/account/">Кабинет</a>
+      <button class="btn-logout" id="btnLogout">Выйти</button>
+    </div>
+  </div>
+
+  <main>
+    <h1>Лицензионные ключи</h1>
+
+    <div class="section-header">
+      <div class="section-title">Все ключи</div>
+      <button class="btn-new" id="btnNew">+ Выдать ключ вручную</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Община</th>
+          <th>Режим</th>
+          <th>Активации</th>
+          <th>Статус</th>
+          <th>Выдан</th>
+          <th>Пользователь</th>
+        </tr>
+      </thead>
+      <tbody id="keysBody"><tr><td colspan="6" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
+    </table>
+  </main>
+
+  <!-- New key modal -->
+  <div class="modal-bg" id="modalNew">
+    <div class="modal">
+      <h2>Выдать ключ вручную</h2>
+      <div class="field">
+        <label>Название общины *</label>
+        <input type="text" id="nCommunity" placeholder="Имя общины" maxlength="200" />
+      </div>
+      <div class="field">
+        <label>Режим *</label>
+        <select id="nMode">
+          <option value="server">Server</option>
+          <option value="offline">Offline</option>
+        </select>
+      </div>
+      <div class="field" id="nLimitField">
+        <label>Лимит активаций</label>
+        <input type="number" id="nLimit" value="3" min="1" max="100" />
+      </div>
+      <div class="field">
+        <label>Заголовок владельца</label>
+        <input type="text" id="nOwner" placeholder="Пастор / Руководитель / …" />
+      </div>
+      <div class="key-output" id="newKeyOut"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelNew">Отмена</button>
+        <button class="btn-confirm" id="confirmNew">Создать ключ</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function load() {
+      const me = await fetch('/api/v1/me', { credentials: 'same-origin' }).then(r => r.json()).catch(() => null);
+      if (!me?.isAdmin) { window.location.href = '/account/login'; return; }
+
+      const keys = await fetch('/api/v1/admin/keys', { credentials: 'same-origin' }).then(r => r.json());
+      const tbody = document.getElementById('keysBody');
+      if (!keys.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = keys.map(k => `
+        <tr>
+          <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}</td>
+          <td><span class="badge badge-${k.mode}">${k.mode}</span></td>
+          <td>${k.activations} / ${k.activation_limit ?? '∞'}</td>
+          <td><span class="badge badge-${k.status}">${k.status}</span></td>
+          <td style="color:var(--gray)">${fmt(k.issued_at)}</td>
+          <td style="color:var(--gray);font-size:0.8rem">${esc(k.user_email ?? '—')}</td>
+        </tr>`).join('');
+    }
+
+    document.getElementById('btnNew').onclick = () => {
+      document.getElementById('nCommunity').value = '';
+      document.getElementById('nMode').value = 'server';
+      document.getElementById('nOwner').value = '';
+      document.getElementById('newKeyOut').style.display = 'none';
+      document.getElementById('confirmNew').disabled = false;
+      document.getElementById('confirmNew').textContent = 'Создать ключ';
+      document.getElementById('modalNew').classList.add('open');
+    };
+    document.getElementById('cancelNew').onclick = () => document.getElementById('modalNew').classList.remove('open');
+
+    document.getElementById('nMode').onchange = function() {
+      document.getElementById('nLimitField').style.display = this.value === 'server' ? '' : 'none';
+    };
+
+    document.getElementById('confirmNew').onclick = async () => {
+      const btn  = document.getElementById('confirmNew');
+      const community = document.getElementById('nCommunity').value.trim();
+      const mode  = document.getElementById('nMode').value;
+      const limit = parseInt(document.getElementById('nLimit').value, 10);
+      const owner = document.getElementById('nOwner').value.trim() || null;
+      if (!community) return;
+      btn.disabled = true; btn.textContent = 'Создаю…';
+
+      const res  = await fetch('/api/v1/admin/keys', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ communityName: community, mode, activationLimit: mode === 'server' ? limit : undefined, ownerTitle: owner }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const out = document.getElementById('newKeyOut');
+        out.textContent = data.keyString;
+        out.style.display = 'block';
+        btn.textContent = 'Готово ✓';
+        setTimeout(() => { document.getElementById('modalNew').classList.remove('open'); load(); }, 3000);
+      } else {
+        btn.textContent = 'Ошибка'; btn.disabled = false;
+      }
+    };
+
+    document.getElementById('btnLogout').onclick = async () => {
+      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      window.location.href = '/account/login';
+    };
+
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmt(iso) { return iso ? new Date(iso).toLocaleDateString('ru-RU', { day:'numeric', month:'short', year:'numeric' }) : '—'; }
+
+    load();
+  </script>
+</body>
+</html>

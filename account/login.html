@@ -53,6 +53,17 @@
     const btn  = document.getElementById('btn');
     const msg  = document.getElementById('msg');
 
+    // Auto-redirect if already logged in
+    (async () => {
+      try {
+        const res = await fetch('/api/v1/me', { credentials: 'same-origin' });
+        if (res.ok) {
+          const me = await res.json();
+          window.location.href = me.isAdmin ? '/admin/' : '/account/';
+        }
+      } catch (e) {}
+    })();
+
     // Show message from URL params (e.g. after verification)
     const params = new URLSearchParams(location.search);
     if (params.get('verified') === '1') {

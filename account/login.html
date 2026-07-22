@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Вход — DisplayWord</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../style.css" />
@@ -52,17 +56,6 @@
     const form = document.getElementById('form');
     const btn  = document.getElementById('btn');
     const msg  = document.getElementById('msg');
-
-    // Auto-redirect if already logged in
-    (async () => {
-      try {
-        const res = await fetch('/api/v1/me', { credentials: 'same-origin' });
-        if (res.ok) {
-          const me = await res.json();
-          window.location.href = me.isAdmin ? '/admin/' : '/account/';
-        }
-      } catch (e) {}
-    })();
 
     // Show message from URL params (e.g. after verification)
     const params = new URLSearchParams(location.search);

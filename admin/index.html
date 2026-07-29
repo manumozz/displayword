@@ -48,32 +48,12 @@
     .modal { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: 480px; max-width: 90vw; }
     .modal h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; }
     .modal label { display: block; font-size: 0.82rem; color: var(--gray); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
-    .modal input, .modal select, .modal textarea {
-      width: 100%; box-sizing: border-box;
-      background: #152033; border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 8px; padding: 10px 12px; color: #f5f7fa;
-      font-family: inherit; font-size: 0.9rem; margin-bottom: 16px;
-      color-scheme: dark;
-    }
-    .modal select option { background: #152033; color: #f5f7fa; }
-    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; flex-wrap: wrap; }
+    .modal input, .modal select, .modal textarea { width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; color: var(--white); font-family: inherit; font-size: 0.9rem; margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
     .btn-cancel { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; }
     .btn-confirm { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; }
     .btn-confirm:disabled { opacity: 0.45; }
-    .btn-copy {
-      background: rgba(74,222,128,0.12); color: var(--green);
-      border: 1px solid rgba(74,222,128,0.35);
-      padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
-      cursor: pointer; font-family: inherit;
-    }
-    .key-output {
-      font-family: ui-monospace, Consolas, monospace; font-size: 0.78rem;
-      color: #86efac; word-break: break-all; line-height: 1.45;
-      background: #0b1220; border: 1px solid rgba(74,222,128,0.25);
-      padding: 12px; border-radius: 8px; margin-top: 8px; display: none; user-select: all;
-      max-height: 140px; overflow-y: auto;
-    }
-    .key-hint { font-size: 0.75rem; color: var(--gray); margin: 8px 0 0; display: none; }
+    .key-output { font-family: monospace; font-size: 0.72rem; color: var(--green); word-break: break-all; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-top: 8px; display: none; }
     @media (max-width: 700px) { .stats { grid-template-columns: 1fr 1fr; } .app-row { flex-direction: column; align-items: flex-start; } }
   </style>
 </head>
@@ -110,20 +90,18 @@
       <h2 id="modalTitle">Одобрить заявку</h2>
       <label>Режим</label>
       <select id="approveMode">
-        <option value="offline" selected>Offline (без интернета)</option>
-        <option value="server">Server (активация через сайт)</option>
+        <option value="server">Server</option>
+        <option value="offline">Offline</option>
       </select>
       <label>Лимит активаций (Server)</label>
-      <input type="number" id="approveLimit" value="3" min="1" max="100" style="display:none" />
+      <input type="number" id="approveLimit" value="3" min="1" max="100" />
       <label>Заголовок владельца (необязательно)</label>
       <input type="text" id="approveOwner" placeholder="Например: Пастор" />
       <label>Заметка для себя (необязательно)</label>
       <textarea id="approveNotes" rows="2"></textarea>
       <div class="key-output" id="keyOutput"></div>
-      <p class="key-hint" id="keyHint">Ключ показывается один раз. Скопируйте — модалка сама не закроется.</p>
       <div class="modal-actions">
         <button class="btn-cancel" id="cancelApprove">Отмена</button>
-        <button type="button" class="btn-copy" id="btnCopyApproveKey" style="display:none">Копировать</button>
         <button class="btn-confirm" id="confirmApprove">Выдать ключ</button>
       </div>
     </div>
@@ -189,25 +167,16 @@
       }
     }
 
-    let lastApproveKey = '';
-
     function openApprove(id, name, edition) {
       currentAppId = id;
       document.getElementById('modalTitle').textContent = 'Одобрить: ' + name;
       document.getElementById('approveMode').value = edition === 'server' ? 'server' : 'offline';
       document.getElementById('approveLimit').value = 3;
-      document.getElementById('approveLimit').style.display = document.getElementById('approveMode').value === 'server' ? '' : 'none';
       document.getElementById('approveOwner').value = '';
       document.getElementById('approveNotes').value = '';
       document.getElementById('keyOutput').style.display = 'none';
-      document.getElementById('keyHint').style.display = 'none';
-      document.getElementById('btnCopyApproveKey').style.display = 'none';
-      document.getElementById('btnCopyApproveKey').textContent = 'Копировать';
-      document.getElementById('cancelApprove').textContent = 'Отмена';
       document.getElementById('confirmApprove').disabled = false;
-      document.getElementById('confirmApprove').style.display = '';
       document.getElementById('confirmApprove').textContent = 'Выдать ключ';
-      lastApproveKey = '';
       document.getElementById('modalApprove').classList.add('open');
     }
     function openReject(id) {
@@ -216,34 +185,8 @@
       document.getElementById('modalReject').classList.add('open');
     }
 
-    document.getElementById('approveMode').onchange = function() {
-      document.getElementById('approveLimit').style.display = this.value === 'server' ? '' : 'none';
-    };
-
-    document.getElementById('cancelApprove').onclick = () => {
-      document.getElementById('modalApprove').classList.remove('open');
-      load();
-    };
+    document.getElementById('cancelApprove').onclick = () => document.getElementById('modalApprove').classList.remove('open');
     document.getElementById('cancelReject').onclick  = () => document.getElementById('modalReject').classList.remove('open');
-
-    document.getElementById('btnCopyApproveKey').onclick = async () => {
-      const text = lastApproveKey || document.getElementById('keyOutput').textContent;
-      if (!text) return;
-      const btn = document.getElementById('btnCopyApproveKey');
-      try {
-        await navigator.clipboard.writeText(text);
-        btn.textContent = 'Скопировано ✓';
-        setTimeout(() => { btn.textContent = 'Копировать'; }, 2000);
-      } catch {
-        const out = document.getElementById('keyOutput');
-        const range = document.createRange();
-        range.selectNodeContents(out);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-        btn.textContent = 'Выделено — Ctrl+C';
-      }
-    };
 
     document.getElementById('confirmApprove').onclick = async () => {
       const btn = document.getElementById('confirmApprove');
@@ -260,15 +203,11 @@
       });
       const data = await res.json();
       if (res.ok) {
-        lastApproveKey = data.keyString || '';
         const out = document.getElementById('keyOutput');
-        out.textContent = lastApproveKey;
+        out.textContent = data.keyString;
         out.style.display = 'block';
-        document.getElementById('keyHint').style.display = 'block';
-        document.getElementById('btnCopyApproveKey').style.display = '';
-        document.getElementById('cancelApprove').textContent = 'Закрыть';
-        btn.style.display = 'none';
-        try { await navigator.clipboard.writeText(lastApproveKey); } catch (_) {}
+        btn.textContent = 'Готово ✓';
+        setTimeout(() => { document.getElementById('modalApprove').classList.remove('open'); load(); }, 2000);
       } else {
         btn.textContent = 'Ошибка: ' + (data.error ?? 'unknown');
         btn.disabled = false;

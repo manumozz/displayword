@@ -41,41 +41,12 @@
     .modal h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; }
     .field { margin-bottom: 16px; }
     .field label { display: block; font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
-    .field input, .field select {
-      width: 100%; box-sizing: border-box;
-      background: #152033; border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 8px; padding: 10px 12px;
-      color: #f5f7fa; font-family: inherit; font-size: 0.9rem;
-      color-scheme: dark;
-    }
-    /* Windows/Chrome: option в выпадашке иначе белый на белом */
-    .field select option { background: #152033; color: #f5f7fa; }
-    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; flex-wrap: wrap; }
+    .field input, .field select { width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; color: var(--white); font-family: inherit; font-size: 0.9rem; }
+    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
     .btn-cancel  { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; }
     .btn-confirm { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; }
     .btn-confirm:disabled { opacity: 0.45; }
-    .btn-copy {
-      background: rgba(74,222,128,0.12); color: var(--green);
-      border: 1px solid rgba(74,222,128,0.35);
-      padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
-      cursor: pointer; font-family: inherit;
-    }
-    .btn-copy:hover { background: rgba(74,222,128,0.2); }
-    .key-result { display: none; margin-top: 12px; }
-    .key-output {
-      font-family: ui-monospace, Consolas, monospace; font-size: 0.78rem;
-      color: #86efac; word-break: break-all; line-height: 1.45;
-      background: #0b1220; border: 1px solid rgba(74,222,128,0.25);
-      padding: 12px; border-radius: 8px; user-select: all;
-      max-height: 140px; overflow-y: auto;
-    }
-    .btn-revoke {
-      background: none; border: 1px solid rgba(248,113,113,0.35); color: #f87171;
-      padding: 5px 12px; border-radius: 7px; font-size: 0.78rem; font-weight: 700;
-      cursor: pointer; font-family: inherit;
-    }
-    .btn-revoke:hover { background: rgba(248,113,113,0.12); }
-    .btn-revoke:disabled { opacity: 0.4; cursor: default; }
+    .key-output { font-family: monospace; font-size: 0.72rem; color: var(--green); word-break: break-all; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-top: 12px; display: none; }
   </style>
 </head>
 <body>
@@ -106,10 +77,9 @@
           <th>Статус</th>
           <th>Выдан</th>
           <th>Пользователь</th>
-          <th></th>
         </tr>
       </thead>
-      <tbody id="keysBody"><tr><td colspan="7" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
+      <tbody id="keysBody"><tr><td colspan="6" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
     </table>
   </main>
 
@@ -124,11 +94,11 @@
       <div class="field">
         <label>Режим *</label>
         <select id="nMode">
-          <option value="offline" selected>Offline (без интернета)</option>
-          <option value="server">Server (активация через сайт)</option>
+          <option value="server">Server</option>
+          <option value="offline">Offline</option>
         </select>
       </div>
-      <div class="field" id="nLimitField" style="display:none">
+      <div class="field" id="nLimitField">
         <label>Лимит активаций</label>
         <input type="number" id="nLimit" value="3" min="1" max="100" />
       </div>
@@ -136,13 +106,9 @@
         <label>Заголовок владельца</label>
         <input type="text" id="nOwner" placeholder="Пастор / Руководитель / …" />
       </div>
-      <div class="key-result" id="keyResult">
-        <div class="key-output" id="newKeyOut" tabindex="0"></div>
-        <p class="key-hint">Ключ показывается один раз. Скопируйте и сохраните — модалка сама не закроется.</p>
-      </div>
+      <div class="key-output" id="newKeyOut"></div>
       <div class="modal-actions">
         <button class="btn-cancel" id="cancelNew">Отмена</button>
-        <button type="button" class="btn-copy" id="btnCopyKey" style="display:none">Копировать</button>
         <button class="btn-confirm" id="confirmNew">Создать ключ</button>
       </div>
     </div>
@@ -156,97 +122,33 @@
       const keys = await fetch('/api/v1/admin/keys', { credentials: 'same-origin' }).then(r => r.json());
       const tbody = document.getElementById('keysBody');
       if (!keys.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
         return;
       }
-      tbody.innerHTML = keys.map(k => {
-        const canRevoke = k.status === 'active';
-        const revokeBtn = canRevoke
-          ? `<button type="button" class="btn-revoke" data-revoke="${esc(k.key_id)}" data-name="${esc(k.community_name)}">Отозвать</button>`
-          : `<span style="color:var(--gray);font-size:0.75rem">—</span>`;
-        return `
+      tbody.innerHTML = keys.map(k => `
         <tr>
           <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}</td>
-          <td><span class="badge badge-${esc(k.mode)}">${esc(k.mode)}</span></td>
+          <td><span class="badge badge-${k.mode}">${k.mode}</span></td>
           <td>${k.activations} / ${k.activation_limit ?? '∞'}</td>
-          <td><span class="badge badge-${esc(k.status)}">${esc(k.status)}</span></td>
+          <td><span class="badge badge-${k.status}">${k.status}</span></td>
           <td style="color:var(--gray)">${fmt(k.issued_at)}</td>
           <td style="color:var(--gray);font-size:0.8rem">${esc(k.user_email ?? '—')}</td>
-          <td>${revokeBtn}</td>
-        </tr>`;
-      }).join('');
-
-      tbody.querySelectorAll('[data-revoke]').forEach(btn => {
-        btn.onclick = () => revokeKey(btn.getAttribute('data-revoke'), btn.getAttribute('data-name'), btn);
-      });
+        </tr>`).join('');
     }
-
-    async function revokeKey(keyId, name, btn) {
-      if (!keyId) return;
-      const ok = confirm(`Отозвать ключ «${name || keyId}»?\n\nServer: новые активации и продление токена перестанут работать.\nOffline: ключ в админке пометится отозванным (строка DW1 у кого уже есть — технически ещё подписана).`);
-      if (!ok) return;
-      btn.disabled = true;
-      btn.textContent = '…';
-      const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(keyId)}`, {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'revoke' }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        alert('Не удалось отозвать: ' + (data.error || res.status));
-        btn.disabled = false;
-        btn.textContent = 'Отозвать';
-        return;
-      }
-      load();
-    }
-
-    let lastKeyString = '';
 
     document.getElementById('btnNew').onclick = () => {
       document.getElementById('nCommunity').value = '';
-      document.getElementById('nMode').value = 'offline';
+      document.getElementById('nMode').value = 'server';
       document.getElementById('nOwner').value = '';
-      document.getElementById('nLimitField').style.display = 'none';
-      document.getElementById('keyResult').style.display = 'none';
-      document.getElementById('newKeyOut').textContent = '';
-      document.getElementById('btnCopyKey').style.display = 'none';
-      document.getElementById('btnCopyKey').textContent = 'Копировать';
-      document.getElementById('cancelNew').textContent = 'Отмена';
+      document.getElementById('newKeyOut').style.display = 'none';
       document.getElementById('confirmNew').disabled = false;
-      document.getElementById('confirmNew').style.display = '';
       document.getElementById('confirmNew').textContent = 'Создать ключ';
-      lastKeyString = '';
       document.getElementById('modalNew').classList.add('open');
     };
-    document.getElementById('cancelNew').onclick = () => {
-      document.getElementById('modalNew').classList.remove('open');
-      load();
-    };
+    document.getElementById('cancelNew').onclick = () => document.getElementById('modalNew').classList.remove('open');
 
     document.getElementById('nMode').onchange = function() {
       document.getElementById('nLimitField').style.display = this.value === 'server' ? '' : 'none';
-    };
-
-    document.getElementById('btnCopyKey').onclick = async () => {
-      const text = lastKeyString || document.getElementById('newKeyOut').textContent;
-      if (!text) return;
-      const btn = document.getElementById('btnCopyKey');
-      try {
-        await navigator.clipboard.writeText(text);
-        btn.textContent = 'Скопировано ✓';
-        setTimeout(() => { btn.textContent = 'Копировать'; }, 2000);
-      } catch {
-        // fallback: выделить текст
-        const out = document.getElementById('newKeyOut');
-        const range = document.createRange();
-        range.selectNodeContents(out);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-        btn.textContent = 'Выделено — Ctrl+C';
-      }
     };
 
     document.getElementById('confirmNew').onclick = async () => {
@@ -265,15 +167,11 @@
       });
       const data = await res.json();
       if (res.ok) {
-        lastKeyString = data.keyString || '';
-        document.getElementById('newKeyOut').textContent = lastKeyString;
-        document.getElementById('keyResult').style.display = 'block';
-        document.getElementById('btnCopyKey').style.display = '';
-        document.getElementById('btnCopyKey').textContent = 'Копировать';
-        document.getElementById('cancelNew').textContent = 'Закрыть';
-        btn.style.display = 'none';
-        // автокопирование в буфер (если браузер разрешит)
-        try { await navigator.clipboard.writeText(lastKeyString); } catch (_) {}
+        const out = document.getElementById('newKeyOut');
+        out.textContent = data.keyString;
+        out.style.display = 'block';
+        btn.textContent = 'Готово ✓';
+        setTimeout(() => { document.getElementById('modalNew').classList.remove('open'); load(); }, 3000);
       } else {
         btn.textContent = 'Ошибка'; btn.disabled = false;
       }

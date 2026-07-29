@@ -41,7 +41,7 @@ const DW_T = {
     regional_note: "Prices shown in USD (USA). Regional pricing available for Israel 🇮🇱, Europe 🇪🇺, and developing countries — <a href=\"mailto:hello@displayword.com\">contact us</a>.",
 
     // ── HOME · HERO ───────────────────────────────────────────
-    home_badge: "🎵 Free for churches",
+    home_badge: "🎵 For churches",
     home_h1:    "The Living Word<br /><span class=\"text-gold\">on Every Screen</span>",
     home_p:     "<ul class=\"hero-features\"><li>Control church screens from multiple devices simultaneously: worship leader's tablet, speaker's tablet, and operator's PC — unlimited connections</li><li>Song lyrics with chords on the stage screen and musicians' phones</li><li>Live key modulation</li><li>Song library with a powerful editor and auto key detection</li></ul>",
     home_dl:    "Download",
@@ -116,7 +116,7 @@ const DW_T = {
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Ready to transform<br />your worship services?",
-    cta_p:        "Download DisplayWord free and start today.",
+    cta_p:        "Download DisplayWord and start today.",
     early_title:  "Get Early Access",
     early_p:      "We're preparing the first release. Drop your email and we'll notify you.",
     notify_btn:   "Notify Me",
@@ -396,7 +396,7 @@ const DW_T = {
     regional_note: "Цены указаны в долларах США. Региональные цены для Израиля 🇮🇱, Европы 🇪🇺 и развивающихся стран — <a href=\"mailto:hello@displayword.com\">напишите нам</a>.",
 
     // ── HOME · HERO ───────────────────────────────────────────
-    home_badge: "🎵 Бесплатно для церквей",
+    home_badge: "🎵 Для церквей",
     home_h1:    "Живое Слово<br /><span class=\"text-gold\">на каждый экран</span>",
     home_p:     "<ul class=\"hero-features\"><li>Управление экранами с нескольких устройств: планшет лидера поклонения, планшет проповедника, компьютер оператора — количество подключений неограниченно</li><li>Тексты с аккордами на экране сцены и на телефонах музыкантов</li><li>Модуляция тональности на лету</li><li>Песенник с удобным конструктором и автоопределением тональности</li></ul>",
     home_dl:    "Скачать",
@@ -471,7 +471,7 @@ const DW_T = {
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Готовы преобразить<br />ваше богослужение?",
-    cta_p:        "Скачайте DisplayWord бесплатно и начните уже сегодня.",
+    cta_p:        "Скачайте DisplayWord и начните уже сегодня.",
     early_title:  "Ранний доступ",
     early_p:      "Мы готовим первый релиз. Оставьте email — мы уведомим вас.",
     notify_btn:   "Уведомить",

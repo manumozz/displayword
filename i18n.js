@@ -281,7 +281,7 @@ const DW_T = {
     cmp_os:          "Windows 10 / 11 · macOS",
 
     faq_title: "Frequently asked questions",
-    faq1_q: "Is the free version really free?",
+    faq1_q: "Is the Church edition really free?",
     faq1_a: "Yes, completely. DisplayWord Church has no trial period, no expiry, no ads, and no credit card required. It includes the Hall screen and full song library — suitable for many smaller churches and house groups.",
     faq2_q: "Are Connect and Team affordable for a small church?",
     faq2_a: "Yes. Connect is $24/month — less than the cost of a weekly coffee — and gives your entire team all 3 screens, chords, live modulation, and musician cues. Team is $48/month and adds web screens on every musician's phone via Wi-Fi. Annual subscriptions reduce the cost further. Regional pricing is available for Israel, Europe, and developing countries.",
@@ -636,7 +636,7 @@ const DW_T = {
     cmp_os:          "Windows 10 / 11 · macOS",
 
     faq_title: "Часто задаваемые вопросы",
-    faq1_q: "Бесплатная версия действительно бесплатна?",
+    faq1_q: "Редакция Church действительно бесплатна?",
     faq1_a: "Да, полностью. DisplayWord Church не имеет пробного периода, не истекает, без рекламы и без карты. Включает экран зала и полную библиотеку песен — подходит для многих небольших церквей и домашних групп.",
     faq2_q: "Connect и Team по карману небольшой церкви?",
     faq2_a: "Да. Connect — $24 в месяц. Это сопоставимо со стоимостью одного похода в кафе, но даёт всей команде три экрана, аккорды, живую модуляцию и сигналы для музыкантов. Team — $48 в месяц: добавляет веб-экраны на телефонах каждого музыканта через Wi-Fi. При годовой подписке итоговая сумма ниже. Региональные цены доступны для Израиля, Европы и развивающихся стран.",

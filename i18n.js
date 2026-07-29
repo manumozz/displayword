@@ -7,7 +7,7 @@ const DW_T = {
   en: {
     // ── NAV & FOOTER ──────────────────────────────────────────
     nav_features: "Features",
-    nav_pricing:  "Pricing",
+    nav_pricing:  "Editions",
     nav_download: "Download",
     nav_btn:      "Download",
     nav_login:    "Sign in",
@@ -111,7 +111,7 @@ const DW_T = {
     team_f4: "No extra hardware needed",
 
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
-    creator_quote: "I've been a worship minister for many years — playing, singing, running sound, managing the screens. I know what happens when the operator misses a slide, when the key changes mid-song, when the guitarist plays the chorus while the bassist plays a verse, when the preacher grabs the mic and the sound engineer doesn't notice, when the preacher needs his text and it's not there. DisplayWord is everything I wished I had for our services. Built from the experience of real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.",
+    creator_quote: "DisplayWord is what I always wanted to build for our ministry. Built from the experience of real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.",
     creator_role:  "Musician · Vocalist · Sound Engineer · Media Ministry Leader<br />Beit Kerem Community, Haifa coast, Israel",
 
     // ── HOME · CTA ────────────────────────────────────────────
@@ -362,7 +362,7 @@ const DW_T = {
   ru: {
     // ── NAV & FOOTER ──────────────────────────────────────────
     nav_features: "Возможности",
-    nav_pricing:  "Цены",
+    nav_pricing:  "Версии",
     nav_download: "Скачать",
     nav_btn:      "Скачать",
     nav_login:    "Войти",
@@ -466,7 +466,7 @@ const DW_T = {
     team_f4: "Без доп. оборудования",
 
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
-    creator_quote: "Я служитель в поклонении уже много лет — играю, пою, сижу за звуком, управляю экранами. Я знаю, что происходит, когда оператор не успел переключить слайд, когда тональность поменялась в середине песни, когда гитарист играет припев, а басист куплет, когда проповедник взял микрофон, а звукооператор этого не увидел, когда проповеднику нужен текст — а его нет. DisplayWord — это всё, что я сам хотел иметь для нашего служения. Он создан на опыте реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
+    creator_quote: "DisplayWord — это то, что я всегда хотел создать для нашего служения. Он создан на опыте реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
     creator_role:  "Музыкант · Певец · Звукооператор · Лидер медиаслужения<br />Община Beit Kerem, побережье Хайфы, Израиль",
 
     // ── HOME · CTA ────────────────────────────────────────────

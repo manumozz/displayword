@@ -41,7 +41,7 @@ const DW_T = {
     regional_note: "Prices shown in USD (USA). Regional pricing available for Israel 🇮🇱, Europe 🇪🇺, and developing countries — <a href=\"mailto:hello@displayword.com\">contact us</a>.",
 
     // ── HOME · HERO ───────────────────────────────────────────
-    home_badge: "🎵 For churches · Coming soon",
+    home_badge: "🎵 Free for churches",
     home_h1:    "The Living Word<br /><span class=\"text-gold\">on Every Screen</span>",
     home_p:     "<ul class=\"hero-features\"><li>Control church screens from multiple devices simultaneously: worship leader's tablet, speaker's tablet, and operator's PC — unlimited connections</li><li>Song lyrics with chords on the stage screen and musicians' phones</li><li>Live key modulation</li><li>Song library with a powerful editor and auto key detection</li></ul>",
     home_dl:    "Download",
@@ -396,7 +396,7 @@ const DW_T = {
     regional_note: "Цены указаны в долларах США. Региональные цены для Израиля 🇮🇱, Европы 🇪🇺 и развивающихся стран — <a href=\"mailto:hello@displayword.com\">напишите нам</a>.",
 
     // ── HOME · HERO ───────────────────────────────────────────
-    home_badge: "🎵 Для церквей · Скоро",
+    home_badge: "🎵 Бесплатно для церквей",
     home_h1:    "Живое Слово<br /><span class=\"text-gold\">на каждый экран</span>",
     home_p:     "<ul class=\"hero-features\"><li>Управление экранами с нескольких устройств: планшет лидера поклонения, планшет проповедника, компьютер оператора — количество подключений неограниченно</li><li>Тексты с аккордами на экране сцены и на телефонах музыкантов</li><li>Модуляция тональности на лету</li><li>Песенник с удобным конструктором и автоопределением тональности</li></ul>",
     home_dl:    "Скачать",

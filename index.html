@@ -153,6 +153,7 @@
     </ul>
   </div>
   <div class="nav-right">
+    <a href="/account/login" class="btn btn-outline" data-i18n="nav_login">Sign in</a>
     <button onclick="openDlModal()" class="btn btn-gold" data-i18n="nav_btn">Download</button>
     <button class="hamburger" id="navHam" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
@@ -382,16 +383,10 @@
 <!-- BOTTOM CTA -->
 <section class="cta-section">
   <h2 data-i18n="cta_title">Ready to transform<br />your worship services?</h2>
-  <p data-i18n="cta_p">Be first to know when the pilot release drops. Free for all early churches.</p>
-  <div class="subscribe-box centered">
-    <h3 data-i18n="early_title">Get Early Access</h3>
-    <p data-i18n="early_p">We're preparing the first release. Drop your email and we'll notify you.</p>
-    <div class="form-row">
-      <input type="email" id="emailInput2" data-i18n-ph="email_ph" placeholder="your@church.com" />
-      <button class="btn btn-gold" onclick="handleSubscribe2()" data-i18n="notify_btn">Notify Me</button>
-    </div>
-    <div class="subscribe-note" data-i18n="sub_note">No spam. One email when we launch.</div>
-    <div class="success-msg" id="successMsg2" data-i18n="success_msg">✓ You're on the list! We'll be in touch.</div>
+  <p data-i18n="cta_p">Download DisplayWord free and start today.</p>
+    <div class="cta-actions" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+    <a href="/download" class="btn btn-gold btn-lg" data-i18n="home_dl">Download</a>
+    <a href="/pricing" class="btn btn-outline btn-lg" data-i18n="home_price">View Pricing</a>
   </div>
 </section>
 
@@ -494,7 +489,7 @@
   </div>
 </div>
 
-<script src="i18n.js?v=10"></script>
+<script src="i18n.js?v=11"></script>
 <script>
   const BREVO_API_KEY = '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';
   const BREVO_LIST_ID = 2;

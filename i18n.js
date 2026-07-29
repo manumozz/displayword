@@ -116,7 +116,7 @@ const DW_T = {
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Ready to transform<br />your worship services?",
-    cta_p:        "Be first to know when the pilot release drops.",
+    cta_p:        "Download DisplayWord free and start today.",
     early_title:  "Get Early Access",
     early_p:      "We're preparing the first release. Drop your email and we'll notify you.",
     notify_btn:   "Notify Me",
@@ -471,7 +471,7 @@ const DW_T = {
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Готовы преобразить<br />ваше богослужение?",
-    cta_p:        "Узнайте первыми о выходе пилотного релиза.",
+    cta_p:        "Скачайте DisplayWord бесплатно и начните уже сегодня.",
     early_title:  "Ранний доступ",
     early_p:      "Мы готовим первый релиз. Оставьте email — мы уведомим вас.",
     notify_btn:   "Уведомить",

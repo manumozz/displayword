@@ -108,7 +108,7 @@ const DW_T = {
     team_f1: "Everything in Connect",
     team_f2: "Web screens on phones &amp; tablets",
     team_f3: "Musicians' screens via Wi-Fi",
-    team_f4: "No extra hardware needed",
+    team_f4: "Screen control from leader's and speaker's tablets",
 
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
     creator_quote: "DisplayWord is what I always wanted to build for our ministry. Built from the experience of real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.",
@@ -197,11 +197,10 @@ const DW_T = {
 
     team_badge_feat:  "DisplayWord Team",
     team_title_feat:  "Musicians' phones become<br />stage screens",
-    team_p_feat:      "In the Team edition, every musician sees their own screen on their phone or tablet — chords, cues, key — over Wi-Fi. No cables, no extra monitors, no hardware.",
+    team_p_feat:      "In the Team edition, every musician sees their own screen on their phone or tablet — chords, cues, key — over Wi-Fi.",
     dev_guitarist:    "Guitarist",     dev_guitar_desc:  "Chords in their key on their phone",
     dev_keys:         "Keyboardist",   dev_keys_desc:    "Chord chart + live transposition",
     dev_vocalist:     "Lead Vocalist", dev_vocal_desc:   "Lyrics, key, cues on a tablet",
-    dev_sound:        "Sound Engineer",dev_sound_desc:   "What's live, what's coming next",
     team_pricing_link:"See Team pricing",
     start_free_btn:   "Get Started →",
     feat_dl_btn:      "⬇ Download",
@@ -243,9 +242,8 @@ const DW_T = {
     team_pf1: "Everything in Connect",
     team_pf2: "Web screens via browser (Wi-Fi)",
     team_pf3: "Musicians' phones as stage screens",
-    team_pf4: "Lead vocalist tablet view",
-    team_pf5: "Sound engineer monitor view",
-    team_pf6: "No extra hardware required",
+    team_pf4: "Screen control from the speaker's tablet",
+    team_pf5: "Screen control from the worship leader's tablet",
     team_pf7: "Unlimited connected devices",
 
     cmp_title:       "Full feature comparison",
@@ -463,7 +461,7 @@ const DW_T = {
     team_f1: "Всё из Connect",
     team_f2: "Веб-экраны на телефонах и планшетах",
     team_f3: "Экраны музыкантов через Wi-Fi",
-    team_f4: "Без доп. оборудования",
+    team_f4: "Управление экранами с планшетов лидера прославления и спикера",
 
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
     creator_quote: "DisplayWord — это то, что я всегда хотел создать для нашего служения. Он создан на опыте реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
@@ -552,11 +550,10 @@ const DW_T = {
 
     team_badge_feat:  "DisplayWord Team",
     team_title_feat:  "Телефоны музыкантов<br />становятся экранами сцены",
-    team_p_feat:      "В версии Team каждый музыкант видит свой экран на телефоне или планшете — аккорды, сигналы, тональность — через Wi-Fi. Без кабелей, без лишних мониторов.",
+    team_p_feat:      "В версии Team каждый музыкант видит свой экран на телефоне или планшете — аккорды, сигналы, тональность — через Wi-Fi.",
     dev_guitarist:    "Гитарист",        dev_guitar_desc:  "Аккорды в своей тональности на телефоне",
     dev_keys:         "Клавишник",       dev_keys_desc:    "Аккорды + живая транспозиция",
     dev_vocalist:     "Ведущий вокалист",dev_vocal_desc:   "Тексты, тональность, сигналы на планшете",
-    dev_sound:        "Звукорежиссёр",   dev_sound_desc:   "Что сейчас, что следующее",
     team_pricing_link:"Тарифы Team",
     start_free_btn:   "Начать →",
     feat_dl_btn:      "⬇ Скачать",
@@ -598,9 +595,8 @@ const DW_T = {
     team_pf1: "Всё из Connect",
     team_pf2: "Веб-экраны через браузер (Wi-Fi)",
     team_pf3: "Телефоны музыкантов как экраны сцены",
-    team_pf4: "Вид планшета ведущего",
-    team_pf5: "Монитор звукорежиссёра",
-    team_pf6: "Не нужно доп. оборудование",
+    team_pf4: "Управление экранами с планшета спикера",
+    team_pf5: "Управление экранами с планшета лидера прославления",
     team_pf7: "Неограниченное число устройств",
 
     cmp_title:       "Полное сравнение возможностей",

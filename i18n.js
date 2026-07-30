@@ -112,7 +112,7 @@ const DW_T = {
 
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
     creator_quote: "DisplayWord is what I always wanted to build for our ministry. Built from the experience of real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.",
-    creator_role:  "Musician · Vocalist · Sound Engineer · Media Ministry Leader<br />Beit Kerem Community, Haifa coast, Israel",
+    creator_role:  "Media Ministry Leader",
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Ready to transform<br />your worship services?",
@@ -467,7 +467,7 @@ const DW_T = {
 
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
     creator_quote: "DisplayWord — это то, что я всегда хотел создать для нашего служения. Он создан на опыте реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
-    creator_role:  "Музыкант · Певец · Звукооператор · Лидер медиаслужения<br />Община Beit Kerem, побережье Хайфы, Израиль",
+    creator_role:  "Лидер медиаслужения",
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Готовы преобразить<br />ваше богослужение?",
@@ -731,6 +731,8 @@ function dwApply(lang) {
   );
   document.documentElement.lang = lang;
   localStorage.setItem('dw_lang', lang);
+  // Page-specific post-translate hooks (defined inline on pages that need them, e.g. home hero card sizing)
+  if (typeof dwFitCreatorCard === 'function') dwFitCreatorCard();
 }
 
 function dwSwitch(lang) {

@@ -319,6 +319,7 @@ const DW_T = {
     dl_p:           "Worship presentation software for Christian churches — lyrics, chords, up to 4 screens, musician cues.",
     dl_edition:     "DisplayWord · Church Edition",
     dl_platform:    "Windows 10 / 11 · 64-bit · ~265 MB",
+    dl_mobile_note: "DisplayWord is a Windows app. You can't install it on a phone — open this page on the computer you'll use for services.",
 
     // Live download state
     dl_btn_installer:     "Download Installer",
@@ -688,6 +689,7 @@ const DW_T = {
     dl_p:           "Программа управления экранами для христианских церквей — тексты, аккорды, до 4 экранов, сигналы для музыкантов.",
     dl_edition:     "DisplayWord · версия Church",
     dl_platform:    "Windows 10 / 11 · 64-bit · ~265 МБ",
+    dl_mobile_note: "DisplayWord — программа для Windows. На телефон её не установить: откройте эту страницу на том компьютере, за которым ведёте служение.",
 
     // Live download state
     dl_btn_installer:     "Скачать установщик",

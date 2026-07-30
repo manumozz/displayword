@@ -87,9 +87,11 @@
     .screen-device-label { font-size: 0.76rem; color: var(--gray); text-align: center; margin-top: 10px; letter-spacing: 0.02em; }
 
     @media (max-width: 768px) {
-      .feature-block { grid-template-columns: 1fr; gap: 40px; }
+      .feature-block { grid-template-columns: 1fr; gap: 40px; max-width: 100%; min-width: 0; box-sizing: border-box; }
       .feature-block.reverse .feat-visual { order: 0; }
-      .connect-section { padding: 36px 24px; }
+      .feat-text, .feat-visual { min-width: 0; max-width: 100%; }
+      .chord-visual { padding: 16px; overflow: hidden; box-sizing: border-box; }
+      .connect-section { padding: 36px 16px; }
     }
   </style>
 </head>
@@ -103,6 +105,8 @@
       <li><a href="/features" class="active" data-i18n="nav_features">Features</a></li>
       <li><a href="/pricing" data-i18n="nav_pricing">Pricing</a></li>
       <li><a href="/download" data-i18n="nav_download">Download</a></li>
+      <li class="nav-mobile-only"><a href="/account/login" data-i18n="nav_login">Sign in</a></li>
+      <li class="nav-mobile-only"><a href="/download" class="nav-dl" data-i18n="nav_btn">Download</a></li>
     </ul>
   </div>
   <div class="nav-right">
@@ -391,6 +395,6 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=21"></script>
+<script src="i18n.js?v=22"></script>
 </body>
 </html>

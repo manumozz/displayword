@@ -46,6 +46,8 @@
     .feat-list li:last-child { border-bottom: none; }
     .feat-list .chk  { color: var(--green); flex-shrink: 0; font-weight: 700; margin-top: 1px; }
     .feat-list .dash { color: rgba(255,255,255,0.2); flex-shrink: 0; }
+    .feat-list li.feat-group { display: block; border-bottom: none; padding: 16px 0 4px; font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; }
+    .feat-list li.feat-group:first-child { padding-top: 0; }
 
     /* ── Regional note ─────────────────────────────── */
     .regional-note { text-align: center; margin-top: 28px; font-size: 0.82rem; color: rgba(255,255,255,0.35); line-height: 1.6; }
@@ -136,16 +138,28 @@
         <a href="/download" class="price-cta outline" data-i18n="church_cta">Download</a>
         <div class="divider"></div>
         <ul class="feat-list">
-          <li><span class="chk">✓</span> <span data-i18n="church_pf1">Hall screen (congregation)</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf2">Song library &amp; setlists</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf3">Full song editor with chords</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf4">Key selection &amp; transposition</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf5">Multiple song books</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf6">Print chord sheets as PDF</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf7">Quick messages &amp; announcements</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf8">Blackout (hide all screens)</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf9">Works fully offline</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="church_pf10">Light &amp; dark themes</span></li>
+          <li class="feat-group" data-i18n="church_g1">Hall screen &amp; Bible</li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf1">Song lyrics and Bible verses on the hall screen</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf2">Bible search by reference or by text; Tanakh / New Testament / whole Bible filter</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf3">One click puts a verse on screen; Ctrl-click builds a selection and shows it at once</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf4">Up to three Bible translations on screen at once, Hebrew included</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf5">Sermon plan and history of shown verses</span></li>
+          <li class="feat-group" data-i18n="church_g2">Song books &amp; song editor</li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf6">Library of service song books; separate song books for guests</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf7">Verse / chorus / bridge sections with colour tags and notes</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf8">Chord chips: drag into the text, double-click to remove, clear them all in one click</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf9">Two section modes: plain text, or text with chords</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf10">"Text" mode: the whole song as one block — paste from clipboard, edit in bulk</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf11">Rearrange sections by dragging, copy with Alt, undo with Ctrl+Z</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf12">Slide preview: see exactly how the song will go on screen</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf13">A key per vocalist, with chords transposed automatically</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf14">Print chord sheets as PDF for musicians</span></li>
+          <li class="feat-group" data-i18n="church_g3">Everyday convenience</li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf15">Keyboard shortcuts: run the service from the keyboard, without a mouse</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf16">Interface language is chosen per device</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf17">Quick messages and announcements on screen</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf18">Works fully offline</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="church_pf19">Light and dark themes</span></li>
           <li><span class="dash">—</span> <span data-i18n="church_d1">Stage &amp; Preacher screens</span></li>
         </ul>
       </div>
@@ -162,7 +176,7 @@
         <ul class="feat-list">
           <li><span class="chk">✓</span> <span data-i18n="connect_pf1">Everything in Church</span></li>
           <li><span class="chk">✓</span> <span data-i18n="connect_pf2">Stage screen and preacher screen</span></li>
-          <li><span class="chk">✓</span> <span data-i18n="connect_pf3">Live modulation mid-song</span></li>
+          <li><span class="chk">✓</span> <span data-i18n="connect_pf3">Live modulation on the fly during the service</span></li>
           <li><span class="chk">✓</span> <span data-i18n="connect_pf4">Special cues for musicians (customizable)</span></li>
           <li><span class="chk">✓</span> <span data-i18n="connect_pf5">Media: slide backgrounds and files in the playlist</span></li>
           <li><span class="dash">—</span> <span data-i18n="connect_d1">Wi-Fi web screens for phones/tablets</span></li>
@@ -332,7 +346,7 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=17"></script>
+<script src="i18n.js?v=18"></script>
 <script>
 /* ── Billing toggle ──────────────────────────────────────── */
 const PRICES = {

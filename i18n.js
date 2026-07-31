@@ -23,12 +23,12 @@ const DW_T = {
 
     // ── SHARED ────────────────────────────────────────────────
     download_free:  "Download",
-    view_pricing:   "View Pricing",
+    view_pricing:   "View Editions",
     one_time:       "Cancel anytime",
     most_popular:   "Most Popular",
     coming_soon:    "Coming soon",
     see_all_feat:   "See all features →",
-    full_price_link:"Full pricing details &amp; comparison →",
+    full_price_link:"Full edition comparison →",
 
     // ── BILLING TOGGLE ────────────────────────────────────────
     bill_monthly: "Monthly",
@@ -45,7 +45,7 @@ const DW_T = {
     home_h1:    "The Living Word<br /><span class=\"text-gold\">on Every Screen</span>",
     home_p:     "<ul class=\"hero-features\"><li>Worship leader's tablet — the service song set, shown on the screens</li><li>Preacher's tablet — several plans of Bible verses, shown on the screens</li><li>The operator runs the service from the computer at the same time; in the Team edition you can connect as many tablets and phones as you need</li><li>Song lyrics with chords on the stage screen and musicians' phones</li><li>Live key modulation</li><li>Song library with a powerful editor and auto key detection</li></ul>",
     home_dl:    "Download",
-    home_price: "View Pricing",
+    home_price: "View Editions",
 
     // ── HOME · SCREENS ────────────────────────────────────────
     scr_stage:    "Stage Screen",
@@ -72,7 +72,8 @@ const DW_T = {
 
     // ── HOME · HOW IT WORKS ───────────────────────────────────
     how_label: "How it works",
-    how_title: "Simple for operators, powerful for services",
+    how_title: "Putting things on screen is no longer one person's job at the computer",
+    how_sub:   "The whole team runs the service, each from their own device: the operator from the computer, the worship leader and the preacher from their tablets. In the Team edition.",
     step1_title: "Build your setlist",
     step1_p:     "Pick songs from your library, set keys, arrange the order. Takes 5 minutes before service.",
     step2_title: "Run the service",
@@ -90,7 +91,7 @@ const DW_T = {
     who4_title: "Churches Worldwide", who4_p: "Built to serve congregations of every size and tradition across the globe.",
 
     // ── HOME · MINI PRICING ───────────────────────────────────
-    price_label: "Pricing",
+    price_label: "Editions",
     price_title: "Choose the edition that fits your church.",
     price_sub:   "Church edition is free — no account needed.",
     church_price:   "Free",
@@ -203,10 +204,10 @@ const DW_T = {
     dev_guitarist:    "Guitarist",     dev_guitar_desc:  "Chords in their key on their phone",
     dev_keys:         "Keyboardist",   dev_keys_desc:    "Chord chart + live transposition",
     dev_vocalist:     "Lead Vocalist", dev_vocal_desc:   "Lyrics, key, cues on a tablet",
-    team_pricing_link:"See Team pricing",
+    team_pricing_link:"More about the Team edition",
     start_free_btn:   "Get Started →",
     feat_dl_btn:      "⬇ Download",
-    feat_pr_btn:      "View Pricing",
+    feat_pr_btn:      "View Editions",
 
     // ── PRICING PAGE ──────────────────────────────────────────
     pr_badge: "Editions",
@@ -393,12 +394,12 @@ const DW_T = {
 
     // ── SHARED ────────────────────────────────────────────────
     download_free:  "Скачать",
-    view_pricing:   "Тарифы",
+    view_pricing:   "Версии",
     one_time:       "Можно отменить в любое время",
     most_popular:   "Популярный",
     coming_soon:    "Скоро",
     see_all_feat:   "Все возможности →",
-    full_price_link:"Полное сравнение тарифов →",
+    full_price_link:"Полное сравнение версий →",
 
     // ── BILLING TOGGLE ────────────────────────────────────────
     bill_monthly: "Ежемесячно",
@@ -415,7 +416,7 @@ const DW_T = {
     home_h1:    "Живое Слово<br /><span class=\"text-gold\">на каждый экран</span>",
     home_p:     "<ul class=\"hero-features\"><li>Планшет лидера поклонения — подборка песен служения, вывод на экраны</li><li>Планшет проповедника — несколько планов со стихами Библии, вывод на экраны</li><li>Оператор параллельно ведёт служение с компьютера; в редакции Team планшетов и телефонов можно подключить сколько нужно</li><li>Тексты с аккордами на экране сцены и на телефонах музыкантов</li><li>Модуляция тональности на лету</li><li>Песенник с удобным конструктором и автоопределением тональности</li></ul>",
     home_dl:    "Скачать",
-    home_price: "Тарифы",
+    home_price: "Версии",
 
     // ── HOME · SCREENS ────────────────────────────────────────
     scr_stage:    "Экран сцены",
@@ -442,7 +443,8 @@ const DW_T = {
 
     // ── HOME · HOW IT WORKS ───────────────────────────────────
     how_label: "Как это работает",
-    how_title: "Просто для оператора — мощно для служения",
+    how_title: "Вывод на экраны перестал быть задачей одного человека за компьютером",
+    how_sub:   "Служение ведёт вся команда, каждый со своего устройства: оператор с компьютера, лидер поклонения и проповедник — со своих планшетов. В редакции Team.",
     step1_title: "Составьте сет-лист",
     step1_p:     "Выберите песни из библиотеки, задайте тональности, расставьте порядок. 5 минут до начала служения.",
     step2_title: "Ведите служение",
@@ -460,7 +462,7 @@ const DW_T = {
     who4_title: "Церкви по всему миру",   who4_p: "Создано для общин любого размера и традиции по всему миру.",
 
     // ── HOME · MINI PRICING ───────────────────────────────────
-    price_label: "Тарифы",
+    price_label: "Версии",
     price_title: "Выберите конфигурацию для вашей общины.",
     price_sub:   "Редакция Church бесплатна — регистрация не нужна.",
     church_price:   "Бесплатно",
@@ -573,10 +575,10 @@ const DW_T = {
     dev_guitarist:    "Гитарист",        dev_guitar_desc:  "Аккорды в своей тональности на телефоне",
     dev_keys:         "Клавишник",       dev_keys_desc:    "Аккорды + живая транспозиция",
     dev_vocalist:     "Ведущий вокалист",dev_vocal_desc:   "Тексты, тональность, сигналы на планшете",
-    team_pricing_link:"Тарифы Team",
+    team_pricing_link:"Подробнее о версии Team",
     start_free_btn:   "Начать →",
     feat_dl_btn:      "⬇ Скачать",
-    feat_pr_btn:      "Тарифы",
+    feat_pr_btn:      "Версии",
 
     // ── PRICING PAGE ──────────────────────────────────────────
     pr_badge: "Редакции",

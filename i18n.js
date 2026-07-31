@@ -43,7 +43,7 @@ const DW_T = {
     // ── HOME · HERO ───────────────────────────────────────────
     home_badge: "🎵 For Christian gatherings",
     home_h1:    "The Living Word<br /><span class=\"text-gold\">on Every Screen</span>",
-    home_p:     "<ul class=\"hero-features\"><li>Control church screens from multiple devices: the worship leader's tablet, the speaker's tablet, the operator's PC — in the Team edition the number of connected devices is unlimited</li><li>Song lyrics with chords on the stage screen and musicians' phones</li><li>Live key modulation</li><li>Song library with a powerful editor and auto key detection</li></ul>",
+    home_p:     "<ul class=\"hero-features\"><li>Worship leader's tablet — the service song set, shown on the screens</li><li>Preacher's tablet — several plans of Bible verses, shown on the screens</li><li>The operator runs the service from the computer at the same time; in the Team edition you can connect as many tablets and phones as you need</li><li>Song lyrics with chords on the stage screen and musicians' phones</li><li>Live key modulation</li><li>Song library with a powerful editor and auto key detection</li></ul>",
     home_dl:    "Download",
     home_price: "View Pricing",
 
@@ -413,7 +413,7 @@ const DW_T = {
     // ── HOME · HERO ───────────────────────────────────────────
     home_badge: "🎵 Для христианских собраний",
     home_h1:    "Живое Слово<br /><span class=\"text-gold\">на каждый экран</span>",
-    home_p:     "<ul class=\"hero-features\"><li>Управление экранами с нескольких устройств: планшет лидера прославления, планшет проповедника, компьютер оператора — в редакции Team число подключённых устройств не ограничено</li><li>Тексты с аккордами на экране сцены и на телефонах музыкантов</li><li>Модуляция тональности на лету</li><li>Песенник с удобным конструктором и автоопределением тональности</li></ul>",
+    home_p:     "<ul class=\"hero-features\"><li>Планшет лидера поклонения — подборка песен служения, вывод на экраны</li><li>Планшет проповедника — несколько планов со стихами Библии, вывод на экраны</li><li>Оператор параллельно ведёт служение с компьютера; в редакции Team планшетов и телефонов можно подключить сколько нужно</li><li>Тексты с аккордами на экране сцены и на телефонах музыкантов</li><li>Модуляция тональности на лету</li><li>Песенник с удобным конструктором и автоопределением тональности</li></ul>",
     home_dl:    "Скачать",
     home_price: "Тарифы",
 
@@ -480,7 +480,7 @@ const DW_T = {
     connect_f4:      "Спецсигналы для музыкантов",
     team_f1: "Всё из Connect",
     team_f2: "Веб-экраны на телефонах и планшетах музыкантов",
-    team_f3: "Управление экранами с планшетов лидера прославления и спикера",
+    team_f3: "Управление экранами с планшетов лидера поклонения и спикера",
 
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
     creator_quote: "DisplayWord — это то, что я всегда хотел создать для нашего служения. Он создан на опыте реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
@@ -506,7 +506,7 @@ const DW_T = {
 
     f_sc_label: "Управление с устройств · Team",
     f_sc_title: "Лидер, проповедник, оператор —<br />у каждого своё устройство.",
-    f_sc_desc:  "В редакции Team лидер прославления управляет экраном сцены со своего планшета — аккорды и сигналы для музыкантов. Проповедник управляет своим экраном сам. Оператор ведёт зал с компьютера. Три роли, три устройства — всё через Wi-Fi.",
+    f_sc_desc:  "В редакции Team лидер поклонения управляет экраном сцены со своего планшета — аккорды и сигналы для музыкантов. Проповедник управляет своим экраном сам. Оператор ведёт зал с компьютера. Три роли, три устройства — всё через Wi-Fi.",
     f_sc_l1: "Экран сцены — планшет лидера: аккорды и сигналы для музыкантов",
     f_sc_l2: "Экран проповедника — планшет спикера: его личный дисплей",
     f_sc_l3: "Экран зала — компьютер оператора: тексты для прихожан",
@@ -628,7 +628,7 @@ const DW_T = {
     team_cta:    "Получить Team",
     team_pf1: "Всё из Connect",
     team_pf2: "Веб-экраны на телефонах и планшетах музыкантов — без ограничения по числу устройств",
-    team_pf3: "Управление экранами с планшета лидера прославления",
+    team_pf3: "Управление экранами с планшета лидера поклонения",
     team_pf4: "Управление экранами с планшета спикера",
 
     cmp_title:       "Полное сравнение возможностей",

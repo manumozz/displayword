@@ -86,7 +86,6 @@
 
     .dl-arr { font-size: 1.2em; line-height: 1; }
 
-    .about-creator-section { background: var(--navy2); }
     .about-creator-card { margin: 0 auto; padding: 8px 0; position: relative; max-width: 100%; }
     .about-creator-body { width: 100%; }
     .about-creator-text { font-size: 1.1rem; color: var(--white); line-height: 1.75; font-style: italic; margin-bottom: 22px; }
@@ -94,9 +93,12 @@
     .about-creator-signature .about-creator-name { color: var(--white); font-weight: 800; letter-spacing: -0.3px; }
     .hero .about-creator-text,
     .hero .about-creator-signature { max-width: none; }
+    .about-creator-framed { max-width: 720px; margin: 0 auto; padding: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(240,165,0,0.2); border-radius: 16px; }
+    .about-creator-framed .about-creator-text { margin-bottom: 22px; }
     @media (max-width: 600px) {
       .about-creator-card { padding: 28px 22px; }
       .about-creator-text { font-size: 1rem; }
+      .about-creator-framed { padding: 28px 22px; }
     }
 
     /* ── DOWNLOAD MODAL ─────────────────────────── */
@@ -371,6 +373,18 @@
   </div>
 </section>
 
+<!-- FROM THE AUTHOR -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label" data-i18n="about_label">From the author</div>
+    <div class="about-creator-framed">
+      <p class="about-creator-text" data-i18n="creator_quote_full">I've been a worship minister for many years — playing, singing, running sound, managing the screens. I know what happens when the operator misses a slide, when the key changes mid-song, when the guitarist plays the chorus while the bassist plays a verse, when the preacher grabs the mic and the sound engineer doesn't notice, when the preacher needs his text and it's not there. DisplayWord is everything I wished I had for our services. Built from the experience of real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.</p>
+      <div class="about-creator-signature">
+        <span data-i18n="creator_role">Media Ministry Leader</span> — <span class="about-creator-name">David <span style="color:var(--gold)">Willart</span></span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- BOTTOM CTA -->
 <section class="cta-section">
@@ -483,7 +497,7 @@
   </div>
 </div>
 
-<script src="i18n.js?v=24"></script>
+<script src="i18n.js?v=25"></script>
 <script>
   const BREVO_API_KEY = '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';
   const BREVO_LIST_ID = 2;

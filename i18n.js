@@ -116,6 +116,8 @@ const DW_T = {
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
     creator_quote: "DisplayWord is what I always wanted to build for our ministry. Built from the experience of real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.",
     creator_role:  "Media Ministry Leader",
+    about_label:   "From the author",
+    creator_quote_full: "I've been a worship minister for many years — playing, singing, running sound, managing the screens. I know what happens when the operator misses a slide, when the key changes mid-song, when the guitarist plays the chorus while the bassist plays a verse, when the preacher grabs the mic and the sound engineer doesn't notice, when the preacher needs his text and it's not there. DisplayWord is everything I wished I had for our services. Built from the experience of real services, real moments, real needs — by someone who steps up to serve with you every Shabbat.",
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Ready to transform<br />your worship services?",
@@ -487,6 +489,8 @@ const DW_T = {
     // ── HOME · ABOUT CREATOR ─────────────────────────────────
     creator_quote: "DisplayWord — это то, что я всегда хотел создать для нашего служения. Он создан на опыте реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
     creator_role:  "Лидер медиаслужения",
+    about_label:   "От автора",
+    creator_quote_full: "Я служитель в поклонении уже много лет — играю, пою, сижу за звуком, управляю экранами. Я знаю, что происходит, когда оператор не успел переключить слайд, когда тональность поменялась в середине песни, когда гитарист играет припев, а басист куплет, когда проповедник взял микрофон, а звукооператор этого не увидел, когда проповеднику нужен текст — а его нет. DisplayWord — это всё, что я сам хотел иметь для нашего служения. Он создан на опыте реальных служений, реальных моментов, реальных потребностей — человеком, который каждый шабат выходит вместе с вами на служение.",
 
     // ── HOME · CTA ────────────────────────────────────────────
     cta_title:    "Готовы преобразить<br />ваше богослужение?",

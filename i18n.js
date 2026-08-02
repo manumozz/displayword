@@ -158,8 +158,11 @@ const DW_T = {
     f_ch_l3: "Live modulation block: raise or lower key mid-song",
     f_ch_l4: "Hebrew (RTL) songs: standard-notation chords sit precisely above the Hebrew text",
     f_ch_l5: "Auto-detects key from chord set",
-    mod_key_lbl: "Key:",
-    mod_live:    "↑ Live modulation",
+    cd_panel_title: "Chords<br />in the key",
+    cd_tag: "Verse",
+    cd_line1: "I will praise You, Lord, with all of my heart",
+    cd_line2: "You are my fortress and my <span id=\"lastWord\">song</span>",
+    cd_caption: "The chord is dragged from the key panel straight onto the right syllable — the bar shows where it will land",
 
     f_cue_label: "Special Cues",
     f_cue_title: "Instant signals<br />to your musicians.",
@@ -531,8 +534,11 @@ const DW_T = {
     f_ch_l3: "Блок живой модуляции: повысить или понизить во время песни",
     f_ch_l4: "Песни на иврите (RTL): аккорды в стандартной нотации точно встают над ивритским текстом",
     f_ch_l5: "Автоопределение тональности по набору аккордов",
-    mod_key_lbl: "Тон.:",
-    mod_live:    "↑ Живая модуляция",
+    cd_panel_title: "Аккорды<br />тональности",
+    cd_tag: "Куплет",
+    cd_line1: "Славлю Тебя, Господь, всем сердцем моим",
+    cd_line2: "Ты — моя крепость и песня <span id=\"lastWord\">моя</span>",
+    cd_caption: "Аккорд перетаскивается из панели тональности прямо на нужный слог — полоска показывает, куда он встанет",
 
     f_cue_label: "Спецсигналы",
     f_cue_title: "Мгновенные сигналы<br />для музыкантов.",
@@ -769,6 +775,7 @@ function dwApply(lang) {
   localStorage.setItem('dw_lang', lang);
   // Page-specific post-translate hooks (defined inline on pages that need them, e.g. home hero card sizing)
   if (typeof dwFitCreatorCard === 'function') dwFitCreatorCard();
+  if (typeof dwFitChordDemo === 'function') dwFitChordDemo();
 }
 
 function dwSwitch(lang) {

@@ -40,7 +40,8 @@
       padding:22px;display:flex;gap:26px;position:relative;overflow:hidden;
       margin-left:auto;margin-right:auto;
     }
-    .chord-block .screen-device-label { text-align:center; max-width:860px; margin:10px auto 0; }
+    .chord-block .chord-demo { margin: 22px auto 0; }
+    .chord-block .screen-device-label { text-align:center; max-width:860px; margin: 10px auto 26px; }
     .cd-panel{width:132px;flex-shrink:0}
     .cd-panel-title{font-size:.6rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
                     color:var(--accent);margin-bottom:12px;line-height:1.5}
@@ -273,54 +274,58 @@
       <div class="feat-label" data-i18n="f_ch_label">Chords &amp; Modulation</div>
       <h2 class="feat-title" data-i18n="f_ch_title">Every song in<br />any key, instantly.</h2>
       <p class="feat-desc" data-i18n="f_ch_desc">Songs are stored with chords positioned above the lyrics. The worship leader decides the key — DisplayWord transposes everything in real time. Mid-song modulation is a single + or − button.</p>
+
       <ul class="feat-list">
         <li data-i18n="f_ch_l1">Chords displayed above each line of lyrics</li>
+      </ul>
+
+      <div class="chord-demo" id="demo">
+        <div class="cd-panel">
+          <div class="cd-panel-title" data-i18n="cd_panel_title">Chords<br />in the key</div>
+          <div class="cd-chips">
+            <div class="cd-chip">G</div>
+            <div class="cd-chip src" id="srcChip">Am</div>
+            <div class="cd-chip">C</div>
+            <div class="cd-chip">D</div>
+            <div class="cd-chip">Em</div>
+            <div class="cd-chip">F</div>
+          </div>
+        </div>
+        <div class="cd-song">
+          <div class="cd-tag" data-i18n="cd_tag">Verse</div>
+          <div class="cd-line">
+            <div class="cd-chords">
+              <span style="left:0">G</span>
+              <span style="left:210px">C</span>
+            </div>
+            <div class="cd-lyric" data-i18n="cd_line1">I will praise You, Lord, with all of my heart</div>
+          </div>
+          <div class="cd-line">
+            <div class="cd-chords">
+              <span style="left:0">G</span>
+              <span style="left:150px">C</span>
+              <span class="cd-landed" id="landed" style="left:330px">Am</span>
+              <div class="cd-drop" id="drop" style="left:330px"></div>
+            </div>
+            <div class="cd-lyric" data-i18n="cd_line2">You are my fortress and my <span id="lastWord">song</span></div>
+          </div>
+        </div>
+        <svg class="cd-arrow" id="arrow"><path id="arrowPath" d=""></path><polygon id="arrowHead" points=""></polygon></svg>
+        <div class="cd-ghost" id="ghost">Am</div>
+        <svg class="cd-cursor" id="cursor" width="26" height="30" viewBox="0 0 26 30" fill="none">
+          <path d="M4 3.2c0-1.2 1-2.2 2.2-2.2S8.4 2 8.4 3.2v8.4h1.1V5.4c0-1.2 1-2.2 2.2-2.2s2.2 1 2.2 2.2v6.2h1.1V7.1c0-1.2 1-2.2 2.2-2.2s2.2 1 2.2 2.2v4.5h1.1V9.6c0-1.2 1-2.2 2.2-2.2S25 8.4 25 9.6v9.2c0 5.6-3.6 10.2-9.1 10.2h-2.3c-3 0-5.1-1.3-6.6-3.6L1.4 16.7c-.6-1-.3-2.3.7-2.9 1-.6 2.3-.3 2.9.7l1 1.6V3.2z"
+            fill="rgba(15,27,45,.94)" stroke="#f0a500" stroke-width="1.3" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p class="screen-device-label" data-i18n="cd_caption">The chord is dragged from the key panel straight onto the right syllable — the bar shows where it will land</p>
+
+      <ul class="feat-list">
         <li data-i18n="f_ch_l2">One-click transposition to any key</li>
         <li data-i18n="f_ch_l3">Live modulation block: raise or lower key mid-song</li>
         <li data-i18n="f_ch_l4">Hebrew (RTL) songs: standard-notation chords sit precisely above the Hebrew text</li>
         <li data-i18n="f_ch_l5">Auto-detects key from chord set</li>
       </ul>
     </div>
-
-    <div class="chord-demo" id="demo">
-      <div class="cd-panel">
-        <div class="cd-panel-title" data-i18n="cd_panel_title">Chords<br />in the key</div>
-        <div class="cd-chips">
-          <div class="cd-chip">G</div>
-          <div class="cd-chip src" id="srcChip">Am</div>
-          <div class="cd-chip">C</div>
-          <div class="cd-chip">D</div>
-          <div class="cd-chip">Em</div>
-          <div class="cd-chip">F</div>
-        </div>
-      </div>
-      <div class="cd-song">
-        <div class="cd-tag" data-i18n="cd_tag">Verse</div>
-        <div class="cd-line">
-          <div class="cd-chords">
-            <span style="left:0">G</span>
-            <span style="left:210px">C</span>
-          </div>
-          <div class="cd-lyric" data-i18n="cd_line1">I will praise You, Lord, with all of my heart</div>
-        </div>
-        <div class="cd-line">
-          <div class="cd-chords">
-            <span style="left:0">G</span>
-            <span style="left:150px">C</span>
-            <span class="cd-landed" id="landed" style="left:330px">Am</span>
-            <div class="cd-drop" id="drop" style="left:330px"></div>
-          </div>
-          <div class="cd-lyric" data-i18n="cd_line2">You are my fortress and my <span id="lastWord">song</span></div>
-        </div>
-      </div>
-      <svg class="cd-arrow" id="arrow"><path id="arrowPath" d=""></path><polygon id="arrowHead" points=""></polygon></svg>
-      <div class="cd-ghost" id="ghost">Am</div>
-      <svg class="cd-cursor" id="cursor" width="26" height="30" viewBox="0 0 26 30" fill="none">
-        <path d="M4 3.2c0-1.2 1-2.2 2.2-2.2S8.4 2 8.4 3.2v8.4h1.1V5.4c0-1.2 1-2.2 2.2-2.2s2.2 1 2.2 2.2v6.2h1.1V7.1c0-1.2 1-2.2 2.2-2.2s2.2 1 2.2 2.2v4.5h1.1V9.6c0-1.2 1-2.2 2.2-2.2S25 8.4 25 9.6v9.2c0 5.6-3.6 10.2-9.1 10.2h-2.3c-3 0-5.1-1.3-6.6-3.6L1.4 16.7c-.6-1-.3-2.3.7-2.9 1-.6 2.3-.3 2.9.7l1 1.6V3.2z"
-          fill="rgba(15,27,45,.94)" stroke="#f0a500" stroke-width="1.3" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <p class="screen-device-label" data-i18n="cd_caption">The chord is dragged from the key panel straight onto the right syllable — the bar shows where it will land</p>
   </div>
 </div>
 

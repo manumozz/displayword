@@ -122,6 +122,7 @@
     </div>
   </div>
 
+  <script src="/countries.js"></script>
   <script>
     let currentAppId = null;
     let approveKeyCreated = false;
@@ -182,7 +183,7 @@
                 <span class="badge badge-${a.edition}">${a.edition}</span>
               </div>
               <div class="app-meta">
-                ${esc(a.city_country)} · ${esc(a.user_email)} · ${fmt(a.created_at)}
+                ${esc(a.city_country)}${a.country ? ', <span title="' + esc(dwCountryName(a.country)) + '">' + esc(a.country) + '</span>' : ''} · ${esc(a.user_email)} · ${fmt(a.created_at)}
                 ${a.members_count ? ' · ~' + a.members_count + ' чел.' : ''}
                 ${a.message ? '<br><span style="color:var(--white);opacity:0.7">' + esc(a.message) + '</span>' : ''}
               </div>

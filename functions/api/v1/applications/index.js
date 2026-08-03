@@ -23,7 +23,7 @@ export async function onRequest(ctx) {
 
 async function handleGet({ env }, session) {
   const rows = await env.DB.prepare(
-    `SELECT id, community_name, city_country, contact_info, edition, members_count,
+    `SELECT id, community_name, city_country, country, contact_info, edition, members_count,
             status, notes, created_at
      FROM applications
      WHERE user_id = ?
@@ -40,11 +40,13 @@ async function handlePost({ env, request }, session) {
   try { body = await request.json(); }
   catch { return json({ error: 'invalid_json' }, 400); }
 
-  const { community_name, city_country, contact_info, edition, members_count, message } = body;
+  const { community_name, city_country, country, contact_info, edition, members_count, message } = body;
 
   // Validate required fields
   if (!community_name?.trim())  return json({ error: 'community_name_required' }, 400);
   if (!city_country?.trim())    return json({ error: 'city_country_required' }, 400);
+  if (!country || typeof country !== 'string' || !/^[A-Z]{2}$/.test(country))
+                                return json({ error: 'country_required' }, 400);
   if (!edition || !['church', 'server'].includes(edition))
                                 return json({ error: 'invalid_edition' }, 400);
 
@@ -61,14 +63,15 @@ async function handlePost({ env, request }, session) {
 
   await env.DB.prepare(
     `INSERT INTO applications
-       (id, user_id, community_name, city_country, contact_info, edition, members_count,
+       (id, user_id, community_name, city_country, country, contact_info, edition, members_count,
         message, status, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)`
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)`
   ).bind(
     id,
     session.user_id,
     community_name.trim(),
     city_country.trim(),
+    country,
     contact_info?.trim() ?? null,
     edition,
     members_count ? parseInt(members_count, 10) : null,
@@ -82,7 +85,7 @@ async function handlePost({ env, request }, session) {
     const adminUrl   = `https://displayword.com/admin/applications/${id}`;
     await sendEmail(env, newApplicationEmail(
       adminEmail,
-      `${community_name.trim()} (${city_country.trim()}, ${edition}, ${session.email})`,
+      `${community_name.trim()} (${city_country.trim()}, ${country}, ${edition}, ${session.email})`,
       session.email,
       adminUrl,
     ));
@@ -92,7 +95,7 @@ async function handlePost({ env, request }, session) {
   }
 
   const result = await env.DB.prepare(
-    `SELECT id, community_name, city_country, contact_info, edition, members_count,
+    `SELECT id, community_name, city_country, country, contact_info, edition, members_count,
             status, notes, created_at
      FROM applications WHERE id = ?`
   ).bind(id).first();

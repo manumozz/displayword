@@ -21,7 +21,7 @@ export async function onRequest({ request, env }) {
 
 async function handleGet(env) {
   const rows = await env.DB.prepare(`
-    SELECT lk.key_id, lk.community_name, lk.mode, lk.activation_limit,
+    SELECT lk.key_id, lk.community_name, lk.country, lk.mode, lk.activation_limit,
            lk.owner_title, lk.status, lk.issued_at, lk.expires_at, lk.notes,
            COUNT(ac.id) AS activations,
            u.email AS user_email
@@ -40,10 +40,16 @@ async function handlePost(request, env, session) {
   try { body = await request.json(); }
   catch { return json({ error: 'invalid_json' }, 400); }
 
-  const { communityName, mode, activationLimit, expiresAt, ownerTitle, notes, userId, email } = body;
+  const { communityName, mode, activationLimit, expiresAt, ownerTitle, notes, userId, email, country } = body;
 
   if (!communityName?.trim()) return json({ error: 'community_name_required' }, 400);
   if (!mode || !['server', 'offline'].includes(mode)) return json({ error: 'invalid_mode' }, 400);
+
+  let countryCode = null;
+  if (country != null && String(country).trim() !== '') {
+    countryCode = String(country).trim();
+    if (!/^[A-Z]{2}$/.test(countryCode)) return json({ error: 'invalid_country' }, 400);
+  }
 
   const keyId = crypto.randomUUID();
   const keyString = await generateLicenseKey(env, {
@@ -58,13 +64,13 @@ async function handlePost(request, env, session) {
   const now = new Date().toISOString();
   await env.DB.prepare(`
     INSERT INTO license_keys
-      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id)
-    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?)
+      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id, country)
+    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?, ?)
   `).bind(
     keyId, communityName.trim(), mode,
     activationLimit ?? null, ownerTitle ?? null,
     keyString, now, expiresAt ?? null,
-    notes ?? null, userId ?? null,
+    notes ?? null, userId ?? null, countryCode,
   ).run();
 
   let emailed = false;

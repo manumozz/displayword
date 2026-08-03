@@ -98,11 +98,17 @@
                placeholder="Например: Дом молитвы Хайфа" maxlength="200" required />
       </div>
 
-      <!-- City / Country -->
+      <!-- Country -->
       <div class="form-group">
-        <label for="cityCountry">Город и страна <span>*</span></label>
+        <label for="country">Страна <span>*</span></label>
+        <select id="country" name="country" required></select>
+      </div>
+
+      <!-- City (stored in city_country) -->
+      <div class="form-group">
+        <label for="cityCountry">Город <span>*</span></label>
         <input type="text" id="cityCountry" name="city_country"
-               placeholder="Например: Хайфа, Израиль" maxlength="200" required />
+               placeholder="Например: Хайфа" maxlength="200" required />
       </div>
 
       <!-- Members count -->
@@ -130,11 +136,19 @@
     </form>
   </main>
 
+  <script src="/countries.js"></script>
   <script>
-    // Check auth
+    // Check auth + country list + geo prefill
     (async () => {
       const res = await fetch('/api/v1/me', { credentials: 'same-origin' });
       if (!res.ok) window.location.href = '/account/login?redirect=/account/apply';
+
+      const countrySel = document.getElementById('country');
+      dwFillCountrySelect(countrySel, '— страна —');
+      try {
+        const geo = await fetch('/api/v1/geo').then(r => r.json());
+        if (geo?.country && !countrySel.value) countrySel.value = geo.country;
+      } catch (_) { /* человек выберет сам */ }
     })();
 
     // Edition card selection
@@ -157,13 +171,15 @@
       const edition = form.querySelector('input[name=edition]:checked')?.value;
       const communityName = form.community_name.value.trim();
       const cityCountry   = form.city_country.value.trim();
+      const country       = form.country.value;
       const membersCount  = form.members_count.value || null;
       const contactInfo   = form.contact_info.value.trim() || null;
       const message       = form.message.value.trim() || null;
 
       if (!edition)         return showError('Выберите конфигурацию.');
       if (!communityName)   return showError('Введите название общины.');
-      if (!cityCountry)     return showError('Введите город и страну.');
+      if (!country)         return showError('Выберите страну.');
+      if (!cityCountry)     return showError('Введите город.');
 
       btn.disabled = true;
       btn.textContent = 'Отправка…';
@@ -174,7 +190,7 @@
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
           body: JSON.stringify({ community_name: communityName, city_country: cityCountry,
-                                 edition, members_count: membersCount,
+                                 country, edition, members_count: membersCount,
                                  contact_info: contactInfo, message }),
         });
         const data = await res.json();

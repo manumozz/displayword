@@ -24,7 +24,15 @@
     .section-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
     .btn-new { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: inherit; }
     .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: collapse; min-width: 960px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1040px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 14px; }
+    .filters label { font-size: 0.75rem; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .filters select {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 7px 10px; color: var(--white); font-family: inherit; font-size: 0.85rem;
+    }
+    .filters select option { background: #0f1b2d; }
+    .filter-count { font-size: 0.8rem; color: var(--gray); margin-left: auto; }
     thead th { font-size: 0.75rem; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.07); }
     tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
     tbody tr:hover { background: rgba(255,255,255,0.02); }
@@ -117,11 +125,24 @@
       <button class="btn-new" id="btnNew">+ Выдать ключ вручную</button>
     </div>
 
+    <div class="filters">
+      <label for="filterCountry">Страна</label>
+      <select id="filterCountry"><option value="">Все</option></select>
+      <label for="filterStatus">Статус</label>
+      <select id="filterStatus">
+        <option value="">Все</option>
+        <option value="active">active</option>
+        <option value="revoked">revoked</option>
+      </select>
+      <span class="filter-count" id="filterCount"></span>
+    </div>
+
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
             <th>Община</th>
+            <th>Страна</th>
             <th>Режим</th>
             <th>Активации</th>
             <th>Статус</th>
@@ -131,7 +152,7 @@
             <th>Действия</th>
           </tr>
         </thead>
-        <tbody id="keysBody"><tr><td colspan="8" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
+        <tbody id="keysBody"><tr><td colspan="9" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
       </table>
     </div>
   </main>
@@ -160,6 +181,10 @@
         <input type="text" id="nOwner" placeholder="Пастор / Руководитель / …" />
       </div>
       <div class="field">
+        <label>Страна</label>
+        <select id="nCountry"></select>
+      </div>
+      <div class="field">
         <label>Email для отправки ключа</label>
         <input type="email" id="nEmail" placeholder="Необязательно — ключ придёт письмом" />
       </div>
@@ -173,14 +198,19 @@
     </div>
   </div>
 
+  <script src="/countries.js"></script>
   <script>
     let newKeyCreated = false;
     let lastNewKeyString = '';
+    let allKeys = [];
+
+    dwFillCountrySelect(document.getElementById('nCountry'), '— страна —');
 
     function resetNewModal() {
       document.getElementById('nCommunity').value = '';
       document.getElementById('nMode').value = 'server';
       document.getElementById('nOwner').value = '';
+      document.getElementById('nCountry').value = '';
       document.getElementById('nEmail').value = '';
       document.getElementById('nLimitField').style.display = '';
       document.getElementById('newKeyOut').style.display = 'none';
@@ -245,19 +275,43 @@
       cell.dataset.revealed = keyString;
     }
 
-    async function load() {
-      const me = await fetch('/api/v1/me', { credentials: 'same-origin' }).then(r => r.json()).catch(() => null);
-      if (!me?.isAdmin) { window.location.href = '/account/login'; return; }
+    function rebuildCountryFilter() {
+      const sel = document.getElementById('filterCountry');
+      const prev = sel.value;
+      const codes = [...new Set(allKeys.map(k => k.country).filter(Boolean))].sort((a, b) =>
+        dwCountryName(a).localeCompare(dwCountryName(b), 'ru'));
+      sel.innerHTML = '<option value="">Все</option>' + codes.map(c =>
+        `<option value="${esc(c)}">${esc(dwCountryName(c))} (${esc(c)})</option>`).join('');
+      if (prev && codes.includes(prev)) sel.value = prev;
+    }
 
-      const keys = await fetch('/api/v1/admin/keys', { credentials: 'same-origin' }).then(r => r.json());
+    function renderKeys() {
       const tbody = document.getElementById('keysBody');
-      if (!keys.length) {
-        tbody.innerHTML = '<tr><td colspan="8" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
+      const fc = document.getElementById('filterCountry').value;
+      const fs = document.getElementById('filterStatus').value;
+      let list = allKeys;
+      if (fc) list = list.filter(k => k.country === fc);
+      if (fs) list = list.filter(k => k.status === fs);
+
+      const countEl = document.getElementById('filterCount');
+      if (fc || fs) {
+        countEl.textContent = 'показано ' + list.length + ' из ' + allKeys.length;
+      } else {
+        countEl.textContent = '';
+      }
+
+      if (!allKeys.length) {
+        tbody.innerHTML = '<tr><td colspan="9" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
         return;
       }
-      tbody.innerHTML = keys.map(k => `
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="9" style="color:var(--gray);padding:20px">Нет ключей по фильтру.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(k => `
         <tr>
           <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}</td>
+          <td>${k.country ? '<span title="' + esc(dwCountryName(k.country)) + '">' + esc(k.country) + '</span>' : '—'}</td>
           <td><span class="badge badge-${k.mode}">${k.mode}</span></td>
           <td>${k.activations} / ${k.activation_limit ?? '∞'}</td>
           <td><span class="badge badge-${k.status}">${k.status}</span></td>
@@ -274,6 +328,19 @@
           </td>
         </tr>`).join('');
     }
+
+    async function load() {
+      const me = await fetch('/api/v1/me', { credentials: 'same-origin' }).then(r => r.json()).catch(() => null);
+      if (!me?.isAdmin) { window.location.href = '/account/login'; return; }
+
+      allKeys = await fetch('/api/v1/admin/keys', { credentials: 'same-origin' }).then(r => r.json());
+      if (!Array.isArray(allKeys)) allKeys = [];
+      rebuildCountryFilter();
+      renderKeys();
+    }
+
+    document.getElementById('filterCountry').onchange = renderKeys;
+    document.getElementById('filterStatus').onchange = renderKeys;
 
     function shortName(name, maxLen) {
       const s = String(name || '');
@@ -462,6 +529,7 @@
       const mode  = document.getElementById('nMode').value;
       const limit = parseInt(document.getElementById('nLimit').value, 10);
       const owner = document.getElementById('nOwner').value.trim() || null;
+      const country = document.getElementById('nCountry').value || null;
       const email = document.getElementById('nEmail').value.trim() || null;
       if (!community) return;
       btn.disabled = true; btn.textContent = 'Создаю…';
@@ -469,7 +537,7 @@
       const res  = await fetch('/api/v1/admin/keys', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ communityName: community, mode, activationLimit: mode === 'server' ? limit : undefined, ownerTitle: owner, email }),
+        body: JSON.stringify({ communityName: community, mode, activationLimit: mode === 'server' ? limit : undefined, ownerTitle: owner, email, country }),
       });
       const data = await res.json();
       if (res.ok) {

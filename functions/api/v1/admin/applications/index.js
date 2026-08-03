@@ -15,7 +15,7 @@ export async function onRequest({ request, env }) {
   const status = url.searchParams.get('status');
 
   let query = `
-    SELECT a.id, a.community_name, a.city_country, a.contact_info,
+    SELECT a.id, a.community_name, a.city_country, a.country, a.contact_info,
            a.edition, a.members_count, a.message, a.status, a.notes,
            a.created_at, u.email AS user_email
     FROM applications a

@@ -123,11 +123,17 @@ export async function onRequest({ request, env }) {
     .bind(keyId, fingerprint)
     .first();
 
+  const actCountry = (() => {
+    const c = request.headers.get('CF-IPCountry');
+    if (!c || c === 'XX' || c === 'T1') return null;
+    return c;
+  })();
+
   if (existing) {
     // Known device — refresh last_seen, re-issue token
     await env.DB
-      .prepare('UPDATE activations SET last_seen_at = ?, app_version = ? WHERE key_id = ? AND fingerprint = ?')
-      .bind(now, appVersion ?? null, keyId, fingerprint)
+      .prepare('UPDATE activations SET last_seen_at = ?, app_version = ?, country = ? WHERE key_id = ? AND fingerprint = ?')
+      .bind(now, appVersion ?? null, actCountry, keyId, fingerprint)
       .run();
   } else {
     // New device — check limit
@@ -144,8 +150,8 @@ export async function onRequest({ request, env }) {
     }
 
     await env.DB
-      .prepare('INSERT INTO activations (id, key_id, fingerprint, last_seen_at, created_at, app_version) VALUES (?, ?, ?, ?, ?, ?)')
-      .bind(crypto.randomUUID(), keyId, fingerprint, now, now, appVersion ?? null)
+      .prepare('INSERT INTO activations (id, key_id, fingerprint, last_seen_at, created_at, app_version, country) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .bind(crypto.randomUUID(), keyId, fingerprint, now, now, appVersion ?? null, actCountry)
       .run();
   }
 

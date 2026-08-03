@@ -53,13 +53,13 @@ export async function onRequest({ request, env, params }) {
   // Store key in D1
   await env.DB.prepare(`
     INSERT INTO license_keys
-      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id)
-    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?)
+      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id, country)
+    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?, ?)
   `).bind(
     keyId, app.community_name, mode,
     activationLimit ?? null, ownerTitle,
     keyString, now, expiresAt,
-    adminNotes, app.user_id,
+    adminNotes, app.user_id, app.country ?? null,
   ).run();
 
   // Update application status

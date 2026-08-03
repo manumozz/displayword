@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFI0lEQVR4AbxWXWxURRT+5i4r3e2y2wrlpy0CbWkg/TFtQ7TVahRJI8YHoy+g8QE1MTw0aDXqg4kJ+qBCTCBgUDQ+GI0m6psRE2oMCCagVVLTpn82hUpbS+h2+78/4/nm3ru7/bUiy2TOnTNnvnO+c2fOnV0Ly2y5uUWhYH7lnlB++Yeh/IqLoYLy4VBBRcwW0WmTtaBgiF1mWPxrAqsKtpWG8ss/SvizryqlP4NSz0KhBlCrAXhsEZ02WSOGWPrQV9aX7IsnUFjrCxVUHrLgbYVS+wD4RJbbffSxxJcxILGwSFswgWDh9q3BxNgFQDeJn1fkRrv46ibGYsyFgsxLILRhe7XSnnNKoWwhhxuxMRZjMvZc/1kJmCwtzylArcFNbxJTYhuOtNipBHhOiRXfICPkcJokQQ5yOZZkAiE9fpBb5dgzNpCDXC6BScD+XHSja8z8qBttTtj3gKVXvCKkUrHyvDXd63DCypUbDkrtIW9R3jS+3t+dlK9E/2RfLxp3DmFNIEaIkfWhqMEce7LPzN3HCo/GF8/34EsRr+iunePxp/qMz/pglFOQM1e4rbgvsBvOJePzJlCzeQLVmyZw58YJVN0xgQe2RdDUMIgfXu7A/aURgQKDYS82rp7BI5VhrE5LrFrwdxeN4y6Rmk3jBssHk99dEUbh7TMYHE1utI/clkLiQYLS5Xx3Nopfq0DRqxXYcXAbjjXnIZAVx4mn+8Bd0gL+qTMAKSjUFo/JzO73bk3p9Wk6McSeFR/62miA3FKEqgpLtKGIF+98tx5HT6+F77YEXtw1aNAMRqWuOPWm6aT1palkah3M2a4AXdJEVVlQenOaZVH1xI95mI4pPFQWAc/XDVbn7EBQdojH1vP3SnQNrURFwSRy/HETr65kDFo07poMqS7cFqBysIw2Pm2hc3AlWCf5OVEMSB2QaEveDDZIUdYKiUeinekIgLtjiX6P2Li2Zc0MusQ37fwdRpUjMPyHpgzWfsIQ0VAru+Bu/xk5Zwrt9VsjyRphUrTNFUlAj8w1LjT3y/mXrJ3CVFShf8RrIMljKBkHE4jFFVjAP3dngzrroE7WCHax1FOiRyxo1ZsyLK49d98wsrwap9tWISpERBqihEJD2Sg2yza3XPZhbNpjhHphbhQPl4dNMsTSZ5YIN3egZZZxziTXH8MLUvkHRPj2732/LomITHlwSUiDPrvYeP7uorvlgawEfhMME3PXUqNusTSs5pTB1niZtL/Ziva3WtHyRhsO7BrCxIyF/Z9uQudQlg1yni4Rp+n6QskQky7ktjyTY9+KcVJEztcyb9Ta75OKz0LnQBbOybfLO2Dnu6Vm+4lLl+b2Vcbnwp9+eVN/cun3y35c7PWbNWKSCyllktzW9es9YWj9Oe3d8g0/erQE6bL3gy04dGodBlJXKKFJaenzG/wT7xcjLvXgLsREf/x4sVljMq49OQonuS0aEir2tozOr4Rome9Rh9P+OY70t3cA6ghuWVNHbE7YCZA3rLJf1xp/UM+kkINcLoc5AjO5cn4SVuwx+Ss+bOYZeehhw0EuJ34qATGMXmnrRCLekJkkhFxiGw7hcvusBGgMX237Vat4HbeK85shjMWYjD033rwECGCWo1ZgB6AOA/g/X4f4qsOMxZgSa15fMAGDknMK9196KYFoudwTH4vNXFYyLqdP0oe+jAGJtZjT4gk4Hvxcwn+1PmNNjG/QWu2VwCeh8YvUyTWB8EdARF8zNq1PEkMsfegrmCX7PwAAAP//TN0GuwAAAAZJREFUAwD3/hixLPQA6QAAAABJRU5ErkJggg==" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
   <style>
     .page-hero { padding: 140px 5% 80px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 65%); }
     .page-hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 20px; }
@@ -128,8 +128,7 @@
       .chord-demo{flex-direction:column;gap:16px;height:auto}
       .cd-panel{width:100%}
       .cd-chips{grid-template-columns:repeat(6,1fr)}
-      .cd-lyric{font-size:.95rem;white-space:normal}
-      .cd-ghost,.cd-cursor,.cd-drop,.cd-arrow{display:none}
+      .cd-lyric{font-size:.95rem;white-space:nowrap}
     }
 
     .cue-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -321,14 +320,14 @@
           <div class="cd-line">
             <div class="cd-chords">
               <span style="left:0">G</span>
-              <span style="left:210px">C</span>
+              <span data-base-left="210" style="left:210px">C</span>
             </div>
             <div class="cd-lyric" data-i18n="cd_line1">I will praise You, Lord, with all of my heart</div>
           </div>
           <div class="cd-line">
             <div class="cd-chords">
               <span style="left:0">G</span>
-              <span style="left:150px">C</span>
+              <span data-base-left="150" style="left:150px">C</span>
               <span class="cd-landed" id="landed" style="left:330px">Am</span>
               <div class="cd-drop" id="drop" style="left:330px"></div>
             </div>
@@ -539,7 +538,37 @@
     var chip=document.getElementById('srcChip'), drop=document.getElementById('drop'),
         ghost=document.getElementById('ghost'), lw=document.getElementById('lastWord');
     if(!chip||!drop||!ghost||!lw) return;
-    if(getComputedStyle(ghost).display==='none') return;   /* на мобильном анимация выключена */
+
+    /* shrink-to-fit: keep each lyric on one line (required for drop targeting) */
+    var lyrics=demo.querySelectorAll('.cd-lyric');
+    var i, el, basePx=0, fs, minPx, scale=1, rootPx;
+    for(i=0;i<lyrics.length;i++){
+      el=lyrics[i];
+      el.style.fontSize='';
+      el.style.whiteSpace='nowrap';
+    }
+    if(lyrics.length){
+      basePx=parseFloat(getComputedStyle(lyrics[0]).fontSize)||16;
+      rootPx=parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+      minPx=0.68*rootPx;
+      fs=basePx;
+      function lyricsFit(){
+        for(var j=0;j<lyrics.length;j++){
+          if(lyrics[j].scrollWidth>lyrics[j].clientWidth+1) return false;
+        }
+        return true;
+      }
+      while(fs>minPx+0.05 && !lyricsFit()){
+        fs=Math.max(minPx, fs-0.5);
+        for(i=0;i<lyrics.length;i++) lyrics[i].style.fontSize=fs+'px';
+      }
+      scale=basePx>0 ? fs/basePx : 1;
+    }
+    demo.querySelectorAll('.cd-chords [data-base-left]').forEach(function(span){
+      var base=parseFloat(span.getAttribute('data-base-left'));
+      if(!isNaN(base)) span.style.left=Math.round(base*scale)+'px';
+    });
+
     var line=lw.parentNode;
     var off=Math.round(lw.getBoundingClientRect().left-line.getBoundingClientRect().left);
     drop.style.left=off+'px';

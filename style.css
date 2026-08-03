@@ -79,6 +79,7 @@ nav {
 .lang-menu-item.lang-active .lang-code { color: var(--gold); }
 
 /* ── LANG SWITCHER (top nav) ─────────────────── */
+.nav-right .nav-lang { margin-left: 18px; }
 .nav-lang { position: relative; }
 .nav-lang-btn {
   display: inline-flex; align-items: center; gap: 5px;

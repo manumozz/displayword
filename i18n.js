@@ -1888,6 +1888,8 @@ function dwApply(lang) {
   if (label) label.textContent = DW_LANG_NAMES[resolved] || ('🌐 ' + resolved.toUpperCase());
   const codeEl = document.getElementById('dwNavLangCode');
   if (codeEl) codeEl.textContent = resolved.toUpperCase();
+  const navSelect = document.getElementById('dwNavLangSelect');
+  if (navSelect) navSelect.value = resolved;
   document.querySelectorAll('.lang-menu-item, .nav-lang-item').forEach(b =>
     b.classList.toggle('lang-active', b.dataset.lang === resolved)
   );
@@ -1957,6 +1959,11 @@ document.addEventListener('click', e => {
 
 document.addEventListener('DOMContentLoaded', () => {
   dwApply(dwDetectLang());
+
+  const navSelect = document.getElementById('dwNavLangSelect');
+  if (navSelect) {
+    navSelect.addEventListener('change', () => dwSwitch(navSelect.value));
+  }
 
   const ham      = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');

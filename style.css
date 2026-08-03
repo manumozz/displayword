@@ -81,15 +81,21 @@ nav {
 /* ── LANG SWITCHER (top nav) ─────────────────── */
 .nav-lang { position: relative; }
 .nav-lang-btn {
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: 5px;
   background: none; border: none; padding: 0;
-  font-size: 0.9rem; font-weight: 500;
+  font-size: 0.9rem; font-weight: 600;
   color: var(--gray); cursor: pointer;
-  font-family: inherit; letter-spacing: 0.02em;
+  font-family: inherit; letter-spacing: 0.06em;
   transition: color 0.2s; white-space: nowrap;
 }
 .nav-lang-btn:hover,
 .nav-lang-btn.open { color: var(--white); }
+.nav-lang-btn svg {
+  width: 10px; height: 10px;
+  stroke: currentColor; fill: none; stroke-width: 2;
+  transition: transform 0.2s; flex-shrink: 0;
+}
+.nav-lang-btn.open svg { transform: rotate(180deg); }
 .nav-lang-menu {
   display: none; position: absolute;
   top: calc(100% + 10px); right: 0;
@@ -111,13 +117,38 @@ nav {
 .nav-lang-item.lang-active { color: var(--white); }
 .nav-lang-item.lang-active .lang-code { color: var(--gold); }
 .nav-lang-mobile { display: none; }
-.nav-lang-mobile-list { display: flex; flex-direction: column; gap: 0; padding: 4px 0 8px; }
-.nav-lang-mobile-list .nav-lang-item {
-  padding: 12px 0;
+.nav-lang-mobile-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; width: 100%;
+  padding: 14px 0;
+  font-size: 1rem; font-weight: 500;
+  color: var(--gray);
   border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 0.95rem;
+  cursor: pointer;
 }
-.nav-lang-mobile-list .nav-lang-item:last-child { border-bottom: none; }
+.nav-lang-mobile-row select {
+  appearance: none; -webkit-appearance: none;
+  min-width: 140px;
+  background-color: rgba(255,255,255,0.05);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpolyline points='2,4 6,8 10,4' fill='none' stroke='%238a9ab5' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 8px 30px 8px 12px;
+  font-size: 0.9rem; font-weight: 500;
+  font-family: inherit; cursor: pointer;
+}
+.nav-lang-mobile-row select:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.28);
+}
+.nav-lang-mobile-row select option {
+  background: #0f1b2d;
+  color: var(--white);
+}
 
 .logo { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; color: var(--white); }
 .logo span { color: var(--gold); }

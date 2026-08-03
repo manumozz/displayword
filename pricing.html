@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFI0lEQVR4AbxWXWxURRT+5i4r3e2y2wrlpy0CbWkg/TFtQ7TVahRJI8YHoy+g8QE1MTw0aDXqg4kJ+qBCTCBgUDQ+GI0m6psRE2oMCCagVVLTpn82hUpbS+h2+78/4/nm3ru7/bUiy2TOnTNnvnO+c2fOnV0Ly2y5uUWhYH7lnlB++Yeh/IqLoYLy4VBBRcwW0WmTtaBgiF1mWPxrAqsKtpWG8ss/SvizryqlP4NSz0KhBlCrAXhsEZ02WSOGWPrQV9aX7IsnUFjrCxVUHrLgbYVS+wD4RJbbffSxxJcxILGwSFswgWDh9q3BxNgFQDeJn1fkRrv46ibGYsyFgsxLILRhe7XSnnNKoWwhhxuxMRZjMvZc/1kJmCwtzylArcFNbxJTYhuOtNipBHhOiRXfICPkcJokQQ5yOZZkAiE9fpBb5dgzNpCDXC6BScD+XHSja8z8qBttTtj3gKVXvCKkUrHyvDXd63DCypUbDkrtIW9R3jS+3t+dlK9E/2RfLxp3DmFNIEaIkfWhqMEce7LPzN3HCo/GF8/34EsRr+iunePxp/qMz/pglFOQM1e4rbgvsBvOJePzJlCzeQLVmyZw58YJVN0xgQe2RdDUMIgfXu7A/aURgQKDYS82rp7BI5VhrE5LrFrwdxeN4y6Rmk3jBssHk99dEUbh7TMYHE1utI/clkLiQYLS5Xx3Nopfq0DRqxXYcXAbjjXnIZAVx4mn+8Bd0gL+qTMAKSjUFo/JzO73bk3p9Wk6McSeFR/62miA3FKEqgpLtKGIF+98tx5HT6+F77YEXtw1aNAMRqWuOPWm6aT1palkah3M2a4AXdJEVVlQenOaZVH1xI95mI4pPFQWAc/XDVbn7EBQdojH1vP3SnQNrURFwSRy/HETr65kDFo07poMqS7cFqBysIw2Pm2hc3AlWCf5OVEMSB2QaEveDDZIUdYKiUeinekIgLtjiX6P2Li2Zc0MusQ37fwdRpUjMPyHpgzWfsIQ0VAru+Bu/xk5Zwrt9VsjyRphUrTNFUlAj8w1LjT3y/mXrJ3CVFShf8RrIMljKBkHE4jFFVjAP3dngzrroE7WCHax1FOiRyxo1ZsyLK49d98wsrwap9tWISpERBqihEJD2Sg2yza3XPZhbNpjhHphbhQPl4dNMsTSZ5YIN3egZZZxziTXH8MLUvkHRPj2732/LomITHlwSUiDPrvYeP7uorvlgawEfhMME3PXUqNusTSs5pTB1niZtL/Ziva3WtHyRhsO7BrCxIyF/Z9uQudQlg1yni4Rp+n6QskQky7ktjyTY9+KcVJEztcyb9Ta75OKz0LnQBbOybfLO2Dnu6Vm+4lLl+b2Vcbnwp9+eVN/cun3y35c7PWbNWKSCyllktzW9es9YWj9Oe3d8g0/erQE6bL3gy04dGodBlJXKKFJaenzG/wT7xcjLvXgLsREf/x4sVljMq49OQonuS0aEir2tozOr4Rome9Rh9P+OY70t3cA6ghuWVNHbE7YCZA3rLJf1xp/UM+kkINcLoc5AjO5cn4SVuwx+Ss+bOYZeehhw0EuJ34qATGMXmnrRCLekJkkhFxiGw7hcvusBGgMX237Vat4HbeK85shjMWYjD033rwECGCWo1ZgB6AOA/g/X4f4qsOMxZgSa15fMAGDknMK9196KYFoudwTH4vNXFYyLqdP0oe+jAGJtZjT4gk4Hvxcwn+1PmNNjG/QWu2VwCeh8YvUyTWB8EdARF8zNq1PEkMsfegrmCX7PwAAAP//TN0GuwAAAAZJREFUAwD3/hixLPQA6QAAAABJRU5ErkJggg==" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="style.css?v=3" />
   <style>
     .page-hero { padding: 140px 5% 70px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.12) 0%, transparent 65%); }
     .page-hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 18px; }
@@ -99,9 +99,28 @@
       <li><a href="/pricing" class="active" data-i18n="nav_pricing">Pricing</a></li>
       <li><a href="/download" class="nav-dl" data-i18n="nav_download">Download</a></li>
       <li class="nav-mobile-only"><a href="/account/login" data-i18n="nav_login">Sign in</a></li>
+      <li class="nav-mobile-only nav-lang-mobile">
+        <div class="nav-lang-mobile-list">
+          <button type="button" class="nav-lang-item" data-lang="en" onclick="dwSwitch('en')"><span class="lang-code">EN</span> English</button>
+          <button type="button" class="nav-lang-item" data-lang="ru" onclick="dwSwitch('ru')"><span class="lang-code">RU</span> Русский</button>
+          <button type="button" class="nav-lang-item" data-lang="uk" onclick="dwSwitch('uk')"><span class="lang-code">UK</span> Українська</button>
+          <button type="button" class="nav-lang-item" data-lang="es" onclick="dwSwitch('es')"><span class="lang-code">ES</span> Español</button>
+          <button type="button" class="nav-lang-item" data-lang="pt" onclick="dwSwitch('pt')"><span class="lang-code">PT</span> Português</button>
+        </div>
+      </li>
     </ul>
   </div>
   <div class="nav-right">
+        <div class="nav-lang">
+      <button type="button" class="nav-lang-btn" id="dwNavLangBtn" onclick="dwToggleNavLang()" aria-label="Language">🌐 <span id="dwNavLangCode">EN</span></button>
+      <div class="nav-lang-menu" id="dwNavLangMenu">
+        <button type="button" class="nav-lang-item" data-lang="en" onclick="dwSwitch('en')"><span class="lang-code">EN</span> English</button>
+        <button type="button" class="nav-lang-item" data-lang="ru" onclick="dwSwitch('ru')"><span class="lang-code">RU</span> Русский</button>
+        <button type="button" class="nav-lang-item" data-lang="uk" onclick="dwSwitch('uk')"><span class="lang-code">UK</span> Українська</button>
+        <button type="button" class="nav-lang-item" data-lang="es" onclick="dwSwitch('es')"><span class="lang-code">ES</span> Español</button>
+        <button type="button" class="nav-lang-item" data-lang="pt" onclick="dwSwitch('pt')"><span class="lang-code">PT</span> Português</button>
+      </div>
+    </div>
     <a href="/account/login" class="btn btn-outline" data-i18n="nav_login">Sign in</a>
     <a href="/download" class="btn btn-gold" data-i18n="nav_btn">Download</a>
     <button class="hamburger" id="navHam" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -341,6 +360,9 @@
           <div class="lang-menu" id="dwLangMenu">
             <button class="lang-menu-item" data-lang="en" onclick="dwSwitch('en')"><span class="lang-code">EN</span> English</button>
             <button class="lang-menu-item" data-lang="ru" onclick="dwSwitch('ru')"><span class="lang-code">RU</span> Русский</button>
+            <button class="lang-menu-item" data-lang="uk" onclick="dwSwitch('uk')"><span class="lang-code">UK</span> Українська</button>
+            <button class="lang-menu-item" data-lang="es" onclick="dwSwitch('es')"><span class="lang-code">ES</span> Español</button>
+            <button class="lang-menu-item" data-lang="pt" onclick="dwSwitch('pt')"><span class="lang-code">PT</span> Português</button>
           </div>
         </div>
       </div>
@@ -353,7 +375,7 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=27"></script>
+<script src="i18n.js?v=28"></script>
 <script>
 /* ── Billing toggle ──────────────────────────────────────── */
 const PRICES = {

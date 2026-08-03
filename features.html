@@ -124,6 +124,14 @@
       64%     {opacity:1; transform:translate(var(--cx1),var(--cy1)) scale(1)}
       72%,100%{opacity:0; transform:translate(var(--cx1),var(--cy1)) scale(1)}
     }
+    .chord-demo.cd-measure .cd-ghost,
+    .chord-demo.cd-measure .cd-cursor { animation: none !important; transform: none !important; }
+    .chord-demo.cd-measure .cd-drop,
+    .chord-demo.cd-measure .cd-landed,
+    .chord-demo.cd-measure .cd-chip.src,
+    .chord-demo.cd-measure .cd-arrow path,
+    .chord-demo.cd-measure .cd-arrow polygon { animation: none !important; }
+
     @media (max-width:768px){
       .chord-demo{flex-direction:column;gap:16px;height:auto}
       .cd-panel{width:100%}
@@ -539,6 +547,9 @@
         ghost=document.getElementById('ghost'), lw=document.getElementById('lastWord');
     if(!chip||!drop||!ghost||!lw) return;
 
+    demo.classList.add('cd-measure');
+    void demo.offsetWidth; /* apply freeze before any getBoundingClientRect */
+
     /* shrink-to-fit: keep each lyric on one line (required for drop targeting) */
     var lyrics=demo.querySelectorAll('.cd-lyric');
     var i, el, basePx=0, fs, minPx, scale=1, rootPx;
@@ -590,6 +601,9 @@
     s.setProperty('--gx1',gx1.toFixed(0)+'px'); s.setProperty('--gy1',gy1.toFixed(0)+'px');
     s.setProperty('--cx0',(gx0+(G.left-D.left)+30).toFixed(0)+'px'); s.setProperty('--cy0',(gy0+(G.top-D.top)+16).toFixed(0)+'px');
     s.setProperty('--cx1',(gx1+(G.left-D.left)+30).toFixed(0)+'px'); s.setProperty('--cy1',(gy1+(G.top-D.top)+16).toFixed(0)+'px');
+
+    void demo.offsetWidth; /* apply new CSS vars before restarting animations */
+    demo.classList.remove('cd-measure');
   }
   window.addEventListener('load', dwFitChordDemo);
   window.addEventListener('resize', function(){

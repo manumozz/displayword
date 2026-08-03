@@ -42,6 +42,9 @@
     .field { margin-bottom: 16px; }
     .field label { display: block; font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
     .field input, .field select { width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; color: var(--white); font-family: inherit; font-size: 0.9rem; }
+    .field select option { background: #0f1b2d; }
+    .btn-copy-key { background: none; border: 1px solid rgba(255,255,255,0.12); color: var(--gray); padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .btn-copy-key:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
     .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
     .btn-cancel  { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; }
     .btn-confirm { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; }
@@ -107,6 +110,7 @@
         <input type="text" id="nOwner" placeholder="Пастор / Руководитель / …" />
       </div>
       <div class="key-output" id="newKeyOut"></div>
+      <button class="btn-confirm" id="btnCopyNew" style="display:none;margin-top:10px;width:100%">Копировать ключ</button>
       <div class="modal-actions">
         <button class="btn-cancel" id="cancelNew">Отмена</button>
         <button class="btn-confirm" id="confirmNew">Создать ключ</button>
@@ -115,6 +119,37 @@
   </div>
 
   <script>
+    let newKeyCreated = false;
+    let lastNewKeyString = '';
+
+    function resetNewModal() {
+      document.getElementById('nCommunity').value = '';
+      document.getElementById('nMode').value = 'server';
+      document.getElementById('nOwner').value = '';
+      document.getElementById('nLimitField').style.display = '';
+      document.getElementById('newKeyOut').style.display = 'none';
+      document.getElementById('newKeyOut').textContent = '';
+      document.getElementById('btnCopyNew').style.display = 'none';
+      document.getElementById('btnCopyNew').textContent = 'Копировать ключ';
+      document.getElementById('confirmNew').disabled = false;
+      document.getElementById('confirmNew').textContent = 'Создать ключ';
+      document.getElementById('cancelNew').textContent = 'Отмена';
+      newKeyCreated = false;
+      lastNewKeyString = '';
+    }
+
+    async function copyText(text, btn, idleLabel) {
+      try {
+        await navigator.clipboard.writeText(text);
+        const prev = btn.textContent;
+        btn.textContent = 'Скопировано ✓';
+        setTimeout(() => { btn.textContent = idleLabel || prev; }, 1500);
+      } catch (_) {
+        btn.textContent = 'Не удалось';
+        setTimeout(() => { btn.textContent = idleLabel || 'Копировать ключ'; }, 1500);
+      }
+    }
+
     async function load() {
       const me = await fetch('/api/v1/me', { credentials: 'same-origin' }).then(r => r.json()).catch(() => null);
       if (!me?.isAdmin) { window.location.href = '/account/login'; return; }
@@ -125,30 +160,48 @@
         tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
         return;
       }
-      tbody.innerHTML = keys.map(k => `
+      const keyMap = {};
+      tbody.innerHTML = keys.map(k => {
+        if (k.key_string) keyMap[k.key_id] = k.key_string;
+        const copyBtn = k.key_string
+          ? `<br><button type="button" class="btn-copy-key" data-key-id="${esc(k.key_id)}">⧉ ключ</button>`
+          : '';
+        return `
         <tr>
-          <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}</td>
+          <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}${copyBtn}</td>
           <td><span class="badge badge-${k.mode}">${k.mode}</span></td>
           <td>${k.activations} / ${k.activation_limit ?? '∞'}</td>
           <td><span class="badge badge-${k.status}">${k.status}</span></td>
           <td style="color:var(--gray)">${fmt(k.issued_at)}</td>
           <td style="color:var(--gray);font-size:0.8rem">${esc(k.user_email ?? '—')}</td>
-        </tr>`).join('');
+        </tr>`;
+      }).join('');
+      tbody.querySelectorAll('.btn-copy-key').forEach(btn => {
+        btn.onclick = () => {
+          const ks = keyMap[btn.dataset.keyId];
+          if (ks) copyText(ks, btn, '⧉ ключ');
+        };
+      });
     }
 
     document.getElementById('btnNew').onclick = () => {
-      document.getElementById('nCommunity').value = '';
-      document.getElementById('nMode').value = 'server';
-      document.getElementById('nOwner').value = '';
-      document.getElementById('newKeyOut').style.display = 'none';
-      document.getElementById('confirmNew').disabled = false;
-      document.getElementById('confirmNew').textContent = 'Создать ключ';
+      resetNewModal();
       document.getElementById('modalNew').classList.add('open');
     };
-    document.getElementById('cancelNew').onclick = () => document.getElementById('modalNew').classList.remove('open');
+    document.getElementById('cancelNew').onclick = () => {
+      const created = newKeyCreated;
+      document.getElementById('modalNew').classList.remove('open');
+      resetNewModal();
+      if (created) load();
+    };
 
     document.getElementById('nMode').onchange = function() {
       document.getElementById('nLimitField').style.display = this.value === 'server' ? '' : 'none';
+    };
+
+    document.getElementById('btnCopyNew').onclick = () => {
+      if (!lastNewKeyString) return;
+      copyText(lastNewKeyString, document.getElementById('btnCopyNew'), 'Копировать ключ');
     };
 
     document.getElementById('confirmNew').onclick = async () => {
@@ -170,8 +223,12 @@
         const out = document.getElementById('newKeyOut');
         out.textContent = data.keyString;
         out.style.display = 'block';
+        lastNewKeyString = data.keyString;
+        newKeyCreated = true;
+        document.getElementById('btnCopyNew').style.display = 'block';
+        document.getElementById('btnCopyNew').textContent = 'Копировать ключ';
+        document.getElementById('cancelNew').textContent = 'Закрыть';
         btn.textContent = 'Готово ✓';
-        setTimeout(() => { document.getElementById('modalNew').classList.remove('open'); load(); }, 3000);
       } else {
         btn.textContent = 'Ошибка'; btn.disabled = false;
       }
@@ -182,7 +239,7 @@
       window.location.href = '/account/login';
     };
 
-    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function fmt(iso) { return iso ? new Date(iso).toLocaleDateString('ru-RU', { day:'numeric', month:'short', year:'numeric' }) : '—'; }
 
     load();

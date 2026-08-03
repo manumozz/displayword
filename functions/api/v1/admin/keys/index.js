@@ -19,7 +19,7 @@ export async function onRequest({ request, env }) {
 
 async function handleGet(env) {
   const rows = await env.DB.prepare(`
-    SELECT lk.key_id, lk.community_name, lk.mode, lk.activation_limit,
+    SELECT lk.key_id, lk.key_string, lk.community_name, lk.mode, lk.activation_limit,
            lk.owner_title, lk.status, lk.issued_at, lk.expires_at, lk.notes,
            COUNT(ac.id) AS activations,
            u.email AS user_email

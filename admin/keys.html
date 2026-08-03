@@ -23,17 +23,43 @@
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .section-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
     .btn-new { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: inherit; }
-    table { width: 100%; border-collapse: collapse; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
     thead th { font-size: 0.75rem; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.07); }
     tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
     tbody tr:hover { background: rgba(255,255,255,0.02); }
     td { padding: 12px 14px; font-size: 0.88rem; vertical-align: middle; }
-    .mono { font-family: monospace; font-size: 0.75rem; color: var(--gray); word-break: break-all; }
     .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; }
     .badge-server  { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
     .badge-offline { background: rgba(251,191,36,0.1); color: var(--gold); border: 1px solid rgba(251,191,36,0.2); }
     .badge-active  { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
     .badge-revoked { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .key-cell { min-width: 150px; max-width: 260px; }
+    .key-cell code { display: block; word-break: break-all; font-size: 0.68rem; color: var(--green); margin-bottom: 8px; line-height: 1.35; }
+    .key-cell .key-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .key-cell .btn-reveal,
+    .key-cell .btn-send,
+    .key-cell .btn-hide,
+    .key-cell .btn-copy-revealed,
+    .key-cell .btn-send-go {
+      background: none; border: 1px solid rgba(255,255,255,0.12); color: var(--gray);
+      padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+    }
+    .key-cell .btn-reveal:hover,
+    .key-cell .btn-send:hover,
+    .key-cell .btn-hide:hover,
+    .key-cell .btn-copy-revealed:hover,
+    .key-cell .btn-send-go:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+    .key-cell .btn-reveal:disabled,
+    .key-cell .btn-send:disabled { opacity: 0.45; cursor: default; }
+    .key-cell .send-form { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .key-cell .send-form input {
+      flex: 1 1 140px; min-width: 0; max-width: 200px; box-sizing: border-box;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; padding: 6px 8px; color: var(--white); font-family: inherit; font-size: 0.78rem;
+    }
+    .key-cell .send-status { font-size: 0.75rem; margin-top: 6px; color: var(--gray); }
     /* Modal */
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
     .modal-bg.open { display: flex; }
@@ -43,13 +69,14 @@
     .field label { display: block; font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
     .field input, .field select { width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; color: var(--white); font-family: inherit; font-size: 0.9rem; }
     .field select option { background: #0f1b2d; }
-    .btn-copy-key { background: none; border: 1px solid rgba(255,255,255,0.12); color: var(--gray); padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 6px; }
-    .btn-copy-key:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
     .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
     .btn-cancel  { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; }
     .btn-confirm { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; }
     .btn-confirm:disabled { opacity: 0.45; }
     .key-output { font-family: monospace; font-size: 0.72rem; color: var(--green); word-break: break-all; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-top: 12px; display: none; }
+    .email-status { font-size: 0.82rem; margin-top: 10px; display: none; }
+    .email-status.ok { color: var(--green); }
+    .email-status.fail { color: #fbbf24; }
   </style>
 </head>
 <body>
@@ -71,19 +98,22 @@
       <button class="btn-new" id="btnNew">+ Выдать ключ вручную</button>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Община</th>
-          <th>Режим</th>
-          <th>Активации</th>
-          <th>Статус</th>
-          <th>Выдан</th>
-          <th>Пользователь</th>
-        </tr>
-      </thead>
-      <tbody id="keysBody"><tr><td colspan="6" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
-    </table>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Община</th>
+            <th>Режим</th>
+            <th>Активации</th>
+            <th>Статус</th>
+            <th>Выдан</th>
+            <th>Пользователь</th>
+            <th>Ключ</th>
+          </tr>
+        </thead>
+        <tbody id="keysBody"><tr><td colspan="7" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
+      </table>
+    </div>
   </main>
 
   <!-- New key modal -->
@@ -109,7 +139,12 @@
         <label>Заголовок владельца</label>
         <input type="text" id="nOwner" placeholder="Пастор / Руководитель / …" />
       </div>
+      <div class="field">
+        <label>Email для отправки ключа</label>
+        <input type="email" id="nEmail" placeholder="Необязательно — ключ придёт письмом" />
+      </div>
       <div class="key-output" id="newKeyOut"></div>
+      <div class="email-status" id="newEmailStatus"></div>
       <button class="btn-confirm" id="btnCopyNew" style="display:none;margin-top:10px;width:100%">Копировать ключ</button>
       <div class="modal-actions">
         <button class="btn-cancel" id="cancelNew">Отмена</button>
@@ -126,9 +161,14 @@
       document.getElementById('nCommunity').value = '';
       document.getElementById('nMode').value = 'server';
       document.getElementById('nOwner').value = '';
+      document.getElementById('nEmail').value = '';
       document.getElementById('nLimitField').style.display = '';
       document.getElementById('newKeyOut').style.display = 'none';
       document.getElementById('newKeyOut').textContent = '';
+      const es = document.getElementById('newEmailStatus');
+      es.style.display = 'none';
+      es.textContent = '';
+      es.className = 'email-status';
       document.getElementById('btnCopyNew').style.display = 'none';
       document.getElementById('btnCopyNew').textContent = 'Копировать ключ';
       document.getElementById('confirmNew').disabled = false;
@@ -138,16 +178,51 @@
       lastNewKeyString = '';
     }
 
-    async function copyText(text, btn, idleLabel) {
+    async function copyText(text, btn, idleLabel, codeEl) {
       try {
         await navigator.clipboard.writeText(text);
         const prev = btn.textContent;
         btn.textContent = 'Скопировано ✓';
         setTimeout(() => { btn.textContent = idleLabel || prev; }, 1500);
       } catch (_) {
+        if (codeEl) {
+          const range = document.createRange();
+          range.selectNodeContents(codeEl);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
         btn.textContent = 'Не удалось';
         setTimeout(() => { btn.textContent = idleLabel || 'Копировать ключ'; }, 1500);
       }
+    }
+
+    function idleKeyCellHtml(userEmail) {
+      const title = userEmail
+        ? ` title="Выслать на ${esc(userEmail)}"`
+        : '';
+      return `<div class="key-btns">
+        <button type="button" class="btn-reveal">Показать</button>
+        <button type="button" class="btn-send"${title}>Выслать на почту</button>
+      </div>`;
+    }
+
+    function collapseKeyCells(except) {
+      document.querySelectorAll('#keysBody .key-cell').forEach(cell => {
+        if (cell === except) return;
+        cell.innerHTML = idleKeyCellHtml(cell.dataset.userEmail || '');
+      });
+    }
+
+    function showRevealed(cell, keyString) {
+      collapseKeyCells(cell);
+      cell.innerHTML = `
+        <code class="revealed-key">${esc(keyString)}</code>
+        <div class="key-btns">
+          <button type="button" class="btn-copy-revealed">Копировать</button>
+          <button type="button" class="btn-hide">Скрыть</button>
+        </div>`;
+      cell.dataset.revealed = keyString;
     }
 
     async function load() {
@@ -157,31 +232,106 @@
       const keys = await fetch('/api/v1/admin/keys', { credentials: 'same-origin' }).then(r => r.json());
       const tbody = document.getElementById('keysBody');
       if (!keys.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
         return;
       }
-      const keyMap = {};
-      tbody.innerHTML = keys.map(k => {
-        if (k.key_string) keyMap[k.key_id] = k.key_string;
-        const copyBtn = k.key_string
-          ? `<br><button type="button" class="btn-copy-key" data-key-id="${esc(k.key_id)}">⧉ ключ</button>`
-          : '';
-        return `
+      tbody.innerHTML = keys.map(k => `
         <tr>
-          <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}${copyBtn}</td>
+          <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}</td>
           <td><span class="badge badge-${k.mode}">${k.mode}</span></td>
           <td>${k.activations} / ${k.activation_limit ?? '∞'}</td>
           <td><span class="badge badge-${k.status}">${k.status}</span></td>
           <td style="color:var(--gray)">${fmt(k.issued_at)}</td>
           <td style="color:var(--gray);font-size:0.8rem">${esc(k.user_email ?? '—')}</td>
-        </tr>`;
-      }).join('');
-      tbody.querySelectorAll('.btn-copy-key').forEach(btn => {
-        btn.onclick = () => {
-          const ks = keyMap[btn.dataset.keyId];
-          if (ks) copyText(ks, btn, '⧉ ключ');
-        };
+          <td class="key-cell" data-key-id="${esc(k.key_id)}" data-user-email="${esc(k.user_email ?? '')}">
+            ${idleKeyCellHtml(k.user_email ?? '')}
+          </td>
+        </tr>`).join('');
+    }
+
+    document.getElementById('keysBody').addEventListener('click', async (e) => {
+      const cell = e.target.closest('.key-cell');
+      if (!cell) return;
+      const keyId = cell.dataset.keyId;
+      if (!keyId) return;
+
+      if (e.target.classList.contains('btn-reveal')) {
+        const btn = e.target;
+        btn.disabled = true;
+        btn.textContent = '…';
+        const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(keyId)}/reveal`, {
+          method: 'POST', credentials: 'same-origin',
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.keyString) {
+          showRevealed(cell, data.keyString);
+        } else {
+          btn.textContent = 'Ошибка';
+          btn.disabled = false;
+          setTimeout(() => { btn.textContent = 'Показать'; }, 1500);
+        }
+        return;
+      }
+
+      if (e.target.classList.contains('btn-hide')) {
+        cell.innerHTML = idleKeyCellHtml(cell.dataset.userEmail || '');
+        delete cell.dataset.revealed;
+        return;
+      }
+
+      if (e.target.classList.contains('btn-copy-revealed')) {
+        const codeEl = cell.querySelector('code.revealed-key');
+        const text = cell.dataset.revealed || (codeEl && codeEl.textContent) || '';
+        if (text) copyText(text, e.target, 'Копировать', codeEl);
+        return;
+      }
+
+      if (e.target.classList.contains('btn-send')) {
+        const userEmail = cell.dataset.userEmail || '';
+        if (userEmail) {
+          await sendKeyEmail(cell, keyId, userEmail, e.target);
+        } else {
+          if (cell.querySelector('.send-form')) return;
+          const form = document.createElement('div');
+          form.className = 'send-form';
+          form.innerHTML = `<input type="email" class="send-email" placeholder="email@example.com" /><button type="button" class="btn-send-go">Отправить</button>`;
+          cell.appendChild(form);
+          form.querySelector('.send-email').focus();
+        }
+        return;
+      }
+
+      if (e.target.classList.contains('btn-send-go')) {
+        const input = cell.querySelector('.send-email');
+        const email = (input?.value || '').trim();
+        if (!email) return;
+        await sendKeyEmail(cell, keyId, email, e.target);
+      }
+    });
+
+    async function sendKeyEmail(cell, keyId, email, btn) {
+      const prev = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '…';
+      const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(keyId)}/send`, {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       });
+      const data = await res.json().catch(() => ({}));
+      cell.querySelector('.send-form')?.remove();
+      cell.querySelector('.send-status')?.remove();
+      const status = document.createElement('div');
+      status.className = 'send-status';
+      if (res.ok) {
+        status.textContent = 'Отправлено на ' + (data.sentTo || email);
+      } else {
+        status.textContent = 'Не отправлено: ' + (data.detail || data.error || 'ошибка');
+      }
+      cell.appendChild(status);
+      setTimeout(() => {
+        cell.innerHTML = idleKeyCellHtml(cell.dataset.userEmail || '');
+      }, 4000);
     }
 
     document.getElementById('btnNew').onclick = () => {
@@ -210,13 +360,14 @@
       const mode  = document.getElementById('nMode').value;
       const limit = parseInt(document.getElementById('nLimit').value, 10);
       const owner = document.getElementById('nOwner').value.trim() || null;
+      const email = document.getElementById('nEmail').value.trim() || null;
       if (!community) return;
       btn.disabled = true; btn.textContent = 'Создаю…';
 
       const res  = await fetch('/api/v1/admin/keys', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ communityName: community, mode, activationLimit: mode === 'server' ? limit : undefined, ownerTitle: owner }),
+        body: JSON.stringify({ communityName: community, mode, activationLimit: mode === 'server' ? limit : undefined, ownerTitle: owner, email }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -228,6 +379,20 @@
         document.getElementById('btnCopyNew').style.display = 'block';
         document.getElementById('btnCopyNew').textContent = 'Копировать ключ';
         document.getElementById('cancelNew').textContent = 'Закрыть';
+        const es = document.getElementById('newEmailStatus');
+        if (email) {
+          es.style.display = 'block';
+          if (data.emailed === true) {
+            es.className = 'email-status ok';
+            es.textContent = 'Ключ отправлен на ' + email;
+          } else {
+            es.className = 'email-status fail';
+            es.textContent = 'Письмо отправить не удалось — скопируйте ключ вручную';
+          }
+        } else {
+          es.style.display = 'none';
+          es.textContent = '';
+        }
         btn.textContent = 'Готово ✓';
       } else {
         btn.textContent = 'Ошибка'; btn.disabled = false;

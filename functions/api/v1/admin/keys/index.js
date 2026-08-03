@@ -5,21 +5,23 @@
 import { requireAdmin } from '../../../../_lib/admin.js';
 import { json, preflight, cors } from '../../../../_lib/response.js';
 import { generateLicenseKey } from '../../../../_lib/keygen.js';
+import { sendEmail, approvedEmail } from '../../../../_lib/email.js';
+import { logKeyAccess } from '../../../../_lib/keylog.js';
 
 export async function onRequest({ request, env }) {
   if (request.method === 'OPTIONS') return preflight();
 
-  const { response } = await requireAdmin(env, request);
+  const { response, session } = await requireAdmin(env, request);
   if (response) return response;
 
   if (request.method === 'GET')  return handleGet(env);
-  if (request.method === 'POST') return handlePost(request, env);
-  return json({ error: 'method_not_allowed' }, 405);
+  if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
+  return handlePost(request, env, session);
 }
 
 async function handleGet(env) {
   const rows = await env.DB.prepare(`
-    SELECT lk.key_id, lk.key_string, lk.community_name, lk.mode, lk.activation_limit,
+    SELECT lk.key_id, lk.community_name, lk.mode, lk.activation_limit,
            lk.owner_title, lk.status, lk.issued_at, lk.expires_at, lk.notes,
            COUNT(ac.id) AS activations,
            u.email AS user_email
@@ -33,12 +35,12 @@ async function handleGet(env) {
   return json(rows.results ?? [], 200, cors());
 }
 
-async function handlePost(request, env) {
+async function handlePost(request, env, session) {
   let body;
   try { body = await request.json(); }
   catch { return json({ error: 'invalid_json' }, 400); }
 
-  const { communityName, mode, activationLimit, expiresAt, ownerTitle, notes, userId } = body;
+  const { communityName, mode, activationLimit, expiresAt, ownerTitle, notes, userId, email } = body;
 
   if (!communityName?.trim()) return json({ error: 'community_name_required' }, 400);
   if (!mode || !['server', 'offline'].includes(mode)) return json({ error: 'invalid_mode' }, 400);
@@ -65,5 +67,15 @@ async function handlePost(request, env) {
     notes ?? null, userId ?? null,
   ).run();
 
-  return json({ ok: true, keyId, keyString }, 201, cors());
+  let emailed = false;
+  if (email?.trim()) {
+    try {
+      await sendEmail(env, approvedEmail(email.trim(), communityName.trim(), keyString, 'https://displayword.com/download'));
+      emailed = true;
+      await logKeyAccess(env, request, { keyId, action: 'issue_email', session, recipient: email.trim() });
+    } catch (e) {
+      console.error('Manual key email failed:', e.message);
+    }
+  }
+  return json({ ok: true, keyId, keyString, emailed }, 201, cors());
 }

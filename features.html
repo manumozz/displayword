@@ -184,6 +184,21 @@
     .preacher-ref { font-size: clamp(0.52rem, 1vw, 0.84rem); color: var(--gold); font-weight: 700; text-align: right; margin-top: 6px; }
     .screen-device-label { font-size: 0.76rem; color: var(--gray); text-align: center; margin-top: 10px; letter-spacing: 0.02em; }
 
+    /* Stack mockup through tablet: at ~834 a 3-col row still compresses vw-clamps unreadably */
+    @media (max-width: 900px) {
+      .screens-mockup { flex-direction: column; align-items: stretch; gap: 18px; }
+      .screen-col { width: 100%; flex: none; }
+      .mock-label { font-size: 0.76rem; }
+      .chord-row { font-size: 0.85rem; gap: 14px; }
+      .lyric-row { font-size: 1rem; }
+      .hall-lyric { font-size: 1.25rem; }
+      .preacher-verse { font-size: 0.95rem; }
+      .preacher-ref { font-size: 0.9rem; }
+      .mock-body { padding: 12px 16px; gap: 8px; }
+      .mock-preacher .mock-body { padding: 12px 18px; }
+      .screen-device-label { margin-top: 8px; }
+    }
+
     @media (max-width: 768px) {
       .feature-block { grid-template-columns: 1fr; gap: 40px; max-width: 100%; min-width: 0; box-sizing: border-box; }
       .feature-block.reverse .feat-visual { order: 0; }

@@ -1,14 +1,15 @@
 /**
- * POST /api/v1/admin/keys/:keyId — revoke (soft). Body optional: { "action": "revoke" }
- * Не удаляет строку: status = revoked. Activate уже отвергает revoked.
+ * POST /api/v1/admin/keys/:keyId — revoke or soft-delete.
+ * Body optional: { "action": "revoke" | "delete" }  (default: revoke)
  */
 import { requireAdmin } from '../../../../_lib/admin.js';
 import { json, preflight, cors } from '../../../../_lib/response.js';
+import { logKeyAccess } from '../../../../_lib/keylog.js';
 
 export async function onRequest({ request, env, params }) {
   if (request.method === 'OPTIONS') return preflight();
 
-  const { response } = await requireAdmin(env, request);
+  const { response, session } = await requireAdmin(env, request);
   if (response) return response;
 
   if (request.method !== 'POST')
@@ -26,24 +27,44 @@ export async function onRequest({ request, env, params }) {
     /* пустое тело = revoke */
   }
 
-  if (action !== 'revoke')
+  if (action !== 'revoke' && action !== 'delete')
     return json({ error: 'unsupported_action' }, 400, cors());
 
   const row = await env.DB.prepare(
-    `SELECT key_id, status, community_name FROM license_keys WHERE key_id = ?`
+    `SELECT key_id, status, community_name FROM license_keys WHERE key_id = ?`,
   ).bind(keyId).first();
 
   if (!row)
     return json({ error: 'not_found' }, 404, cors());
+
+  if (action === 'delete') {
+    if (row.status === 'deleted')
+      return json({ ok: true, keyId, status: 'deleted', already: true }, 200, cors());
+
+    await env.DB.prepare(
+      `UPDATE license_keys SET status = 'deleted' WHERE key_id = ?`,
+    ).bind(keyId).run();
+
+    await logKeyAccess(env, request, { keyId, action: 'delete', session });
+    return json({
+      ok: true,
+      keyId,
+      status: 'deleted',
+      communityName: row.community_name,
+    }, 200, cors());
+  }
+
+  // revoke
   if (row.status === 'revoked')
     return json({ ok: true, keyId, status: 'revoked', already: true }, 200, cors());
   if (row.status === 'deleted')
     return json({ error: 'deleted' }, 410, cors());
 
   await env.DB.prepare(
-    `UPDATE license_keys SET status = 'revoked' WHERE key_id = ?`
+    `UPDATE license_keys SET status = 'revoked' WHERE key_id = ?`,
   ).bind(keyId).run();
 
+  await logKeyAccess(env, request, { keyId, action: 'revoke', session });
   return json({
     ok: true,
     keyId,

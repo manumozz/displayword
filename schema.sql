@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS key_access_log (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   key_id        TEXT NOT NULL,
-  action        TEXT NOT NULL,            -- 'reveal' | 'resend' | 'issue_email'
+  action        TEXT NOT NULL,            -- 'reveal' | 'resend' | 'issue_email' | 'revoke' | 'delete'
   admin_user_id TEXT,
   admin_email   TEXT,
   recipient     TEXT,                     -- куда ушло письмо; для 'reveal' NULL

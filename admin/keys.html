@@ -24,7 +24,7 @@
     .section-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
     .btn-new { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: inherit; }
     .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    table { width: 100%; border-collapse: collapse; min-width: 960px; }
     thead th { font-size: 0.75rem; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.07); }
     tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
     tbody tr:hover { background: rgba(255,255,255,0.02); }
@@ -59,7 +59,26 @@
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
       border-radius: 6px; padding: 6px 8px; color: var(--white); font-family: inherit; font-size: 0.78rem;
     }
-    .key-cell .send-status { font-size: 0.75rem; margin-top: 6px; color: var(--gray); }
+    .send-status { font-size: 0.75rem; margin-top: 6px; color: var(--gray); }
+    .action-cell { min-width: 120px; max-width: 200px; }
+    .action-cell .action-btns { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+    .btn-revoke {
+      background: none; border: 1px solid rgba(248,113,113,0.35); color: #f87171;
+      padding: 5px 12px; border-radius: 7px; font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+    }
+    .btn-revoke:hover { background: rgba(248,113,113,0.12); }
+    .btn-revoke:disabled { opacity: 0.4; cursor: default; }
+    .btn-delete {
+      background: none; border: 1px solid rgba(248,113,113,0.2); color: var(--gray);
+      padding: 5px 12px; border-radius: 7px; font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; max-width: 100%; white-space: normal; text-align: left; line-height: 1.3;
+    }
+    .btn-delete:hover { color: #f87171; border-color: rgba(248,113,113,0.35); }
+    .btn-delete.armed {
+      background: rgba(248,113,113,0.22); border-color: rgba(248,113,113,0.55); color: #fecaca;
+    }
+    .btn-delete:disabled { opacity: 0.4; cursor: default; }
     /* Modal */
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
     .modal-bg.open { display: flex; }
@@ -109,9 +128,10 @@
             <th>Выдан</th>
             <th>Пользователь</th>
             <th>Ключ</th>
+            <th>Действия</th>
           </tr>
         </thead>
-        <tbody id="keysBody"><tr><td colspan="7" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
+        <tbody id="keysBody"><tr><td colspan="8" style="color:var(--gray);padding:20px">Загрузка…</td></tr></tbody>
       </table>
     </div>
   </main>
@@ -232,7 +252,7 @@
       const keys = await fetch('/api/v1/admin/keys', { credentials: 'same-origin' }).then(r => r.json());
       const tbody = document.getElementById('keysBody');
       if (!keys.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="color:var(--gray);padding:20px">Ключей нет.</td></tr>';
         return;
       }
       tbody.innerHTML = keys.map(k => `
@@ -246,14 +266,96 @@
           <td class="key-cell" data-key-id="${esc(k.key_id)}" data-user-email="${esc(k.user_email ?? '')}">
             ${idleKeyCellHtml(k.user_email ?? '')}
           </td>
+          <td class="action-cell" data-key-id="${esc(k.key_id)}" data-name="${esc(k.community_name)}">
+            <div class="action-btns">
+              ${k.status === 'active' ? '<button type="button" class="btn-revoke">Отозвать</button>' : ''}
+              <button type="button" class="btn-delete">Удалить</button>
+            </div>
+          </td>
         </tr>`).join('');
     }
 
+    function shortName(name, maxLen) {
+      const s = String(name || '');
+      return s.length > maxLen ? s.slice(0, maxLen) + '…' : s;
+    }
+
+    function showActionError(cell, message) {
+      cell.querySelector('.send-status')?.remove();
+      const status = document.createElement('div');
+      status.className = 'send-status';
+      status.textContent = message;
+      cell.appendChild(status);
+    }
+
     document.getElementById('keysBody').addEventListener('click', async (e) => {
-      const cell = e.target.closest('.key-cell');
+      const cell = e.target.closest('.key-cell, .action-cell');
       if (!cell) return;
       const keyId = cell.dataset.keyId;
       if (!keyId) return;
+
+      if (cell.classList.contains('action-cell')) {
+        const name = cell.dataset.name || keyId;
+
+        if (e.target.classList.contains('btn-revoke')) {
+          const btn = e.target;
+          const ok = confirm(
+            `Отозвать ключ «${name || keyId}»?\n\n` +
+            `Server: новые активации и продление токена перестанут работать.\n` +
+            `Offline: ключ в админке пометится отозванным (строка DW1 у кого уже есть — технически ещё подписана).`
+          );
+          if (!ok) return;
+          btn.disabled = true;
+          btn.textContent = '…';
+          const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(keyId)}`, {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'revoke' }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            showActionError(cell, 'Не удалось отозвать: ' + (data.error || res.status));
+            btn.disabled = false;
+            btn.textContent = 'Отозвать';
+            return;
+          }
+          load();
+          return;
+        }
+
+        if (e.target.classList.contains('btn-delete')) {
+          const btn = e.target;
+          if (!btn.classList.contains('armed')) {
+            btn.classList.add('armed');
+            btn.textContent = `Точно удалить «${shortName(name, 20)}»?`;
+            clearTimeout(btn._armTimer);
+            btn._armTimer = setTimeout(() => {
+              btn.classList.remove('armed');
+              btn.textContent = 'Удалить';
+            }, 4000);
+            return;
+          }
+          clearTimeout(btn._armTimer);
+          btn.disabled = true;
+          btn.textContent = '…';
+          const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(keyId)}`, {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'delete' }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            showActionError(cell, 'Не удалось удалить: ' + (data.error || res.status));
+            btn.disabled = false;
+            btn.classList.remove('armed');
+            btn.textContent = 'Удалить';
+            return;
+          }
+          load();
+          return;
+        }
+        return;
+      }
 
       if (e.target.classList.contains('btn-reveal')) {
         const btn = e.target;

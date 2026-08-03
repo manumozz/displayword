@@ -102,7 +102,7 @@ export async function onRequest({ request, env }) {
     .bind(keyId)
     .first();
 
-  if (!row || row.status === 'revoked') {
+  if (!row || row.status !== 'active') {
     return jsonResponse({
       error: 'invalid_key',
       message: 'Ключ недействителен или отозван. Обратитесь на displayword.com',

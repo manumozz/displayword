@@ -516,16 +516,26 @@
       }
     });
 
-    function openSendModal(keyId, communityName, prefillEmail) {
-      sendKeyId = keyId;
-      document.getElementById('sendCommunity').textContent = communityName || '—';
-      document.getElementById('sendEmail').value = prefillEmail || '';
+    function resetSendModalUi(prefillEmail) {
+      const emailEl = document.getElementById('sendEmail');
       const st = document.getElementById('sendStatus');
+      const btnSend = document.getElementById('confirmSend');
+      const btnCancel = document.getElementById('cancelSend');
+      emailEl.value = prefillEmail || '';
+      emailEl.disabled = false;
       st.style.display = 'none';
       st.textContent = '';
       st.className = 'email-status';
-      document.getElementById('confirmSend').disabled = false;
-      document.getElementById('confirmSend').textContent = 'Отправить';
+      btnSend.style.display = '';
+      btnSend.disabled = false;
+      btnSend.textContent = 'Отправить';
+      btnCancel.textContent = 'Отмена';
+    }
+
+    function openSendModal(keyId, communityName, prefillEmail) {
+      sendKeyId = keyId;
+      document.getElementById('sendCommunity').textContent = communityName || '—';
+      resetSendModalUi(prefillEmail);
       openModal('modalSend');
       document.getElementById('sendEmail').focus();
     }
@@ -537,9 +547,11 @@
 
     document.getElementById('confirmSend').onclick = async () => {
       const btn = document.getElementById('confirmSend');
-      const email = document.getElementById('sendEmail').value.trim();
+      const emailEl = document.getElementById('sendEmail');
+      const email = emailEl.value.trim();
       const st = document.getElementById('sendStatus');
-      if (!sendKeyId || !email) return;
+      const btnCancel = document.getElementById('cancelSend');
+      if (!sendKeyId || !email || btn.disabled) return;
       btn.disabled = true;
       btn.textContent = '…';
       const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(sendKeyId)}/send`, {
@@ -552,6 +564,9 @@
       if (res.ok) {
         st.className = 'email-status ok';
         st.textContent = 'Отправлено на ' + (data.sentTo || email);
+        btn.style.display = 'none';
+        btnCancel.textContent = 'Закрыть';
+        emailEl.disabled = true;
         const row = allKeys.find(k => k.key_id === sendKeyId);
         if (row) {
           row.recipient_email = data.sentTo || email;
@@ -560,9 +575,12 @@
       } else {
         st.className = 'email-status fail';
         st.textContent = 'Не отправлено: ' + (data.detail || data.error || 'ошибка');
+        btn.disabled = false;
+        btn.textContent = 'Отправить';
+        btn.style.display = '';
+        btnCancel.textContent = 'Отмена';
+        emailEl.disabled = false;
       }
-      btn.disabled = false;
-      btn.textContent = 'Отправить';
     };
 
     const ACTION_LABELS = {

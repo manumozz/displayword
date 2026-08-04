@@ -23,6 +23,7 @@ async function handleGet(env) {
   const rows = await env.DB.prepare(`
     SELECT lk.key_id, lk.community_name, lk.country, lk.mode, lk.activation_limit,
            lk.owner_title, lk.status, lk.issued_at, lk.expires_at, lk.notes,
+           lk.recipient_email,
            COUNT(ac.id) AS activations,
            u.email AS user_email
     FROM license_keys lk
@@ -51,6 +52,8 @@ async function handlePost(request, env, session) {
     if (!/^[A-Z]{2}$/.test(countryCode)) return json({ error: 'invalid_country' }, 400);
   }
 
+  const recipientEmail = email?.trim() ? email.trim() : null;
+
   const keyId = crypto.randomUUID();
   const keyString = await generateLicenseKey(env, {
     keyId,
@@ -64,21 +67,21 @@ async function handlePost(request, env, session) {
   const now = new Date().toISOString();
   await env.DB.prepare(`
     INSERT INTO license_keys
-      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id, country)
-    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?, ?)
+      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id, country, recipient_email)
+    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     keyId, communityName.trim(), mode,
     activationLimit ?? null, ownerTitle ?? null,
     keyString, now, expiresAt ?? null,
-    notes ?? null, userId ?? null, countryCode,
+    notes ?? null, userId ?? null, countryCode, recipientEmail,
   ).run();
 
   let emailed = false;
-  if (email?.trim()) {
+  if (recipientEmail) {
     try {
-      await sendEmail(env, approvedEmail(email.trim(), communityName.trim(), keyString, 'https://displayword.com/download'));
+      await sendEmail(env, approvedEmail(recipientEmail, communityName.trim(), keyString, 'https://displayword.com/download'));
       emailed = true;
-      await logKeyAccess(env, request, { keyId, action: 'issue_email', session, recipient: email.trim() });
+      await logKeyAccess(env, request, { keyId, action: 'issue_email', session, recipient: recipientEmail });
     } catch (e) {
       console.error('Manual key email failed:', e.message);
     }

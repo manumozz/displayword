@@ -26,7 +26,7 @@ export async function onRequest({ request, env, params }) {
   try { body = await request.json(); } catch { /* optional */ }
 
   const row = await env.DB.prepare(`
-    SELECT lk.key_string, lk.community_name, u.email AS user_email
+    SELECT lk.key_string, lk.community_name, lk.recipient_email, u.email AS user_email
     FROM license_keys lk
     LEFT JOIN users u ON u.id = lk.user_id
     WHERE lk.key_id = ?
@@ -34,7 +34,7 @@ export async function onRequest({ request, env, params }) {
 
   if (!row) return json({ error: 'not_found' }, 404, cors());
 
-  const recipient = (body.email?.trim() || row.user_email || '').trim();
+  const recipient = (body.email?.trim() || row.recipient_email || row.user_email || '').trim();
   if (!recipient) return json({ error: 'no_recipient' }, 400, cors());
   if (!isSimpleEmail(recipient)) return json({ error: 'invalid_email' }, 400, cors());
 
@@ -48,6 +48,10 @@ export async function onRequest({ request, env, params }) {
   } catch (e) {
     return json({ error: 'send_failed', detail: e.message }, 502, cors());
   }
+
+  await env.DB.prepare(
+    `UPDATE license_keys SET recipient_email = ? WHERE key_id = ?`,
+  ).bind(recipient, keyId).run();
 
   await logKeyAccess(env, request, { keyId, action: 'resend', session, recipient });
   return json({ ok: true, sentTo: recipient }, 200, cors());

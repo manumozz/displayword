@@ -48,8 +48,7 @@
     .key-cell .btn-reveal,
     .key-cell .btn-send,
     .key-cell .btn-hide,
-    .key-cell .btn-copy-revealed,
-    .key-cell .btn-send-go {
+    .key-cell .btn-copy-revealed {
       background: none; border: 1px solid rgba(255,255,255,0.12); color: var(--gray);
       padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
       cursor: pointer; font-family: inherit;
@@ -57,17 +56,25 @@
     .key-cell .btn-reveal:hover,
     .key-cell .btn-send:hover,
     .key-cell .btn-hide:hover,
-    .key-cell .btn-copy-revealed:hover,
-    .key-cell .btn-send-go:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+    .key-cell .btn-copy-revealed:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
     .key-cell .btn-reveal:disabled,
     .key-cell .btn-send:disabled { opacity: 0.45; cursor: default; }
-    .key-cell .send-form { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-    .key-cell .send-form input {
-      flex: 1 1 140px; min-width: 0; max-width: 200px; box-sizing: border-box;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 6px; padding: 6px 8px; color: var(--white); font-family: inherit; font-size: 0.78rem;
-    }
     .send-status { font-size: 0.75rem; margin-top: 6px; color: var(--gray); }
+    .community-link {
+      background: none; border: none; padding: 0; margin: 0; color: inherit;
+      font: inherit; font-weight: 600; cursor: pointer; text-align: left;
+      border-bottom: 1px dashed transparent;
+    }
+    .community-link:hover { color: var(--accent); border-bottom-color: rgba(74,144,226,0.55); }
+    .detail-grid { display: grid; grid-template-columns: 140px 1fr; gap: 8px 12px; font-size: 0.88rem; margin-bottom: 18px; }
+    .detail-grid dt { color: var(--gray); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .detail-grid dd { margin: 0; word-break: break-word; }
+    .detail-section-title { font-size: 0.75rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin: 16px 0 8px; }
+    .detail-list { list-style: none; padding: 0; margin: 0; font-size: 0.84rem; }
+    .detail-list li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); color: var(--gray); }
+    .detail-list li strong { color: var(--white); font-weight: 600; }
+    .modal.modal-wide { width: 640px; max-height: 85vh; overflow-y: auto; }
+    .modal-sub { font-size: 0.9rem; color: var(--gray); margin: -12px 0 16px; }
     .action-cell { min-width: 120px; max-width: 200px; }
     .action-cell .action-btns { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
     .btn-revoke {
@@ -90,7 +97,7 @@
     /* Modal */
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
     .modal-bg.open { display: flex; }
-    .modal { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: 480px; max-width: 90vw; }
+    .modal { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: 480px; max-width: 92vw; box-sizing: border-box; }
     .modal h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; }
     .field { margin-bottom: 16px; }
     .field label { display: block; font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -185,7 +192,7 @@
         <select id="nCountry"></select>
       </div>
       <div class="field">
-        <label>Email для отправки ключа</label>
+        <label>Email получателя ключа</label>
         <input type="email" id="nEmail" placeholder="Необязательно — ключ придёт письмом" />
       </div>
       <div class="key-output" id="newKeyOut"></div>
@@ -198,13 +205,49 @@
     </div>
   </div>
 
+  <!-- Send key modal -->
+  <div class="modal-bg" id="modalSend">
+    <div class="modal">
+      <h2>Выслать ключ на почту</h2>
+      <p class="modal-sub" id="sendCommunity">—</p>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="sendEmail" placeholder="email@example.com" />
+      </div>
+      <div class="email-status" id="sendStatus"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelSend">Отмена</button>
+        <button class="btn-confirm" id="confirmSend">Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key details modal -->
+  <div class="modal-bg" id="modalDetail">
+    <div class="modal modal-wide">
+      <h2>Данные ключа</h2>
+      <div id="detailBody"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="closeDetail">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/countries.js"></script>
   <script>
     let newKeyCreated = false;
     let lastNewKeyString = '';
     let allKeys = [];
+    let sendKeyId = null;
 
     dwFillCountrySelect(document.getElementById('nCountry'), '— страна —');
+
+    function updateConfirmNewLabel() {
+      const email = document.getElementById('nEmail').value.trim();
+      const btn = document.getElementById('confirmNew');
+      if (btn.disabled && newKeyCreated) return;
+      btn.textContent = email ? ('Создать и отправить на ' + email) : 'Создать ключ';
+    }
 
     function resetNewModal() {
       document.getElementById('nCommunity').value = '';
@@ -222,11 +265,17 @@
       document.getElementById('btnCopyNew').style.display = 'none';
       document.getElementById('btnCopyNew').textContent = 'Копировать ключ';
       document.getElementById('confirmNew').disabled = false;
-      document.getElementById('confirmNew').textContent = 'Создать ключ';
       document.getElementById('cancelNew').textContent = 'Отмена';
       newKeyCreated = false;
       lastNewKeyString = '';
+      updateConfirmNewLabel();
     }
+
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function dash(v) { return (v == null || v === '') ? '—' : String(v); }
+    function displayUserEmail(k) { return k.user_email || k.recipient_email || '—'; }
+    function preferredSendEmail(k) { return k.recipient_email || k.user_email || ''; }
 
     async function copyText(text, btn, idleLabel, codeEl) {
       try {
@@ -247,20 +296,17 @@
       }
     }
 
-    function idleKeyCellHtml(userEmail) {
-      const title = userEmail
-        ? ` title="Выслать на ${esc(userEmail)}"`
-        : '';
+    function idleKeyCellHtml() {
       return `<div class="key-btns">
         <button type="button" class="btn-reveal">Показать</button>
-        <button type="button" class="btn-send"${title}>Выслать на почту</button>
+        <button type="button" class="btn-send">Выслать на почту</button>
       </div>`;
     }
 
     function collapseKeyCells(except) {
       document.querySelectorAll('#keysBody .key-cell').forEach(cell => {
         if (cell === except) return;
-        cell.innerHTML = idleKeyCellHtml(cell.dataset.userEmail || '');
+        cell.innerHTML = idleKeyCellHtml();
       });
     }
 
@@ -310,15 +356,18 @@
       }
       tbody.innerHTML = list.map(k => `
         <tr>
-          <td>${esc(k.community_name)}${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}</td>
+          <td>
+            <button type="button" class="community-link" data-key-id="${esc(k.key_id)}">${esc(k.community_name)}</button>
+            ${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}
+          </td>
           <td>${k.country ? '<span title="' + esc(dwCountryName(k.country)) + '">' + esc(k.country) + '</span>' : '—'}</td>
           <td><span class="badge badge-${k.mode}">${k.mode}</span></td>
           <td>${k.activations} / ${k.activation_limit ?? '∞'}</td>
           <td><span class="badge badge-${k.status}">${k.status}</span></td>
           <td style="color:var(--gray)">${fmt(k.issued_at)}</td>
-          <td style="color:var(--gray);font-size:0.8rem">${esc(k.user_email ?? '—')}</td>
-          <td class="key-cell" data-key-id="${esc(k.key_id)}" data-user-email="${esc(k.user_email ?? '')}">
-            ${idleKeyCellHtml(k.user_email ?? '')}
+          <td style="color:var(--gray);font-size:0.8rem">${esc(displayUserEmail(k))}</td>
+          <td class="key-cell" data-key-id="${esc(k.key_id)}" data-name="${esc(k.community_name)}" data-send-email="${esc(preferredSendEmail(k))}">
+            ${idleKeyCellHtml()}
           </td>
           <td class="action-cell" data-key-id="${esc(k.key_id)}" data-name="${esc(k.community_name)}">
             <div class="action-btns">
@@ -356,6 +405,12 @@
     }
 
     document.getElementById('keysBody').addEventListener('click', async (e) => {
+      const communityBtn = e.target.closest('.community-link');
+      if (communityBtn) {
+        openKeyDetail(communityBtn.dataset.keyId);
+        return;
+      }
+
       const cell = e.target.closest('.key-cell, .action-cell');
       if (!cell) return;
       const keyId = cell.dataset.keyId;
@@ -443,7 +498,7 @@
       }
 
       if (e.target.classList.contains('btn-hide')) {
-        cell.innerHTML = idleKeyCellHtml(cell.dataset.userEmail || '');
+        cell.innerHTML = idleKeyCellHtml();
         delete cell.dataset.revealed;
         return;
       }
@@ -456,63 +511,148 @@
       }
 
       if (e.target.classList.contains('btn-send')) {
-        const userEmail = cell.dataset.userEmail || '';
-        if (userEmail) {
-          await sendKeyEmail(cell, keyId, userEmail, e.target);
-        } else {
-          if (cell.querySelector('.send-form')) return;
-          const form = document.createElement('div');
-          form.className = 'send-form';
-          form.innerHTML = `<input type="email" class="send-email" placeholder="email@example.com" /><button type="button" class="btn-send-go">Отправить</button>`;
-          cell.appendChild(form);
-          form.querySelector('.send-email').focus();
-        }
+        openSendModal(keyId, cell.dataset.name || '', cell.dataset.sendEmail || '');
         return;
-      }
-
-      if (e.target.classList.contains('btn-send-go')) {
-        const input = cell.querySelector('.send-email');
-        const email = (input?.value || '').trim();
-        if (!email) return;
-        await sendKeyEmail(cell, keyId, email, e.target);
       }
     });
 
-    async function sendKeyEmail(cell, keyId, email, btn) {
-      const prev = btn.textContent;
+    function openSendModal(keyId, communityName, prefillEmail) {
+      sendKeyId = keyId;
+      document.getElementById('sendCommunity').textContent = communityName || '—';
+      document.getElementById('sendEmail').value = prefillEmail || '';
+      const st = document.getElementById('sendStatus');
+      st.style.display = 'none';
+      st.textContent = '';
+      st.className = 'email-status';
+      document.getElementById('confirmSend').disabled = false;
+      document.getElementById('confirmSend').textContent = 'Отправить';
+      openModal('modalSend');
+      document.getElementById('sendEmail').focus();
+    }
+
+    document.getElementById('cancelSend').onclick = () => {
+      closeModal('modalSend');
+      sendKeyId = null;
+    };
+
+    document.getElementById('confirmSend').onclick = async () => {
+      const btn = document.getElementById('confirmSend');
+      const email = document.getElementById('sendEmail').value.trim();
+      const st = document.getElementById('sendStatus');
+      if (!sendKeyId || !email) return;
       btn.disabled = true;
       btn.textContent = '…';
-      const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(keyId)}/send`, {
+      const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(sendKeyId)}/send`, {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
       const data = await res.json().catch(() => ({}));
-      cell.querySelector('.send-form')?.remove();
-      cell.querySelector('.send-status')?.remove();
-      const status = document.createElement('div');
-      status.className = 'send-status';
+      st.style.display = 'block';
       if (res.ok) {
-        status.textContent = 'Отправлено на ' + (data.sentTo || email);
+        st.className = 'email-status ok';
+        st.textContent = 'Отправлено на ' + (data.sentTo || email);
+        const row = allKeys.find(k => k.key_id === sendKeyId);
+        if (row) {
+          row.recipient_email = data.sentTo || email;
+          renderKeys();
+        }
       } else {
-        status.textContent = 'Не отправлено: ' + (data.detail || data.error || 'ошибка');
+        st.className = 'email-status fail';
+        st.textContent = 'Не отправлено: ' + (data.detail || data.error || 'ошибка');
       }
-      cell.appendChild(status);
-      setTimeout(() => {
-        cell.innerHTML = idleKeyCellHtml(cell.dataset.userEmail || '');
-      }, 4000);
+      btn.disabled = false;
+      btn.textContent = 'Отправить';
+    };
+
+    const ACTION_LABELS = {
+      reveal: 'просмотр',
+      resend: 'отправка',
+      issue_email: 'выдача с письмом',
+      revoke: 'отзыв',
+      delete: 'удаление',
+    };
+
+    async function openKeyDetail(keyId) {
+      if (!keyId) return;
+      document.getElementById('detailBody').innerHTML = '<p style="color:var(--gray)">Загрузка…</p>';
+      openModal('modalDetail');
+      const res = await fetch(`/api/v1/admin/keys/${encodeURIComponent(keyId)}`, { credentials: 'same-origin' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.key) {
+        document.getElementById('detailBody').innerHTML =
+          '<p style="color:#f87171">Не удалось загрузить: ' + esc(data.error || res.status) + '</p>';
+        return;
+      }
+      const k = data.key;
+      if (k.key_string != null) delete k.key_string;
+      const countryLabel = k.country
+        ? (esc(k.country) + ' — ' + esc(dwCountryName(k.country)))
+        : '—';
+      const acts = (data.activations || []).map(a =>
+        `<li><strong>${esc(fmtDateTime(a.last_seen_at || a.created_at))}</strong>` +
+        ` · ${esc(a.country ? (a.country + ' — ' + dwCountryName(a.country)) : '—')}` +
+        ` · <code style="font-size:0.75rem;color:var(--accent)">${esc(a.fingerprint || '—')}</code></li>`
+      ).join('') || '<li>Нет активаций</li>';
+      const logs = (data.accessLog || []).map(l =>
+        `<li><strong>${esc(fmtDateTime(l.at))}</strong>` +
+        ` · ${esc(ACTION_LABELS[l.action] || l.action || '—')}` +
+        ` · кому: ${esc(dash(l.recipient))}` +
+        ` · админ: ${esc(dash(l.admin_email))}</li>`
+      ).join('') || '<li>Записей нет</li>';
+      document.getElementById('detailBody').innerHTML = `
+        <dl class="detail-grid">
+          <dt>Община</dt><dd>${esc(dash(k.community_name))}</dd>
+          <dt>Заголовок</dt><dd>${esc(dash(k.owner_title))}</dd>
+          <dt>Страна</dt><dd>${countryLabel}</dd>
+          <dt>Режим</dt><dd>${esc(dash(k.mode))}</dd>
+          <dt>Статус</dt><dd>${esc(dash(k.status))}</dd>
+          <dt>Активации</dt><dd>${esc(String(k.activations ?? 0))} / ${esc(k.activation_limit == null ? '∞' : String(k.activation_limit))}</dd>
+          <dt>Выдан</dt><dd>${esc(fmtDateTime(k.issued_at))}</dd>
+          <dt>Истекает</dt><dd>${esc(k.expires_at ? fmtDateTime(k.expires_at) : '—')}</dd>
+          <dt>Email аккаунта</dt><dd>${esc(dash(k.user_email))}</dd>
+          <dt>Email получателя</dt><dd>${esc(dash(k.recipient_email))}</dd>
+          <dt>Заметки</dt><dd>${esc(dash(k.notes))}</dd>
+          <dt>key_id</dt><dd><code style="font-size:0.75rem;color:var(--accent)">${esc(k.key_id)}</code></dd>
+        </dl>
+        <div class="detail-section-title">Активации</div>
+        <ul class="detail-list">${acts}</ul>
+        <div class="detail-section-title">Журнал доступа (последние 10)</div>
+        <ul class="detail-list">${logs}</ul>`;
     }
+
+    document.getElementById('closeDetail').onclick = () => closeModal('modalDetail');
 
     document.getElementById('btnNew').onclick = () => {
       resetNewModal();
-      document.getElementById('modalNew').classList.add('open');
+      openModal('modalNew');
     };
     document.getElementById('cancelNew').onclick = () => {
       const created = newKeyCreated;
-      document.getElementById('modalNew').classList.remove('open');
+      closeModal('modalNew');
       resetNewModal();
       if (created) load();
     };
+
+    document.getElementById('nEmail').addEventListener('input', updateConfirmNewLabel);
+
+    // Close modals on backdrop click (same for all)
+    ['modalNew', 'modalSend', 'modalDetail'].forEach(id => {
+      document.getElementById(id).addEventListener('click', (e) => {
+        if (e.target.id !== id) return;
+        if (id === 'modalNew') {
+          const created = newKeyCreated;
+          closeModal(id);
+          resetNewModal();
+          if (created) load();
+        } else if (id === 'modalSend') {
+          closeModal(id);
+          sendKeyId = null;
+        } else {
+          closeModal(id);
+        }
+      });
+    });
 
     document.getElementById('nMode').onchange = function() {
       document.getElementById('nLimitField').style.display = this.value === 'server' ? '' : 'none';
@@ -576,6 +716,12 @@
 
     function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function fmt(iso) { return iso ? new Date(iso).toLocaleDateString('ru-RU', { day:'numeric', month:'short', year:'numeric' }) : '—'; }
+    function fmtDateTime(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleString('ru-RU', {
+        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+      });
+    }
 
     load();
   </script>

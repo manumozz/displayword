@@ -7,12 +7,11 @@ const SENDER = { name: 'DisplayWord', email: 'noreply@displayword.com' };
 
 /**
  * Send a transactional email via Brevo.
- * Logs and skips if BREVO_API_KEY is not configured.
+ * Throws if BREVO_API_KEY is not configured (callers must handle).
  */
 export async function sendEmail(env, { to, subject, html }) {
   if (!env.BREVO_API_KEY) {
-    console.warn('[email] BREVO_API_KEY not set — skipping email to', to);
-    return;
+    throw new Error('email_not_configured');
   }
   const res = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
@@ -65,7 +64,7 @@ export function approvedEmail(to, communityName, keyString, downloadUrl) {
       <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#1a1a2e">
         <h2 style="color:#4a90e2">DisplayWord</h2>
         <p>Здравствуйте,</p>
-        <p>Заявка для общины <strong>${communityName}</strong> одобрена.</p>
+        <p>Заявка для собрания <strong>${communityName}</strong> одобрена.</p>
         <p>Ваш лицензионный ключ:</p>
         <pre style="background:#f4f7fc;padding:16px;border-radius:8px;font-size:0.85rem;word-break:break-all">${keyString}</pre>
         <p style="margin:24px 0">
@@ -88,7 +87,7 @@ export function rejectedEmail(to, communityName, reason) {
       <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#1a1a2e">
         <h2 style="color:#4a90e2">DisplayWord</h2>
         <p>Здравствуйте,</p>
-        <p>Заявка для общины <strong>${communityName}</strong> отклонена.</p>
+        <p>Заявка для собрания <strong>${communityName}</strong> отклонена.</p>
         ${reason ? `<p>Причина: ${reason}</p>` : ''}
         <p>Если у вас есть вопросы — напишите нам через сайт displayword.com.</p>
       </div>
@@ -103,7 +102,7 @@ export function newApplicationEmail(to, communityName, contactPerson, adminUrl) 
     html: `
       <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#1a1a2e">
         <h2 style="color:#4a90e2">DisplayWord — новая заявка</h2>
-        <p>Община: <strong>${communityName}</strong></p>
+        <p>Собрание: <strong>${communityName}</strong></p>
         <p>Контактное лицо: ${contactPerson}</p>
         <p style="margin:24px 0">
           <a href="${adminUrl}"

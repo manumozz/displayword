@@ -16,3 +16,14 @@ CREATE INDEX IF NOT EXISTS idx_key_access_log_key ON key_access_log(key_id, at);
 ALTER TABLE applications ADD COLUMN country TEXT;   -- ISO 3166-1 alpha-2
 ALTER TABLE license_keys ADD COLUMN country TEXT;   -- ISO 3166-1 alpha-2
 ALTER TABLE activations  ADD COLUMN country TEXT;   -- страна активации по CF-IPCountry
+
+-- #058 recipient email on license key (apply once via wrangler d1 --remote with author OK)
+ALTER TABLE license_keys ADD COLUMN recipient_email TEXT;
+-- optional backfill from audit log (separate command, author OK required):
+-- UPDATE license_keys SET recipient_email = (
+--   SELECT recipient FROM key_access_log l
+--   WHERE l.key_id = license_keys.key_id
+--     AND l.recipient IS NOT NULL
+--     AND l.action IN ('issue_email','resend')
+--   ORDER BY l.at DESC LIMIT 1
+-- ) WHERE recipient_email IS NULL;

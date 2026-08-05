@@ -87,7 +87,7 @@ export async function onRequest({ request, env }) {
     return jsonResponse({ error: 'invalid_key', message: 'Ключ недействителен' }, 403);
   }
 
-  // Check expiry (optional field)
+  // Check expiry from payload (legacy / offline keys that embed expiresAt)
   if (expiresAt && new Date(expiresAt) < new Date()) {
     return jsonResponse({ error: 'key_expired', message: 'Срок действия ключа истёк' }, 403);
   }
@@ -98,7 +98,7 @@ export async function onRequest({ request, env }) {
   }
 
   const row = await env.DB
-    .prepare('SELECT status, activation_limit FROM license_keys WHERE key_id = ?')
+    .prepare('SELECT status, activation_limit, expires_at FROM license_keys WHERE key_id = ?')
     .bind(keyId)
     .first();
 
@@ -107,6 +107,11 @@ export async function onRequest({ request, env }) {
       error: 'invalid_key',
       message: 'Ключ недействителен или отозван. Обратитесь на displayword.com',
     }, 403);
+  }
+
+  // Authoritative server expiry (D1) — can be changed without reissuing the key string
+  if (row.expires_at && new Date(row.expires_at) < new Date()) {
+    return jsonResponse({ error: 'key_expired', message: 'Срок действия ключа истёк' }, 403);
   }
 
   // ── Offline mode: signature verified, key active — done ───────────────────
@@ -169,7 +174,11 @@ export async function onRequest({ request, env }) {
   const tokenSigBytes  = await crypto.subtle.sign('Ed25519', tokenPrivateKey, tokenPayloadBytes);
   const signedToken = `DWT-${b64urlEncode(tokenPayloadBytes)}-${b64urlEncode(new Uint8Array(tokenSigBytes))}`;
 
-  return jsonResponse({ ok: true, signedToken }, 200);
+  return jsonResponse({
+    ok: true,
+    signedToken,
+    expiresAt: row.expires_at ?? null,
+  }, 200);
 }
 
 /* ── crypto helpers ─────────────────────────────────────────────────────── */

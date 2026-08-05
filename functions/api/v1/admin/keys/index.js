@@ -36,6 +36,14 @@ async function handleGet(env) {
   return json(rows.results ?? [], 200, cors());
 }
 
+function normalizeExpiresAt(raw) {
+  if (raw == null || raw === '') return { ok: true, value: null };
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return { ok: false, error: 'invalid_expiry' };
+  if (d.getTime() <= Date.now()) return { ok: false, error: 'invalid_expiry' };
+  return { ok: true, value: d.toISOString() };
+}
+
 async function handlePost(request, env, session) {
   let body;
   try { body = await request.json(); }
@@ -52,15 +60,20 @@ async function handlePost(request, env, session) {
     if (!/^[A-Z]{2}$/.test(countryCode)) return json({ error: 'invalid_country' }, 400);
   }
 
+  const expiry = normalizeExpiresAt(expiresAt);
+  if (!expiry.ok) return json({ error: expiry.error }, 400);
+  if (mode === 'offline' && expiry.value != null)
+    return json({ error: 'expiry_not_allowed_offline' }, 400);
+
   const recipientEmail = email?.trim() ? email.trim() : null;
 
   const keyId = crypto.randomUUID();
+  // Server expiry lives only in D1 — do not embed expiresAt in the signed key string.
   const keyString = await generateLicenseKey(env, {
     keyId,
     communityName: communityName.trim(),
     mode,
     activationLimit,
-    expiresAt,
     ownerTitle,
   });
 
@@ -72,7 +85,7 @@ async function handlePost(request, env, session) {
   `).bind(
     keyId, communityName.trim(), mode,
     activationLimit ?? null, ownerTitle ?? null,
-    keyString, now, expiresAt ?? null,
+    keyString, now, expiry.value,
     notes ?? null, userId ?? null, countryCode, recipientEmail,
   ).run();
 

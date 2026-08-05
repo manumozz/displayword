@@ -1,7 +1,6 @@
 /**
  * GET  /api/v1/admin/keys/:keyId — key details (no key_string), activations, recent log
- * POST /api/v1/admin/keys/:keyId — revoke or soft-delete
- * Body optional: { "action": "revoke" | "delete" }  (default: revoke)
+ * POST /api/v1/admin/keys/:keyId — revoke | delete | set_expiry | release_activation
  */
 import { requireAdmin } from '../../../../_lib/admin.js';
 import { json, preflight, cors } from '../../../../_lib/response.js';
@@ -78,14 +77,91 @@ async function handleGet(env, keyId) {
   }, 200, cors());
 }
 
+function formatExpiryLog(iso) {
+  return iso ? String(iso) : '∞';
+}
+
+function normalizeExpiresAt(raw) {
+  if (raw === null) return { ok: true, value: null };
+  if (raw === undefined || raw === '') return { ok: false, error: 'invalid_expiry' };
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return { ok: false, error: 'invalid_expiry' };
+  if (d.getTime() <= Date.now()) return { ok: false, error: 'invalid_expiry' };
+  return { ok: true, value: d.toISOString() };
+}
+
+async function handleSetExpiry(request, env, session, keyId, body) {
+  const row = await env.DB.prepare(
+    `SELECT key_id, status, mode, expires_at FROM license_keys WHERE key_id = ?`,
+  ).bind(keyId).first();
+
+  if (!row) return json({ error: 'not_found' }, 404, cors());
+  if (row.status === 'deleted') return json({ error: 'deleted' }, 400, cors());
+  if (row.status === 'revoked') return json({ error: 'revoked' }, 400, cors());
+  if (row.mode === 'offline')
+    return json({ error: 'expiry_not_allowed_offline' }, 400, cors());
+
+  const expiry = normalizeExpiresAt(body?.expiresAt === undefined ? undefined : body.expiresAt);
+  if (!expiry.ok) return json({ error: expiry.error }, 400, cors());
+
+  await env.DB.prepare(
+    `UPDATE license_keys SET expires_at = ? WHERE key_id = ?`,
+  ).bind(expiry.value, keyId).run();
+
+  const recipient = `«${formatExpiryLog(row.expires_at)} → ${formatExpiryLog(expiry.value)}»`;
+  await logKeyAccess(env, request, { keyId, action: 'set_expiry', session, recipient });
+
+  return json({
+    ok: true,
+    keyId,
+    expiresAt: expiry.value,
+  }, 200, cors());
+}
+
+async function handleReleaseActivation(request, env, session, keyId, body) {
+  const fingerprint = typeof body?.fingerprint === 'string' ? body.fingerprint.trim() : '';
+  if (!fingerprint) return json({ error: 'fingerprint_required' }, 400, cors());
+
+  const row = await env.DB.prepare(
+    `SELECT key_id, status, mode FROM license_keys WHERE key_id = ?`,
+  ).bind(keyId).first();
+
+  if (!row) return json({ error: 'not_found' }, 404, cors());
+  if (row.status === 'deleted') return json({ error: 'deleted' }, 400, cors());
+  if (row.mode === 'offline')
+    return json({ error: 'not_applicable_offline' }, 400, cors());
+
+  const result = await env.DB.prepare(
+    `DELETE FROM activations WHERE key_id = ? AND fingerprint = ?`,
+  ).bind(keyId, fingerprint).run();
+
+  const deleted = result?.meta?.changes ?? 0;
+  if (!deleted) return json({ error: 'activation_not_found' }, 404, cors());
+
+  await logKeyAccess(env, request, {
+    keyId,
+    action: 'release_activation',
+    session,
+    recipient: fingerprint,
+  });
+
+  return json({ ok: true, keyId, fingerprint }, 200, cors());
+}
+
 async function handlePost(request, env, session, keyId) {
-  let action = 'revoke';
+  let body = {};
   try {
-    const body = await request.json();
-    if (body?.action) action = String(body.action);
+    body = await request.json();
   } catch {
     /* пустое тело = revoke */
   }
+
+  const action = body?.action ? String(body.action) : 'revoke';
+
+  if (action === 'set_expiry')
+    return handleSetExpiry(request, env, session, keyId, body);
+  if (action === 'release_activation')
+    return handleReleaseActivation(request, env, session, keyId, body);
 
   if (action !== 'revoke' && action !== 'delete')
     return json({ error: 'unsupported_action' }, 400, cors());

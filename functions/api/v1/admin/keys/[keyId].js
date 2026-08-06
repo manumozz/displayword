@@ -29,7 +29,7 @@ async function handleGet(env, keyId) {
   const key = await env.DB.prepare(`
     SELECT lk.key_id, lk.community_name, lk.mode, lk.activation_limit, lk.owner_title,
            lk.status, lk.issued_at, lk.expires_at, lk.notes, lk.user_id, lk.country,
-           lk.recipient_email,
+           lk.recipient_email, lk.edition,
            u.email AS user_email,
            (SELECT COUNT(*) FROM activations ac WHERE ac.key_id = lk.key_id) AS activations
     FROM license_keys lk
@@ -60,6 +60,7 @@ async function handleGet(env, keyId) {
       key_id: key.key_id,
       community_name: key.community_name,
       mode: key.mode,
+      edition: key.edition,
       activation_limit: key.activation_limit,
       owner_title: key.owner_title,
       status: key.status,

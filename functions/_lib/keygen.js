@@ -13,6 +13,7 @@ export async function generateLicenseKey(env, {
   activationLimit = 2,
   expiresAt = null,
   ownerTitle = null,
+  edition = null,
 }) {
   const payload = {
     keyId,
@@ -23,6 +24,7 @@ export async function generateLicenseKey(env, {
   };
   if (expiresAt)   payload.expiresAt   = expiresAt;
   if (ownerTitle)  payload.ownerTitle  = ownerTitle;
+  if (edition)     payload.edition     = edition;
 
   const rawBytes  = new TextEncoder().encode(JSON.stringify(payload));
   const privateKey = await importLicensePrivateKey(env);

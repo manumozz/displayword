@@ -40,8 +40,11 @@
     .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; }
     .badge-server  { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
     .badge-offline { background: rgba(251,191,36,0.1); color: var(--gold); border: 1px solid rgba(251,191,36,0.2); }
+    .badge-connect { background: rgba(56,189,248,0.12); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.28); }
+    .badge-team    { background: rgba(167,139,250,0.12); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.28); }
     .badge-active  { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
     .badge-revoked { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .mode-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
     .status-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
     .badge-expiry { font-size: 0.65rem; font-weight: 700; padding: 1px 7px; border-radius: 12px; }
     .badge-expiry-ok { background: rgba(148,163,184,0.12); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
@@ -203,9 +206,17 @@
           <option value="offline">Offline</option>
         </select>
       </div>
+      <div class="field">
+        <label for="nEdition">Редакция *</label>
+        <select id="nEdition">
+          <option value="">— редакция —</option>
+          <option value="connect">Connect</option>
+          <option value="team">Team</option>
+        </select>
+      </div>
       <div class="field" id="nLimitField">
         <label>Лимит активаций</label>
-        <input type="number" id="nLimit" value="3" min="1" max="100" />
+        <input type="number" id="nLimit" value="7" min="1" max="100" />
       </div>
       <div class="field" id="nExpiryField">
         <label for="nExpiry">Срок действия</label>
@@ -229,7 +240,8 @@
       </div>
       <div class="field">
         <label>Email получателя ключа</label>
-        <input type="email" id="nEmail" placeholder="Необязательно — ключ придёт письмом" />
+        <input type="email" id="nEmail" placeholder="email@example.com" />
+        <div class="field-hint" id="nEmailHint">Без адреса письмо не отправится — ключ можно выслать позже из таблицы</div>
       </div>
       <div class="key-output" id="newKeyOut"></div>
       <div class="email-status" id="newEmailStatus"></div>
@@ -278,11 +290,19 @@
 
     dwFillCountrySelect(document.getElementById('nCountry'), '— страна —');
 
-    function updateConfirmNewLabel() {
+    function updateConfirmNewUi() {
       const email = document.getElementById('nEmail').value.trim();
+      const edition = document.getElementById('nEdition').value;
       const btn = document.getElementById('confirmNew');
-      if (btn.disabled && newKeyCreated) return;
-      btn.textContent = email ? ('Создать и отправить на ' + email) : 'Создать ключ';
+      const hint = document.getElementById('nEmailHint');
+      if (hint) {
+        hint.textContent = email
+          ? 'Ключ уйдёт на этот адрес сразу при создании'
+          : 'Без адреса письмо не отправится — ключ можно выслать позже из таблицы';
+      }
+      if (newKeyCreated) return;
+      btn.textContent = email ? 'Создать ключ и отправить' : 'Создать ключ';
+      btn.disabled = !edition;
     }
 
     function syncNewExpiryUi() {
@@ -364,9 +384,11 @@
     function resetNewModal() {
       document.getElementById('nCommunity').value = '';
       document.getElementById('nMode').value = 'server';
+      document.getElementById('nEdition').value = '';
       document.getElementById('nOwner').value = '';
       document.getElementById('nCountry').value = '';
       document.getElementById('nEmail').value = '';
+      document.getElementById('nLimit').value = '7';
       document.getElementById('nLimitField').style.display = '';
       document.getElementById('nExpiry').value = '60';
       document.getElementById('nExpiryDate').value = '';
@@ -379,11 +401,10 @@
       es.className = 'email-status';
       document.getElementById('btnCopyNew').style.display = 'none';
       document.getElementById('btnCopyNew').textContent = 'Копировать ключ';
-      document.getElementById('confirmNew').disabled = false;
       document.getElementById('cancelNew').textContent = 'Отмена';
       newKeyCreated = false;
       lastNewKeyString = '';
-      updateConfirmNewLabel();
+      updateConfirmNewUi();
     }
 
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -478,7 +499,7 @@
             ${k.owner_title ? '<br><span style="color:var(--gray);font-size:0.78rem">' + esc(k.owner_title) + '</span>' : ''}
           </td>
           <td>${k.country ? '<span title="' + esc(dwCountryName(k.country)) + '">' + esc(k.country) + '</span>' : '—'}</td>
-          <td><span class="badge badge-${k.mode}">${k.mode}</span></td>
+          <td><div class="mode-cell"><span class="badge badge-${k.mode}">${k.mode}</span>${k.edition === 'connect' || k.edition === 'team' ? '<span class="badge badge-' + k.edition + '">' + esc(k.edition) + '</span>' : ''}</div></td>
           <td>${k.activations} / ${k.activation_limit ?? '∞'}</td>
           <td><div class="status-cell"><span class="badge badge-${k.status}">${k.status}</span>${expiryBadgeHtml(k.expires_at)}</div></td>
           <td style="color:var(--gray)">${fmt(k.issued_at)}</td>
@@ -788,6 +809,7 @@
           <dt>Заголовок</dt><dd>${esc(dash(k.owner_title))}</dd>
           <dt>Страна</dt><dd>${countryLabel}</dd>
           <dt>Режим</dt><dd>${esc(dash(k.mode))}</dd>
+          <dt>Редакция</dt><dd>${esc(dash(k.edition))}</dd>
           <dt>Статус</dt><dd>${esc(dash(k.status))}</dd>
           <dt>Активации</dt><dd>${esc(String(k.activations ?? 0))} / ${esc(k.activation_limit == null ? '∞' : String(k.activation_limit))}</dd>
           <dt>Выдан</dt><dd>${esc(fmtDateTime(k.issued_at))}</dd>
@@ -863,7 +885,8 @@
       if (created) load();
     };
 
-    document.getElementById('nEmail').addEventListener('input', updateConfirmNewLabel);
+    document.getElementById('nEmail').addEventListener('input', updateConfirmNewUi);
+    document.getElementById('nEdition').addEventListener('change', updateConfirmNewUi);
 
     // Close modals on backdrop click (same for all)
     ['modalNew', 'modalSend', 'modalDetail'].forEach(id => {
@@ -901,11 +924,13 @@
       const btn  = document.getElementById('confirmNew');
       const community = document.getElementById('nCommunity').value.trim();
       const mode  = document.getElementById('nMode').value;
+      const edition = document.getElementById('nEdition').value;
       const limit = parseInt(document.getElementById('nLimit').value, 10);
       const owner = document.getElementById('nOwner').value.trim() || null;
       const country = document.getElementById('nCountry').value || null;
       const email = document.getElementById('nEmail').value.trim() || null;
       if (!community) return;
+      if (edition !== 'connect' && edition !== 'team') return;
       if (mode === 'server' && document.getElementById('nExpiry').value === 'date' && !document.getElementById('nExpiryDate').value) {
         alert('Укажите дату окончания срока');
         return;
@@ -919,6 +944,7 @@
         body: JSON.stringify({
           communityName: community,
           mode,
+          edition,
           activationLimit: mode === 'server' ? limit : undefined,
           ownerTitle: owner,
           email,
@@ -950,9 +976,12 @@
           es.style.display = 'none';
           es.textContent = '';
         }
+        btn.disabled = true;
         btn.textContent = 'Готово ✓';
       } else {
-        btn.textContent = 'Ошибка'; btn.disabled = false;
+        btn.textContent = 'Ошибка';
+        newKeyCreated = false;
+        updateConfirmNewUi();
       }
     };
 

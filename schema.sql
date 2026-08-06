@@ -27,3 +27,6 @@ ALTER TABLE license_keys ADD COLUMN recipient_email TEXT;
 --     AND l.action IN ('issue_email','resend')
 --   ORDER BY l.at DESC LIMIT 1
 -- ) WHERE recipient_email IS NULL;
+
+-- #062 edition on license key (connect | team); apply once via wrangler d1 --remote with author OK
+ALTER TABLE license_keys ADD COLUMN edition TEXT;

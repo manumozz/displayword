@@ -23,7 +23,7 @@ async function handleGet(env) {
   const rows = await env.DB.prepare(`
     SELECT lk.key_id, lk.community_name, lk.country, lk.mode, lk.activation_limit,
            lk.owner_title, lk.status, lk.issued_at, lk.expires_at, lk.notes,
-           lk.recipient_email,
+           lk.recipient_email, lk.edition,
            COUNT(ac.id) AS activations,
            u.email AS user_email
     FROM license_keys lk
@@ -49,10 +49,12 @@ async function handlePost(request, env, session) {
   try { body = await request.json(); }
   catch { return json({ error: 'invalid_json' }, 400); }
 
-  const { communityName, mode, activationLimit, expiresAt, ownerTitle, notes, userId, email, country } = body;
+  const { communityName, mode, activationLimit, expiresAt, ownerTitle, notes, userId, email, country, edition } = body;
 
   if (!communityName?.trim()) return json({ error: 'community_name_required' }, 400);
   if (!mode || !['server', 'offline'].includes(mode)) return json({ error: 'invalid_mode' }, 400);
+  if (edition !== 'connect' && edition !== 'team')
+    return json({ error: 'invalid_edition' }, 400);
 
   let countryCode = null;
   if (country != null && String(country).trim() !== '') {
@@ -75,18 +77,19 @@ async function handlePost(request, env, session) {
     mode,
     activationLimit,
     ownerTitle,
+    edition,
   });
 
   const now = new Date().toISOString();
   await env.DB.prepare(`
     INSERT INTO license_keys
-      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id, country, recipient_email)
-    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?, ?, ?)
+      (key_id, community_name, mode, activation_limit, owner_title, status, key_string, issued_at, expires_at, notes, user_id, country, recipient_email, edition)
+    VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     keyId, communityName.trim(), mode,
     activationLimit ?? null, ownerTitle ?? null,
     keyString, now, expiry.value,
-    notes ?? null, userId ?? null, countryCode, recipientEmail,
+    notes ?? null, userId ?? null, countryCode, recipientEmail, edition,
   ).run();
 
   let emailed = false;

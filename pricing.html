@@ -108,6 +108,7 @@
             <option value="uk">Українська</option>
             <option value="es">Español</option>
             <option value="pt">Português</option>
+            <option value="de">Deutsch</option>
           </select>
         </label>
       </li>
@@ -127,6 +128,7 @@
         <button type="button" class="nav-lang-item" data-lang="uk" onclick="dwSwitch('uk')"><span class="lang-code">UK</span> Українська</button>
         <button type="button" class="nav-lang-item" data-lang="es" onclick="dwSwitch('es')"><span class="lang-code">ES</span> Español</button>
         <button type="button" class="nav-lang-item" data-lang="pt" onclick="dwSwitch('pt')"><span class="lang-code">PT</span> Português</button>
+        <button type="button" class="nav-lang-item" data-lang="de" onclick="dwSwitch('de')"><span class="lang-code">DE</span> Deutsch</button>
       </div>
     </div>
     <button class="hamburger" id="navHam" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -369,6 +371,7 @@
             <button class="lang-menu-item" data-lang="uk" onclick="dwSwitch('uk')"><span class="lang-code">UK</span> Українська</button>
             <button class="lang-menu-item" data-lang="es" onclick="dwSwitch('es')"><span class="lang-code">ES</span> Español</button>
             <button class="lang-menu-item" data-lang="pt" onclick="dwSwitch('pt')"><span class="lang-code">PT</span> Português</button>
+            <button class="lang-menu-item" data-lang="de" onclick="dwSwitch('de')"><span class="lang-code">DE</span> Deutsch</button>
           </div>
         </div>
       </div>
@@ -381,7 +384,7 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=30"></script>
+<script src="i18n.js?v=31"></script>
 <script>
 /* ── Billing toggle ──────────────────────────────────────── */
 const PRICES = {
@@ -438,6 +441,16 @@ const PERIODS = {
     team: {
       monthly:  'por mês · cancele quando quiser',
       annual:   'por ano · economia de $177',
+    }
+  },
+  de: {
+    connect: {
+      monthly:  'pro Monat · jederzeit kündbar',
+      annual:   'pro Jahr · $89 sparen',
+    },
+    team: {
+      monthly:  'pro Monat · jederzeit kündbar',
+      annual:   'pro Jahr · $177 sparen',
     }
   },
 };

@@ -528,8 +528,26 @@
   </div>
 </div>
 
-<script src="i18n.js?v=31"></script>
+<script src="i18n.js?v=32"></script>
 <script>
+  // Append home_trial as the last item of the hero feature list (home_p) without editing other bullets.
+  (function () {
+    const _dwApply = dwApply;
+    dwApply = function (lang) {
+      _dwApply(lang);
+      const ul = document.querySelector('.hero-features');
+      if (!ul) return;
+      let li = ul.querySelector('li[data-home-trial]');
+      if (!li) {
+        li = document.createElement('li');
+        li.setAttribute('data-home-trial', '');
+        ul.appendChild(li);
+      }
+      const resolved = DW_T[lang] ? lang : 'en';
+      li.textContent = (DW_T[resolved] || DW_T.en).home_trial || '';
+    };
+  })();
+
   const BREVO_API_KEY = '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';
   const BREVO_LIST_ID = 2;
 

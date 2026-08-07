@@ -13,7 +13,12 @@
     .dl-hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 140px 5% 60px; background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 68%); }
     .dl-hero-inner { max-width: 680px; }
     .dl-hero h1 { font-size: clamp(2.4rem, 5.5vw, 3.8rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 18px; }
-    .dl-hero p { font-size: 1.1rem; color: var(--gray); max-width: 500px; margin: 0 auto 48px; }
+    .dl-hero > .dl-hero-inner > p[data-i18n="dl_p"] { font-size: 1.1rem; color: var(--gray); max-width: 500px; margin: 0 auto 28px; }
+    .dl-trial { max-width: 560px; margin: 0 auto 36px; text-align: center; }
+    .dl-trial .badge { margin-bottom: 14px; }
+    .dl-trial h2 { font-size: clamp(1.35rem, 3vw, 1.75rem); font-weight: 800; letter-spacing: -0.5px; margin: 0 0 12px; line-height: 1.25; }
+    .dl-trial p[data-i18n="dl_trial_p"] { font-size: 1.02rem; color: var(--white); max-width: 520px; margin: 0 auto 10px; line-height: 1.55; }
+    .dl-trial-after { font-size: 0.88rem; color: var(--gray); max-width: 520px; margin: 0 auto; line-height: 1.5; opacity: 0.9; }
 
     /* ── Main download card ── */
     .dl-card { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 44px 40px; max-width: 560px; margin: 0 auto 60px; }
@@ -167,9 +172,16 @@
     <h1 data-i18n="dl_h1">Download<br /><span class="text-gold">DisplayWord</span></h1>
     <p data-i18n="dl_p">Worship presentation software for Christian churches — lyrics, chords, up to 4 screens, musician cues.</p>
 
+    <div class="dl-trial">
+      <div class="badge badge-gold" data-i18n="dl_trial_badge">60 days of Team — free</div>
+      <h2 data-i18n="dl_trial_title">Download and use everything for 60 days</h2>
+      <p data-i18n="dl_trial_p">On first launch DisplayWord opens every feature of the Team edition for 60 days — no card, no account, no licence key.</p>
+      <p class="dl-trial-after" data-i18n="dl_trial_after">When the trial ends the app keeps running as the free Church edition — your songs, song books and settings stay exactly where they are.</p>
+    </div>
+
     <!-- DOWNLOAD CARD -->
     <div class="dl-card">
-      <div class="dl-edition" data-i18n="dl_edition">DisplayWord · Church Edition</div>
+      <div class="dl-edition" data-i18n="dl_edition">DisplayWord · full edition, 60-day trial</div>
       <div class="dl-name">DisplayWord</div>
 
       <!-- ── LIVE STATE — shown when /releases/stable/releases.stable.json responds ── -->
@@ -394,7 +406,7 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=31"></script>
+<script src="i18n.js?v=32"></script>
 <script>
   /* ── Probe releases JSON ─────────────────────────────── */
   const RELEASES_URL = '/releases/stable/releases.stable.json';

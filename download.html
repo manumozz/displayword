@@ -18,7 +18,9 @@
     .dl-trial .badge { margin-bottom: 14px; }
     .dl-trial h2 { font-size: clamp(1.35rem, 3vw, 1.75rem); font-weight: 800; letter-spacing: -0.5px; margin: 0 0 12px; line-height: 1.25; }
     .dl-trial p[data-i18n="dl_trial_p"] { font-size: 1.02rem; color: var(--white); max-width: 520px; margin: 0 auto 10px; line-height: 1.55; }
-    .dl-trial-after { font-size: 0.88rem; color: var(--gray); max-width: 520px; margin: 0 auto; line-height: 1.5; opacity: 0.9; }
+    .dl-trial-after,
+    .dl-trial-note { font-size: 0.88rem; color: var(--gray); max-width: 520px; margin: 0 auto; line-height: 1.5; opacity: 0.9; }
+    .dl-trial-note { margin-top: 8px; }
 
     /* ── Main download card ── */
     .dl-card { background: var(--navy2); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 44px 40px; max-width: 560px; margin: 0 auto 60px; }
@@ -177,6 +179,7 @@
       <h2 data-i18n="dl_trial_title">Download and use everything for 60 days</h2>
       <p data-i18n="dl_trial_p">On first launch DisplayWord opens every feature of the Team edition for 60 days — no card, no account, no licence key.</p>
       <p class="dl-trial-after" data-i18n="dl_trial_after">When the trial ends the app keeps running as the free Church edition — your songs, song books and settings stay exactly where they are.</p>
+      <p class="dl-trial-note" data-i18n="dl_trial_note">After the trial ends, the Stage and Speaker screens switch off — they are part of Connect and Team. Your monitor setup is kept and comes back the moment you enter a licence key.</p>
     </div>
 
     <!-- DOWNLOAD CARD -->
@@ -277,14 +280,14 @@
       <div class="req-card">
         <div class="req-icon">🧠</div>
         <div class="req-label" data-i18n="req_fw_label">Framework</div>
-        <div class="req-value" data-i18n="req_fw_value">.NET 6 Runtime</div>
-        <div class="req-sub" data-i18n="req_fw_sub">Installed automatically if missing</div>
+        <div class="req-value" data-i18n="req_fw_value">Not required</div>
+        <div class="req-sub" data-i18n="req_fw_sub">Everything is inside the installer — nothing to install separately</div>
       </div>
       <div class="req-card">
         <div class="req-icon">💾</div>
         <div class="req-label" data-i18n="req_disk_label">Disk Space</div>
-        <div class="req-value" data-i18n="req_disk_value">~300 MB</div>
-        <div class="req-sub" data-i18n="req_disk_sub">Plus space for your song library</div>
+        <div class="req-value" data-i18n="req_disk_value">About 700 MB</div>
+        <div class="req-sub" data-i18n="req_disk_sub">Installed app, Bible database and cache</div>
       </div>
       <div class="req-card">
         <div class="req-icon">🖥️</div>
@@ -406,7 +409,7 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=32"></script>
+<script src="i18n.js?v=33"></script>
 <script>
   /* ── Probe releases JSON ─────────────────────────────── */
   const RELEASES_URL = '/releases/stable/releases.stable.json';

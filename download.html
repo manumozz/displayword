@@ -409,16 +409,32 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=35"></script>
+<script src="i18n.js?v=36"></script>
 <script>
   /* ── Probe site download feed (not Velopack update feed) ─ */
   const RELEASES_URL = '/releases/stable/download.stable.json';
   const liveState   = document.getElementById('dlLiveState');
   const comingState = document.getElementById('dlComingSoon');
 
+  let cachedSizes = null;
+
   function fmtMb(bytes) {
     if (!Number.isFinite(bytes) || bytes <= 0) return '';
-    return ' · ~' + Math.round(bytes / 1048576) + ' MB';
+    const lang = document.documentElement.lang || localStorage.getItem('dw_lang') || 'en';
+    const unit = ((typeof DW_T !== 'undefined' && (DW_T[lang] || DW_T.en) || {}).unit_mb) || 'MB';
+    return ' · ~' + Math.round(bytes / 1048576) + ' ' + unit;
+  }
+
+  function paintSizes() {
+    if (!cachedSizes) return;
+    const setupMb = fmtMb(cachedSizes.setup);
+    const portableMb = fmtMb(cachedSizes.portable);
+    const elSetup = document.getElementById('dlSizeSetup');
+    const elPortable = document.getElementById('dlSizePortable');
+    const elPlatform = document.getElementById('dlSizePlatform');
+    if (elSetup) elSetup.textContent = setupMb;
+    if (elPortable) elPortable.textContent = portableMb;
+    if (elPlatform) elPlatform.textContent = setupMb || portableMb;
   }
 
   async function probeReleases() {
@@ -449,11 +465,8 @@
       document.getElementById('sha256Setup').textContent = setup.sha256;
       document.getElementById('sha256Portable').textContent = portable.sha256;
 
-      const setupMb = fmtMb(Number(setup.size));
-      const portableMb = fmtMb(Number(portable.size));
-      document.getElementById('dlSizeSetup').textContent = setupMb;
-      document.getElementById('dlSizePortable').textContent = portableMb;
-      document.getElementById('dlSizePlatform').textContent = setupMb || portableMb;
+      cachedSizes = { setup: Number(setup.size), portable: Number(portable.size) };
+      paintSizes();
 
       showLive();
     } catch (_) { showCS(); }
@@ -461,6 +474,11 @@
 
   function showLive() { liveState.classList.add('active'); comingState.classList.remove('active'); }
   function showCS()   { comingState.classList.add('active'); liveState.classList.remove('active'); }
+
+  if (typeof dwApply === 'function') {
+    const _dwApply = dwApply;
+    dwApply = function (lang) { _dwApply(lang); paintSizes(); };
+  }
 
   probeReleases();
 

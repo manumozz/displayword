@@ -196,7 +196,9 @@ function buildHeaders(object, r2Key) {
   // Caching strategy — immutable ONLY for versioned names (Ч1/Ч2)
   // Set both Cache-Control and CDN-Cache-Control so Cloudflare edge does not
   // rewrite a short origin TTL into a longer default (observed max-age=14400).
-  if (r2Key.endsWith('.json')) {
+  // *.json and Velopack RELEASES-* (no extension) must never be cached stale
+  const baseName = (r2Key.split('/').pop() || '');
+  if (r2Key.endsWith('.json') || baseName.startsWith('RELEASES')) {
     const cc = 'no-cache, no-store, must-revalidate';
     headers.set('cache-control', cc);
     headers.set('cdn-cache-control', cc);
@@ -229,7 +231,9 @@ function corsHeaders() {
 }
 
 function guessMime(key) {
+  const name = key.split('/').pop() || '';
   if (key.endsWith('.json'))  return 'application/json';
+  if (name.startsWith('RELEASES')) return 'text/plain';
   if (key.endsWith('.exe'))   return 'application/vnd.microsoft.portable-executable';
   if (key.endsWith('.nupkg')) return 'application/octet-stream';
   if (key.endsWith('.zip'))   return 'application/zip';

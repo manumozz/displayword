@@ -331,6 +331,7 @@ const DW_T = {
     price_trial_note: "Every edition can be tried first: the 60 days after installation include all Team features.",
     home_trial: "60 days of the full Team edition after installation — then the free Church edition, with your library intact",
     dl_platform:    "Windows 10 / 11 · 64-bit",
+    unit_mb: "MB",
     dl_mobile_note: "DisplayWord is a Windows app. You can't install it on a phone — open this page on the computer you'll use for services.",
 
     // Live download state
@@ -713,6 +714,7 @@ const DW_T = {
     price_trial_note: "Любую редакцию можно сначала попробовать: первые 60 дней после установки включают все возможности Team.",
     home_trial: "60 дней полной редакции Team после установки — дальше бесплатная Church, библиотека остаётся с вами",
     dl_platform:    "Windows 10 / 11 · 64-bit",
+    unit_mb: "МБ",
     dl_mobile_note: "DisplayWord — программа для Windows. На телефон её не установить: откройте эту страницу на том компьютере, за которым ведёте служение.",
 
     // Live download state
@@ -1071,6 +1073,7 @@ const DW_T = {
   price_trial_note: "Будь-яку редакцію можна спочатку спробувати: перші 60 днів після встановлення містять усі можливості Team.",
   home_trial: "60 днів повної редакції Team після встановлення — далі безкоштовна Church, бібліотека залишається з вами",
   dl_platform: "Windows 10 / 11 · 64-bit",
+  unit_mb: "МБ",
   dl_mobile_note: "DisplayWord — програма для Windows. На телефон її не встановити: відкрийте цю сторінку на тому комп'ютері, з якого ведете служіння.",
   dl_btn_installer: "Завантажити інсталятор",
   dl_btn_installer_sub: "Setup.exe · Рекомендовано",
@@ -1442,6 +1445,7 @@ const DW_T = {
   price_trial_note: "Cualquier edición puede probarse primero: los 60 días posteriores a la instalación incluyen todas las funciones de Team.",
   home_trial: "60 días de la edición Team completa tras la instalación; después, la edición gratuita Church con su biblioteca intacta",
   dl_platform: "Windows 10 / 11 · 64-bit",
+  unit_mb: "MB",
   dl_mobile_note: "DisplayWord es un programa para Windows. No se instala en el teléfono: abre esta página en la computadora desde la que diriges el servicio.",
   dl_btn_installer: "Descargar el instalador",
   dl_btn_installer_sub: "Setup.exe · Recomendado",
@@ -1813,6 +1817,7 @@ const DW_T = {
   price_trial_note: "Qualquer edição pode ser testada primeiro: os 60 dias após a instalação incluem todos os recursos do Team.",
   home_trial: "60 dias da edição Team completa após a instalação — depois, a edição gratuita Church, com sua biblioteca intacta",
   dl_platform: "Windows 10 / 11 · 64-bit",
+  unit_mb: "MB",
   dl_mobile_note: "O DisplayWord é um programa para Windows. Não dá para instalar no celular: abra esta página no computador em que você conduz o culto.",
   dl_btn_installer: "Baixar o instalador",
   dl_btn_installer_sub: "Setup.exe · Recomendado",
@@ -2174,6 +2179,7 @@ const DW_T = {
     price_trial_note: "Jede Edition lässt sich zuerst ausprobieren: Die 60 Tage nach der Installation enthalten alle Funktionen von Team.",
     home_trial: "60 Tage volle Team-Edition nach der Installation — danach die kostenlose Church-Edition, Ihre Bibliothek bleibt erhalten",
     dl_platform: "Windows 10 / 11 · 64-Bit",
+    unit_mb: "MB",
     dl_mobile_note: "DisplayWord ist ein Windows-Programm. Auf dem Telefon lässt es sich nicht installieren — öffnen Sie diese Seite auf dem Computer, mit dem Sie den Gottesdienst führen.",
     dl_btn_installer: "Installer herunterladen",
     dl_btn_installer_sub: "Setup.exe · Empfohlen",

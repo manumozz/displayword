@@ -12,13 +12,13 @@
 /
   Cache-Control: no-cache, must-revalidate
 
-# JS / CSS — fingerprint via ?v= param, allow short-term cache
+# JS / CSS — revalidate with origin (Pages ignores ?v= in cache key; №072)
 /*.js
-  Cache-Control: public, max-age=86400
+  Cache-Control: no-cache, must-revalidate
   X-Content-Type-Options: nosniff
 
 /*.css
-  Cache-Control: public, max-age=86400
+  Cache-Control: no-cache, must-revalidate
   X-Content-Type-Options: nosniff
 
 # Fonts and images — longer cache

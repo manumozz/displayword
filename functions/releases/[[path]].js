@@ -10,17 +10,18 @@
  *   R2 bucket:     displayword-releases
  *
  * File naming in R2 (mirrors URL path, without leading slash):
- *   releases/stable/releases.stable.json
- *   releases/stable/DisplayWordApp-Setup.exe
- *   releases/stable/DisplayWordApp-{version}-full.nupkg
- *   releases/stable/DisplayWordApp-{version}-delta.nupkg
- *   releases/stable/DisplayWordApp-{version}-Portable.zip
- *   releases/beta/releases.beta.json
- *   releases/beta/...
+ *   releases/stable/releases.stable.json          ← Velopack update feed
+ *   releases/stable/download.stable.json          ← site download feed
+ *   releases/stable/DisplayWordApp-<ver>-Setup.exe
+ *   releases/stable/DisplayWordApp-<ver>-Portable.zip
+ *   releases/stable/DisplayWordApp-<ver>-stable-full.nupkg
+ *   releases/stable/DisplayWordApp-<ver>-stable-delta.nupkg
+ *   releases/stable/DisplayWordApp-Setup.exe       ← legacy unversioned (short cache)
  *
  * Caching rules:
- *   *.json          → no-cache (auto-updater must always see latest manifest)
- *   *.exe *.nupkg *.zip → immutable (versioned, never changes once uploaded)
+ *   *.json                         → no-cache
+ *   versioned *.exe/*.zip/*.nupkg  → immutable
+ *   legacy unversioned assets      → max-age=300 (immutable only with version in name)
  */
 
 export async function onRequest({ request, env, params }) {
@@ -48,14 +49,63 @@ export async function onRequest({ request, env, params }) {
     if (request.method === 'HEAD') {
       const head = await env.RELEASES_BUCKET.head(r2Key);
       if (!head) return notFound(r2Key);
+      const totalSize = head.size;
+      const rangeResult = resolveRange(request.headers.get('range'), totalSize);
+      if (rangeResult && rangeResult.unsatisfiable) {
+        return rangeNotSatisfiable(totalSize);
+      }
       const headers = buildHeaders(head, r2Key);
+      headers.set('accept-ranges', 'bytes');
+      headers.set('content-length', String(
+        rangeResult ? rangeResult.length : totalSize
+      ));
+      if (rangeResult) {
+        headers.set(
+          'content-range',
+          `bytes ${rangeResult.offset}-${rangeResult.offset + rangeResult.length - 1}/${totalSize}`
+        );
+        return new Response(null, { status: 206, headers });
+      }
       return new Response(null, { status: 200, headers });
+    }
+
+    // Need size first when a Range header is present
+    const rangeHeader = request.headers.get('range');
+    if (rangeHeader) {
+      const head = await env.RELEASES_BUCKET.head(r2Key);
+      if (!head) return notFound(r2Key);
+      const totalSize = head.size;
+      const rangeResult = resolveRange(rangeHeader, totalSize);
+      if (rangeResult === null) {
+        // Unparseable Range → full body (per assignment)
+        const object = await env.RELEASES_BUCKET.get(r2Key);
+        if (!object) return notFound(r2Key);
+        const headers = buildHeaders(object, r2Key);
+        headers.set('accept-ranges', 'bytes');
+        return new Response(object.body, { status: 200, headers });
+      }
+      if (rangeResult.unsatisfiable) {
+        return rangeNotSatisfiable(totalSize);
+      }
+      const object = await env.RELEASES_BUCKET.get(r2Key, {
+        range: { offset: rangeResult.offset, length: rangeResult.length },
+      });
+      if (!object) return notFound(r2Key);
+      const headers = buildHeaders(object, r2Key);
+      headers.set('accept-ranges', 'bytes');
+      headers.set('content-length', String(rangeResult.length));
+      headers.set(
+        'content-range',
+        `bytes ${rangeResult.offset}-${rangeResult.offset + rangeResult.length - 1}/${totalSize}`
+      );
+      return new Response(object.body, { status: 206, headers });
     }
 
     const object = await env.RELEASES_BUCKET.get(r2Key);
     if (!object) return notFound(r2Key);
 
     const headers = buildHeaders(object, r2Key);
+    headers.set('accept-ranges', 'bytes');
     return new Response(object.body, { status: 200, headers });
 
   } catch (err) {
@@ -76,6 +126,54 @@ function notFound(key) {
   );
 }
 
+function rangeNotSatisfiable(totalSize) {
+  const headers = new Headers({
+    'content-range': `bytes */${totalSize}`,
+    'accept-ranges': 'bytes',
+    'content-type': 'application/json',
+    ...corsHeaders(),
+  });
+  return new Response(
+    JSON.stringify({ error: 'Range Not Satisfiable' }),
+    { status: 416, headers }
+  );
+}
+
+/**
+ * Parse `bytes=<start>-<end>` or `bytes=<start>-`.
+ * Returns null if absent / unparseable (caller serves full 200).
+ * Returns { unsatisfiable: true } if outside file size.
+ * Returns { offset, length } for a valid range.
+ */
+function resolveRange(rangeHeader, totalSize) {
+  if (!rangeHeader) return null;
+  const m = /^\s*bytes=(\d+)-(\d*)\s*$/i.exec(rangeHeader);
+  if (!m) return null; // unparseable → full body
+
+  const start = parseInt(m[1], 10);
+  if (Number.isNaN(start) || start < 0) return null;
+
+  let end;
+  if (m[2] === '') {
+    end = totalSize - 1;
+  } else {
+    end = parseInt(m[2], 10);
+    if (Number.isNaN(end)) return null;
+  }
+
+  if (totalSize === 0) return { unsatisfiable: true };
+  if (start >= totalSize) return { unsatisfiable: true };
+  if (end < start) return { unsatisfiable: true };
+
+  end = Math.min(end, totalSize - 1);
+  return { offset: start, length: end - start + 1 };
+}
+
+function isVersionedAsset(r2Key) {
+  const name = r2Key.split('/').pop() || '';
+  return /DisplayWordApp-\d+\.\d+\.\d+-/i.test(name);
+}
+
 function buildHeaders(object, r2Key) {
   const headers = new Headers();
 
@@ -92,15 +190,16 @@ function buildHeaders(object, r2Key) {
     headers.set('content-type', guessMime(r2Key));
   }
 
-  // Caching strategy
+  // Caching strategy — immutable ONLY for versioned names (Ч1/Ч2)
   if (r2Key.endsWith('.json')) {
-    // Release manifest — never cache; auto-updater checks this on every launch
     headers.set('cache-control', 'no-cache, no-store, must-revalidate');
     headers.set('pragma', 'no-cache');
     headers.set('expires', '0');
-  } else {
-    // Versioned packages — content is immutable once uploaded
+  } else if (isVersionedAsset(r2Key)) {
     headers.set('cache-control', 'public, max-age=31536000, immutable');
+  } else {
+    // Legacy unversioned Setup.exe / Portable.zip etc.
+    headers.set('cache-control', 'public, max-age=300');
   }
 
   // CORS — allow Velopack updater and any origin
@@ -114,14 +213,14 @@ function corsHeaders() {
     'access-control-allow-origin': '*',
     'access-control-allow-methods': 'GET, HEAD, OPTIONS',
     'access-control-allow-headers': 'Content-Type, Range',
-    'access-control-expose-headers': 'Content-Length, Content-Range, ETag',
+    'access-control-expose-headers': 'Content-Length, Content-Range, ETag, Accept-Ranges',
   };
 }
 
 function guessMime(key) {
   if (key.endsWith('.json'))  return 'application/json';
-  if (key.endsWith('.exe'))   return 'application/octet-stream';
-  if (key.endsWith('.nupkg')) return 'application/zip';
+  if (key.endsWith('.exe'))   return 'application/vnd.microsoft.portable-executable';
+  if (key.endsWith('.nupkg')) return 'application/octet-stream';
   if (key.endsWith('.zip'))   return 'application/zip';
   return 'application/octet-stream';
 }

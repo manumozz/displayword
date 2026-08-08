@@ -187,30 +187,30 @@
       <div class="dl-edition" data-i18n="dl_edition">DisplayWord · full edition, 60-day trial</div>
       <div class="dl-name">DisplayWord</div>
 
-      <!-- ── LIVE STATE — shown when /releases/stable/releases.stable.json responds ── -->
+      <!-- ── LIVE STATE — shown when /releases/stable/download.stable.json responds ── -->
       <div class="dl-live-state" id="dlLiveState">
         <div class="dl-mobile-note" data-i18n="dl_mobile_note">DisplayWord is a Windows app. You can't install it on a phone — open this page on the computer you'll use for services.</div>
         <div class="dl-version-row">
           <span class="dl-version-badge" id="dlVersionBadge">v—</span>
           <span class="dl-version-date" id="dlVersionDate"></span>
         </div>
-        <div class="dl-platform" data-i18n="dl_platform">Windows 10 / 11 · 64-bit · ~265 MB</div>
+        <div class="dl-platform"><span data-i18n="dl_platform">Windows 10 / 11 · 64-bit</span><span id="dlSizePlatform"></span></div>
 
         <div class="dl-btns">
-          <a id="dlSetupBtn" href="/releases/stable/DisplayWordApp-Setup.exe"
+          <a id="dlSetupBtn" href="#"
              class="dl-btn-main dl-btn-installer" download>
             <span class="dl-btn-icon">⬇</span>
             <div class="dl-btn-texts">
               <span class="dl-btn-label" data-i18n="dl_btn_installer">Download Installer</span>
-              <span class="dl-btn-sub" data-i18n="dl_btn_installer_sub">Setup.exe · ~265 MB · Recommended</span>
+              <span class="dl-btn-sub"><span data-i18n="dl_btn_installer_sub">Setup.exe · Recommended</span><span id="dlSizeSetup"></span></span>
             </div>
           </a>
-          <a id="dlPortableBtn" href="/releases/stable/DisplayWordApp-Portable.zip"
+          <a id="dlPortableBtn" href="#"
              class="dl-btn-main dl-btn-portable" download>
             <span class="dl-btn-icon">📦</span>
             <div class="dl-btn-texts">
               <span class="dl-btn-label" data-i18n="dl_btn_portable">Portable ZIP</span>
-              <span class="dl-btn-sub" data-i18n="dl_btn_portable_sub">No installation needed · ~260 MB</span>
+              <span class="dl-btn-sub"><span data-i18n="dl_btn_portable_sub">No installation needed</span><span id="dlSizePortable"></span></span>
             </div>
           </a>
         </div>
@@ -409,12 +409,17 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=34"></script>
+<script src="i18n.js?v=35"></script>
 <script>
-  /* ── Probe releases JSON ─────────────────────────────── */
-  const RELEASES_URL = '/releases/stable/releases.stable.json';
+  /* ── Probe site download feed (not Velopack update feed) ─ */
+  const RELEASES_URL = '/releases/stable/download.stable.json';
   const liveState   = document.getElementById('dlLiveState');
   const comingState = document.getElementById('dlComingSoon');
+
+  function fmtMb(bytes) {
+    if (!Number.isFinite(bytes) || bytes <= 0) return '';
+    return ' · ~' + Math.round(bytes / 1048576) + ' MB';
+  }
 
   async function probeReleases() {
     try {
@@ -422,27 +427,33 @@
       if (!res.ok) { showCS(); return; }
       const data = await res.json();
 
-      const rel     = data.LatestFullRelease || data;
-      const version = rel.Version || rel.version || '';
-      const dateStr = rel.ReleaseDate || rel.releaseDate || '';
+      const version = data.version || '';
+      const dateStr = data.releaseDate || '';
+      const setup = data.assets && data.assets.setup;
+      const portable = data.assets && data.assets.portable;
 
-      if (version) document.getElementById('dlVersionBadge').textContent = 'v' + version;
+      if (!version || !setup?.fileName || !portable?.fileName || !setup?.sha256 || !portable?.sha256) {
+        showCS();
+        return;
+      }
+
+      document.getElementById('dlVersionBadge').textContent = 'v' + version;
       if (dateStr) {
         const d = new Date(dateStr);
         document.getElementById('dlVersionDate').textContent =
           d.toLocaleDateString(document.documentElement.lang || 'en', { month: 'long', year: 'numeric' });
       }
 
-      // Update hrefs from asset list if present
-      const assets = rel.Assets || data.Assets || [];
-      const setup    = assets.find(a => a.FileName && /Setup\.exe$/i.test(a.FileName));
-      const portable = assets.find(a => a.FileName && /Portable\.zip$/i.test(a.FileName));
-      if (setup)    document.getElementById('dlSetupBtn').href    = '/releases/stable/' + setup.FileName;
-      if (portable) document.getElementById('dlPortableBtn').href = '/releases/stable/' + portable.FileName;
+      document.getElementById('dlSetupBtn').href = '/releases/stable/' + setup.fileName;
+      document.getElementById('dlPortableBtn').href = '/releases/stable/' + portable.fileName;
+      document.getElementById('sha256Setup').textContent = setup.sha256;
+      document.getElementById('sha256Portable').textContent = portable.sha256;
 
-      // Checksums (SHA256 preferred, fall back to SHA1)
-      if (setup?.SHA256)    document.getElementById('sha256Setup').textContent    = setup.SHA256;
-      if (portable?.SHA256) document.getElementById('sha256Portable').textContent = portable.SHA256;
+      const setupMb = fmtMb(Number(setup.size));
+      const portableMb = fmtMb(Number(portable.size));
+      document.getElementById('dlSizeSetup').textContent = setupMb;
+      document.getElementById('dlSizePortable').textContent = portableMb;
+      document.getElementById('dlSizePlatform').textContent = setupMb || portableMb;
 
       showLive();
     } catch (_) { showCS(); }

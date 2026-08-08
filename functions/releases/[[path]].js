@@ -191,15 +191,23 @@ function buildHeaders(object, r2Key) {
   }
 
   // Caching strategy — immutable ONLY for versioned names (Ч1/Ч2)
+  // Set both Cache-Control and CDN-Cache-Control so Cloudflare edge does not
+  // rewrite a short origin TTL into a longer default (observed max-age=14400).
   if (r2Key.endsWith('.json')) {
-    headers.set('cache-control', 'no-cache, no-store, must-revalidate');
+    const cc = 'no-cache, no-store, must-revalidate';
+    headers.set('cache-control', cc);
+    headers.set('cdn-cache-control', cc);
     headers.set('pragma', 'no-cache');
     headers.set('expires', '0');
   } else if (isVersionedAsset(r2Key)) {
-    headers.set('cache-control', 'public, max-age=31536000, immutable');
+    const cc = 'public, max-age=31536000, immutable';
+    headers.set('cache-control', cc);
+    headers.set('cdn-cache-control', cc);
   } else {
     // Legacy unversioned Setup.exe / Portable.zip etc.
-    headers.set('cache-control', 'public, max-age=300');
+    const cc = 'public, max-age=300';
+    headers.set('cache-control', cc);
+    headers.set('cdn-cache-control', cc);
   }
 
   // CORS — allow Velopack updater and any origin

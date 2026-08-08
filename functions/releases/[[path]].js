@@ -7,16 +7,18 @@
  * Required setup in Cloudflare Pages dashboard:
  *   Settings → Functions → R2 bucket bindings
  *   Variable name: RELEASES_BUCKET
- *   R2 bucket:     displayword-releases
+ *   R2 bucket:     displayword-releases-dw   ← canonical (№071); old displayword-releases retired
  *
- * File naming in R2 (mirrors URL path, without leading slash):
- *   releases/stable/releases.stable.json          ← Velopack update feed
- *   releases/stable/download.stable.json          ← site download feed
- *   releases/stable/DisplayWordApp-<ver>-Setup.exe
- *   releases/stable/DisplayWordApp-<ver>-Portable.zip
- *   releases/stable/DisplayWordApp-<ver>-stable-full.nupkg
- *   releases/stable/DisplayWordApp-<ver>-stable-delta.nupkg
- *   releases/stable/DisplayWordApp-Setup.exe       ← legacy unversioned (short cache)
+ * Key layout in R2 (same as releases.displayword.com custom domain — NO "releases/" prefix):
+ *   stable/releases.stable.json                         ← Velopack update feed
+ *   stable/download.stable.json                         ← site download feed
+ *   stable/DisplayWordApp-<ver>-stable-Setup.exe
+ *   stable/DisplayWordApp-<ver>-stable-Portable.zip
+ *   stable/DisplayWordApp-<ver>-stable-full.nupkg
+ *   stable/DisplayWordApp-<ver>-stable-delta.nupkg
+ *
+ * URL /releases/stable/foo → R2 key stable/foo
+ * (params.path is segments after /releases/)
  *
  * Caching rules:
  *   *.json                         → no-cache
@@ -35,8 +37,9 @@ export async function onRequest({ request, env, params }) {
 
   // params.path is an array of URL segments after /releases/
   // e.g. /releases/stable/releases.stable.json → ['stable', 'releases.stable.json']
+  // Canonical bucket displayword-releases-dw keys start at channel (stable/…), no "releases/" prefix.
   const segments = params.path || [];
-  const r2Key = 'releases/' + segments.join('/');
+  const r2Key = segments.join('/');
 
   if (!env.RELEASES_BUCKET) {
     return new Response(

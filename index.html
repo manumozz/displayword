@@ -50,11 +50,6 @@
     .card p  { font-size: 0.9rem; color: var(--gray); line-height: 1.6; }
     .features-link { display: inline-block; margin-top: 40px; color: var(--accent); font-weight: 600; font-size: 0.95rem; text-decoration: none; }
     .features-link:hover { text-decoration: underline; }
-    @media (max-width: 900px) {
-      .features-link { padding: 12px 0; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
-      .pricing-full-link { padding: 12px 0; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
-      .popular-badge { font-size: 0.75rem; padding: 3px 12px; }
-    }
 
     .how-section { background: var(--navy2); }
     .steps { display: flex; gap: 0; flex-wrap: wrap; margin-top: 50px; }
@@ -68,6 +63,11 @@
     .price-card { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 30px; }
     .price-card.featured { border-color: var(--gold); position: relative; }
     .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); font-size: 0.72rem; font-weight: 700; padding: 4px 16px; border-radius: 20px; letter-spacing: 0.05em; white-space: nowrap; }
+    @media (max-width: 900px) {
+      .features-link { padding: 12px 0; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
+      .pricing-full-link { padding: 12px 0; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
+      .popular-badge { font-size: 0.75rem; padding: 3px 12px; }
+    }
     .price-name { font-size: 0.85rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
     .price-amount { font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 6px; }
     .price-note { font-size: 0.82rem; color: var(--gray); margin-bottom: 22px; }

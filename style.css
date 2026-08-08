@@ -163,6 +163,11 @@ nav {
 .nav-links a.active { color: var(--white); }
 .nav-mobile-only { display: none; }
 
+/* Tablet portrait: desktop nav still shown — enlarge tap targets without changing burger breakpoint */
+@media (min-width: 769px) and (max-width: 900px) {
+  .nav-links a { padding: 12px 0; min-height: 40px; box-sizing: border-box; display: inline-flex; align-items: center; }
+}
+
 .btn { display: inline-block; text-decoration: none; font-weight: 700; border-radius: 8px; cursor: pointer; transition: opacity 0.2s, background 0.2s; border: none; }
 .btn-gold  { background: var(--gold); color: var(--navy); padding: 10px 22px; font-size: 0.9rem; }
 .btn-gold:hover { opacity: 0.88; }
@@ -336,13 +341,24 @@ footer {
   .nav-lang-mobile { display: block; width: 100%; }
   .nav-links a.nav-dl { color: var(--gold); font-weight: 700; }
 
+  /* Tap targets ≥44px (padding, not font) */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 0;
+    box-sizing: border-box;
+  }
+
   /* Sections */
   .section { padding: 50px 5%; }
 
   /* Footer */
   .footer-inner { flex-direction: column; gap: 24px; }
   .footer-links { gap: 20px; }
+  .footer-col a { padding: 8px 0; margin-bottom: 0; min-height: 44px; box-sizing: border-box; display: flex; align-items: center; }
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .footer-bottom a { display: inline-flex; align-items: center; padding: 8px 0; min-height: 44px; box-sizing: border-box; }
 
   /* Forms */
   .form-row { flex-direction: column; }

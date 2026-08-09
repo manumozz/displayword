@@ -483,9 +483,6 @@
   probeReleases();
 
   /* ── Email subscribe ──────────────────────────────────── */
-  const BREVO_API_KEY = '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';
-  const BREVO_LIST_ID = 2;
-
   function dwGetMsg(k) {
     const lang = localStorage.getItem('dw_lang') || 'en';
     return (DW_T[lang] || DW_T.en)[k] || '';
@@ -494,17 +491,19 @@
   async function subscribe(email, successId) {
     if (!email || !email.includes('@')) { alert(dwGetMsg('alert_invalid')); return; }
     try {
-      const res = await fetch('https://api.brevo.com/v3/contacts', {
+      const res = await fetch('/api/v1/subscribe', {
         method: 'POST',
-        headers: { 'accept': 'application/json', 'content-type': 'application/json', 'api-key': BREVO_API_KEY },
-        body: JSON.stringify({ email, listIds: [BREVO_LIST_ID], updateEnabled: true })
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email })
       });
-      if (res.ok || res.status === 204) {
+      let data = null;
+      try { data = await res.json(); } catch (_) { data = null; }
+      if (res.ok && data && data.ok === true) {
         document.getElementById(successId).style.display = 'block';
+      } else if (data && data.error === 'invalid_email') {
+        alert(dwGetMsg('alert_invalid'));
       } else {
-        const d = await res.json();
-        if (d.code === 'duplicate_parameter') document.getElementById(successId).style.display = 'block';
-        else alert(dwGetMsg('alert_error'));
+        alert(dwGetMsg('alert_error'));
       }
     } catch(e) { alert(dwGetMsg('alert_conn')); }
   }

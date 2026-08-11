@@ -12,9 +12,9 @@
   <meta name="theme-color" content="#0f1b2d" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="style.css?v=9" />
   <style>
-    .page-hero { padding: 140px 5% 80px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 65%); }
+    .page-hero { padding: 76px 5% 80px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 65%); }
     .page-hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 20px; }
     .page-hero p { font-size: 1.1rem; color: var(--gray); max-width: 580px; margin: 0 auto; }
 
@@ -260,6 +260,11 @@
     <button class="hamburger" id="navHam" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
+
+<div class="pilot-bar">
+  <span data-i18n="pilot_bar">Pilot version: we are still finding and fixing issues. Spotted a problem? Write to us.</span>
+  <a href="mailto:hello@displayword.com" data-i18n="pilot_report">Report a problem</a>
+</div>
 
 <!-- HERO -->
 <section class="page-hero">
@@ -563,7 +568,7 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=37"></script>
+<script src="i18n.js?v=38"></script>
 <script>
   function dwFitChordDemo(){
     var demo=document.getElementById('demo');

@@ -12,9 +12,9 @@
   <meta name="theme-color" content="#0f1b2d" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="style.css?v=9" />
   <style>
-    .dl-hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 140px 5% 60px; background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 68%); }
+    .dl-hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 76px 5% 60px; background: radial-gradient(ellipse at 50% 0%, rgba(74,144,226,0.13) 0%, transparent 68%); }
     .dl-hero-inner { max-width: 680px; }
     .dl-hero h1 { font-size: clamp(2.4rem, 5.5vw, 3.8rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 18px; }
     .dl-hero > .dl-hero-inner > p[data-i18n="dl_p"] { font-size: 1.1rem; color: var(--gray); max-width: 500px; margin: 0 auto 28px; }
@@ -171,6 +171,11 @@
   </div>
 </nav>
 
+<div class="pilot-bar">
+  <span data-i18n="pilot_bar">Pilot version: we are still finding and fixing issues. Spotted a problem? Write to us.</span>
+  <a href="mailto:hello@displayword.com" data-i18n="pilot_report">Report a problem</a>
+</div>
+
 <!-- HERO -->
 <section class="dl-hero">
   <div class="dl-hero-inner">
@@ -185,6 +190,14 @@
       <p class="dl-trial-after" data-i18n="dl_trial_after">When the trial ends the app keeps running as the free Church edition — your songs, song books and settings stay exactly where they are.</p>
       <p class="dl-trial-note" data-i18n="dl_trial_note">After the trial ends, the Stage and Speaker screens switch off — they are part of Connect and Team. Your monitor setup is kept and comes back the moment you enter a licence key.</p>
     </div>
+
+    <section class="pilot-note">
+      <div class="pilot-note-inner">
+        <h2 data-i18n="pilot_dl_title">This is a pilot version</h2>
+        <p data-i18n="pilot_dl_p">DisplayWord already runs real services, but the app is young — we are still finding and fixing issues. If something doesn't work as expected, write to us: we reply quickly and fix whatever gets in the way of a service first.</p>
+        <a class="pilot-note-link" href="mailto:hello@displayword.com" data-i18n="pilot_report">Report a problem</a>
+      </div>
+    </section>
 
     <!-- DOWNLOAD CARD -->
     <div class="dl-card">
@@ -413,7 +426,7 @@
   </div>
 </footer>
 
-<script src="i18n.js?v=37"></script>
+<script src="i18n.js?v=38"></script>
 <script>
   /* ── Probe site download feed (not Velopack update feed) ─ */
   const RELEASES_URL = '/releases/stable/download.stable.json';

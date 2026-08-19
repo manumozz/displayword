@@ -20,6 +20,11 @@ const DW_T = {
     footer_ed1: "DisplayWord Church",
     footer_ed2: "DisplayWord Connect",
     footer_ed3: "DisplayWord Team",
+    footer_legal:   "Legal",
+    footer_terms:   "Terms of Service",
+    footer_privacy: "Privacy Policy",
+    footer_refund:  "Refund Policy",
+    footer_eula:    "Licence Agreement",
 
     // ── SHARED ────────────────────────────────────────────────
     download_free:  "Download",
@@ -423,6 +428,11 @@ const DW_T = {
     footer_ed1: "DisplayWord Church",
     footer_ed2: "DisplayWord Connect",
     footer_ed3: "DisplayWord Team",
+    footer_legal:   "Документы",
+    footer_terms:   "Условия использования",
+    footer_privacy: "Политика приватности",
+    footer_refund:  "Политика возвратов",
+    footer_eula:    "Лицензионное соглашение",
 
     // ── SHARED ────────────────────────────────────────────────
     download_free:  "Скачать",
@@ -823,6 +833,11 @@ const DW_T = {
   footer_ed1: "DisplayWord Church",
   footer_ed2: "DisplayWord Connect",
   footer_ed3: "DisplayWord Team",
+  footer_legal:   "Документи",
+  footer_terms:   "Умови використання",
+  footer_privacy: "Політика приватності",
+  footer_refund:  "Політика повернень",
+  footer_eula:    "Ліцензійна угода",
 
   // ── SHARED ────────────────────────────────────────────────
   download_free:  "Завантажити",
@@ -1215,6 +1230,11 @@ const DW_T = {
   footer_ed1: "DisplayWord Church",
   footer_ed2: "DisplayWord Connect",
   footer_ed3: "DisplayWord Team",
+  footer_legal:   "Legal",
+  footer_terms:   "Términos del servicio",
+  footer_privacy: "Política de privacidad",
+  footer_refund:  "Política de reembolso",
+  footer_eula:    "Acuerdo de licencia",
 
   // ── SHARED ────────────────────────────────────────────────
   download_free:  "Descargar",
@@ -1607,6 +1627,11 @@ const DW_T = {
   footer_ed1: "DisplayWord Church",
   footer_ed2: "DisplayWord Connect",
   footer_ed3: "DisplayWord Team",
+  footer_legal:   "Legal",
+  footer_terms:   "Termos de serviço",
+  footer_privacy: "Política de privacidade",
+  footer_refund:  "Política de reembolso",
+  footer_eula:    "Contrato de licença",
 
   // ── SHARED ────────────────────────────────────────────────
   download_free:  "Baixar",
@@ -1999,6 +2024,11 @@ const DW_T = {
     footer_ed1: "DisplayWord Church",
     footer_ed2: "DisplayWord Connect",
     footer_ed3: "DisplayWord Team",
+    footer_legal:   "Rechtliches",
+    footer_terms:   "Nutzungsbedingungen",
+    footer_privacy: "Datenschutz",
+    footer_refund:  "Rückerstattung",
+    footer_eula:    "Lizenzvereinbarung",
     download_free: "Download",
     view_pricing: "Editionen ansehen",
     one_time: "Jederzeit kündbar",

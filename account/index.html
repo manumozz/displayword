@@ -59,20 +59,9 @@
       <div class="section-title">Лицензионные ключи</div>
       <div id="keysContainer" class="loader">Загрузка…</div>
     </div>
-
-    <div class="section">
-      <div class="section-title">Заявки</div>
-      <div id="appsContainer" class="loader">Загрузка…</div>
-    </div>
   </main>
 
   <script>
-    const STATUS_LABELS = {
-      pending:  '<span class="status-pending">На рассмотрении</span>',
-      approved: '<span class="status-approved">Одобрена</span>',
-      rejected: '<span class="status-rejected">Отклонена</span>',
-    };
-
     async function load() {
       // Check auth
       const meRes = await fetch('/api/v1/me', { credentials: 'same-origin' });
@@ -95,8 +84,8 @@
         if (keys.length === 0) {
           keysEl.innerHTML = `
             <div class="empty-card">
-              <p>У вас ещё нет ключей. Подайте заявку — автор рассмотрит её и выдаст ключ.</p>
-              <a href="/account/apply" class="btn-primary">Подать заявку</a>
+              <p>Ключей пока нет — и чтобы начать, они не нужны. Скачайте программу: 60 дней полного доступа, дальше бесплатная версия Church. Купленные ключи появятся здесь.</p>
+              <a href="/download" class="btn-primary">Скачать программу</a>
             </div>`;
         } else {
           keysEl.innerHTML = keys.map(k => `
@@ -108,31 +97,6 @@
         }
       } else {
         keysEl.textContent = 'Ошибка загрузки ключей.';
-      }
-
-      // Applications
-      const appsRes = await fetch('/api/v1/applications', { credentials: 'same-origin' });
-      const appsEl  = document.getElementById('appsContainer');
-      if (appsRes.ok) {
-        const apps = await appsRes.json();
-        if (apps.length === 0) {
-          appsEl.innerHTML = `
-            <div class="empty-card">
-              <p>Заявок пока нет.</p>
-              <a href="/account/apply" class="btn-primary">Подать первую заявку</a>
-            </div>`;
-        } else {
-          appsEl.innerHTML = apps.map(a => `
-            <div class="app-card">
-              <div class="app-info">
-                <strong>${esc(a.community_name)}</strong>
-                <span>${esc(a.city_country)} · ${fmt(a.created_at)}</span>
-              </div>
-              <div>${STATUS_LABELS[a.status] || a.status}</div>
-            </div>`).join('');
-        }
-      } else {
-        appsEl.textContent = 'Ошибка загрузки заявок.';
       }
     }
 

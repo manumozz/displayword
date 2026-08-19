@@ -13,7 +13,7 @@
   <meta name="theme-color" content="#0f1b2d" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=10" />
+  <link rel="stylesheet" href="style.css?v=11" />
 </head>
 <body>
 
@@ -97,7 +97,8 @@
     <p>The Software ships with seven Bible translations.</p>
     <p>Six are in the <strong>public domain</strong>: Russian Synodal (1876), King James Version (1769), Westminster Leningrad Codex, Luther (1912), Reina-Valera (1909), Almeida (1911).</p>
     <p>One is under an open licence and requires attribution, reproduced here as required:</p>
-    <p>&gt; Переклад Огієнка · 1962 · CC BY-SA 3.0 · Українське Біблійне Товариство · &gt; Біблія в перекладі Івана Огієнка, 1962 (текст — Вікіджерела)</p>
+    <blockquote><p>Переклад Огієнка · 1962 · CC BY-SA 3.0 · Українське Біблійне Товариство ·</p>
+    <p>Біблія в перекладі Івана Огієнка, 1962 (текст — Вікіджерела)</p></blockquote>
     <p>The Creative Commons Attribution-ShareAlike 3.0 licence requires that attribution be preserved and that derivative texts be distributed under the same licence. If you copy or adapt that translation outside the Software, those obligations follow it.</p>
     <h2>7. Backgrounds and media included with the Software</h2>
     <p>The background images supplied with the Software are <strong>our own work</strong>, produced by algorithmic generation. You may use them in your services and presentations without restriction or attribution.</p>
@@ -105,10 +106,10 @@
     <h2>8. Third-party components</h2>
     <p>The Software includes third-party components, used under their respective licences with their copyright notices preserved.</p>
     <table><thead><tr><th>Component</th><th>Licence</th></tr></thead><tbody><tr><td>.NET 8 runtime</td><td>MIT</td></tr><tr><td>Avalonia UI (with Desktop, Skia, Fluent themes, Svg.Skia)</td><td>MIT</td></tr><tr><td>SkiaSharp / Skia</td><td>MIT / BSD-3-Clause</td></tr><tr><td>Inter (typeface)</td><td>SIL Open Font License 1.1</td></tr><tr><td>JetBrains Mono (typeface)</td><td>SIL Open Font License 1.1</td></tr><tr><td>Lucide (icons)</td><td>ISC</td></tr><tr><td>LibVLC and LibVLCSharp</td><td>LGPL-2.1 or later. The distribution uses the LGPL build of LibVLC; modules distributed under the GPL are excluded at build time</td></tr><tr><td>Newtonsoft.Json</td><td>MIT</td></tr><tr><td>Microsoft.Data.Sqlite</td><td>MIT (SQLite itself is public domain)</td></tr><tr><td>BouncyCastle.Cryptography</td><td>Bouncy Castle Licence (MIT-style)</td></tr><tr><td>NAudio</td><td>MIT</td></tr><tr><td>Makaretu.Dns.Multicast</td><td>MIT</td></tr><tr><td>QRCoder</td><td>MIT</td></tr><tr><td>QuestPDF</td><td>QuestPDF Community Licence</td></tr><tr><td>System.Text.Encoding.CodePages</td><td>MIT</td></tr><tr><td>Velopack</td><td>MIT</td></tr></tbody></table>
-    <p>The full text of each licence is supplied with the Software, in the `licenses/` folder installed alongside the program, from version 0.3.4 onwards.</p>
+    <p>The full text of each licence is supplied with the Software, in the <code>licenses/</code> folder installed alongside the program, from version 0.3.4 onwards.</p>
     <h3>Your right to replace the LGPL components</h3>
     <p>LibVLC and LibVLCSharp are licensed under the LGPL, which gives you the right to replace them with your own version.</p>
-    <p>The Software is deliberately <strong>not</strong> packaged as a single bundled file, precisely so that this right is usable. The native libraries `libvlc.dll` and `libvlccore.dll`, together with the modules folder, are installed as <strong>separate files alongside the program</strong>.</p>
+    <p>The Software is deliberately <strong>not</strong> packaged as a single bundled file, precisely so that this right is usable. The native libraries <code>libvlc.dll</code> and <code>libvlccore.dll</code>, together with the modules folder, are installed as <strong>separate files alongside the program</strong>.</p>
     <p>To replace them: close the Software, substitute those files with a compatible build of LibVLC 3.0.x — official builds are available from videolan.org — and start the Software again. It links to these libraries dynamically and will use the version you supplied.</p>
     <h2>9. Updates</h2>
     <p>The Software can check for and install updates. Updates may add, change or remove features.</p>

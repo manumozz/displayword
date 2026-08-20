@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Вход — DisplayWord</title>
+  <title>Смена пароля — DisplayWord</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
@@ -34,8 +34,8 @@
 <body>
   <div class="card">
     <a href="/" class="logo">DisplayWord</a>
-    <h1>Вход</h1>
-    <p class="sub">Войдите чтобы управлять заявками и ключами</p>
+    <h1>Забыли пароль?</h1>
+    <p class="sub">Укажите email — пришлём ссылку для смены пароля</p>
 
     <div class="msg" id="msg"></div>
 
@@ -43,34 +43,16 @@
       <label for="email">Email</label>
       <input type="email" id="email" name="email" autocomplete="email" required />
 
-      <label for="password">Пароль</label>
-      <input type="password" id="password" name="password" autocomplete="current-password" required />
-
-      <button type="submit" class="btn" id="btn">Войти</button>
+      <button type="submit" class="btn" id="btn">Отправить ссылку</button>
     </form>
 
-    <div class="footer-link"><a href="/account/forgot">Забыли пароль?</a></div>
-    <div class="footer-link">Нет аккаунта? <a href="/account/register">Зарегистрироваться</a></div>
+    <div class="footer-link"><a href="/account/login">← Вернуться ко входу</a></div>
   </div>
 
   <script>
     const form = document.getElementById('form');
     const btn  = document.getElementById('btn');
     const msg  = document.getElementById('msg');
-
-    // Show message from URL params (e.g. after verification)
-    const params = new URLSearchParams(location.search);
-    if (params.get('reset') === '1') {
-      showMsg('Пароль изменён. Войдите с новым паролем.', 'success');
-    } else if (params.get('verified') === '1') {
-      showMsg('Email подтверждён. Теперь можно войти.', 'success');
-    } else if (params.get('error') === 'token_expired') {
-      showMsg('Ссылка подтверждения истекла. Нажмите «Забыли пароль?» — новая ссылка из письма заодно подтвердит адрес.', 'error');
-    } else if (params.get('error') === 'server') {
-      showMsg('Не удалось подтвердить email — ошибка на сервере. Попробуйте ещё раз позже.', 'error');
-    } else if (params.get('error')) {
-      showMsg('Ссылка недействительна.', 'error');
-    }
 
     function showMsg(text, type) {
       msg.textContent = text;
@@ -81,32 +63,29 @@
     form.addEventListener('submit', async e => {
       e.preventDefault();
       btn.disabled = true;
-      btn.textContent = 'Входим…';
+      btn.textContent = 'Отправляем…';
       msg.style.display = 'none';
 
       try {
-        const res = await fetch('/api/v1/auth/login', {
+        const res = await fetch('/api/v1/auth/forgot-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
-          }),
+          body: JSON.stringify({ email: document.getElementById('email').value }),
         });
         const data = await res.json();
-
         if (res.ok) {
-          window.location.href = data.isAdmin ? '/admin/' : '/account/';
+          showMsg(data.message, 'success');
+          form.style.display = 'none';
         } else {
-          showMsg(data.message || 'Ошибка входа', 'error');
+          showMsg(data.message || 'Ошибка. Попробуйте ещё раз.', 'error');
           btn.disabled = false;
-          btn.textContent = 'Войти';
+          btn.textContent = 'Отправить ссылку';
         }
       } catch {
         showMsg('Ошибка сети. Попробуйте ещё раз.', 'error');
         btn.disabled = false;
-        btn.textContent = 'Войти';
+        btn.textContent = 'Отправить ссылку';
       }
     });
   </script>

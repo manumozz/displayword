@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Вход — DisplayWord</title>
+  <title>Новый пароль — DisplayWord</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
@@ -34,43 +34,31 @@
 <body>
   <div class="card">
     <a href="/" class="logo">DisplayWord</a>
-    <h1>Вход</h1>
-    <p class="sub">Войдите чтобы управлять заявками и ключами</p>
+    <h1>Новый пароль</h1>
+    <p class="sub">Придумайте новый пароль для входа</p>
 
     <div class="msg" id="msg"></div>
 
     <form id="form">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" autocomplete="email" required />
+      <label for="password">Новый пароль</label>
+      <input type="password" id="password" name="password" autocomplete="new-password" required minlength="8" />
 
-      <label for="password">Пароль</label>
-      <input type="password" id="password" name="password" autocomplete="current-password" required />
+      <label for="password2">Повторите новый пароль</label>
+      <input type="password" id="password2" name="password2" autocomplete="new-password" required minlength="8" />
 
-      <button type="submit" class="btn" id="btn">Войти</button>
+      <button type="submit" class="btn" id="btn">Сменить пароль</button>
     </form>
 
-    <div class="footer-link"><a href="/account/forgot">Забыли пароль?</a></div>
-    <div class="footer-link">Нет аккаунта? <a href="/account/register">Зарегистрироваться</a></div>
+    <div class="footer-link" id="againLink" style="display:none"><a href="/account/forgot">Запросить новую ссылку</a></div>
   </div>
 
   <script>
-    const form = document.getElementById('form');
-    const btn  = document.getElementById('btn');
-    const msg  = document.getElementById('msg');
+    const form  = document.getElementById('form');
+    const btn   = document.getElementById('btn');
+    const msg   = document.getElementById('msg');
+    const again = document.getElementById('againLink');
 
-    // Show message from URL params (e.g. after verification)
-    const params = new URLSearchParams(location.search);
-    if (params.get('reset') === '1') {
-      showMsg('Пароль изменён. Войдите с новым паролем.', 'success');
-    } else if (params.get('verified') === '1') {
-      showMsg('Email подтверждён. Теперь можно войти.', 'success');
-    } else if (params.get('error') === 'token_expired') {
-      showMsg('Ссылка подтверждения истекла. Нажмите «Забыли пароль?» — новая ссылка из письма заодно подтвердит адрес.', 'error');
-    } else if (params.get('error') === 'server') {
-      showMsg('Не удалось подтвердить email — ошибка на сервере. Попробуйте ещё раз позже.', 'error');
-    } else if (params.get('error')) {
-      showMsg('Ссылка недействительна.', 'error');
-    }
+    const token = new URLSearchParams(location.search).get('token') || '';
 
     function showMsg(text, type) {
       msg.textContent = text;
@@ -78,35 +66,46 @@
       msg.style.display = 'block';
     }
 
+    if (!token) {
+      showMsg('Ссылка неполная — в ней нет кода. Запросите новую.', 'error');
+      form.style.display = 'none';
+      again.style.display = 'block';
+    }
+
     form.addEventListener('submit', async e => {
       e.preventDefault();
+      const p1 = document.getElementById('password').value;
+      const p2 = document.getElementById('password2').value;
+      if (p1.length < 8) { showMsg('Минимум 8 символов', 'error'); return; }
+      if (p1 !== p2)     { showMsg('Пароли не совпадают', 'error'); return; }
+
       btn.disabled = true;
-      btn.textContent = 'Входим…';
+      btn.textContent = 'Меняем…';
       msg.style.display = 'none';
 
       try {
-        const res = await fetch('/api/v1/auth/login', {
+        const res = await fetch('/api/v1/auth/reset-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
-          }),
+          body: JSON.stringify({ token, newPassword: p1 }),
         });
         const data = await res.json();
-
         if (res.ok) {
-          window.location.href = data.isAdmin ? '/admin/' : '/account/';
+          window.location.href = '/account/login?reset=1';
+        } else if (data.error === 'invalid_token' || data.error === 'token_expired') {
+          showMsg(data.message || 'Ссылка недействительна. Запросите новую.', 'error');
+          form.style.display = 'none';
+          again.style.display = 'block';
         } else {
-          showMsg(data.message || 'Ошибка входа', 'error');
+          showMsg(data.message || 'Ошибка. Попробуйте ещё раз.', 'error');
           btn.disabled = false;
-          btn.textContent = 'Войти';
+          btn.textContent = 'Сменить пароль';
         }
       } catch {
         showMsg('Ошибка сети. Попробуйте ещё раз.', 'error');
         btn.disabled = false;
-        btn.textContent = 'Войти';
+        btn.textContent = 'Сменить пароль';
       }
     });
   </script>

@@ -56,6 +56,28 @@ export function verificationEmail(to, verifyUrl) {
   };
 }
 
+export function resetEmail(to, resetUrl) {
+  return {
+    to,
+    subject: 'Смена пароля — DisplayWord',
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#1a1a2e">
+        <h2 style="color:#4a90e2">DisplayWord</h2>
+        <p>Здравствуйте,</p>
+        <p>Вы запросили смену пароля. Перейдите по ссылке, чтобы задать новый:</p>
+        <p style="margin:24px 0">
+          <a href="${resetUrl}"
+             style="background:#4a90e2;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600">
+            Задать новый пароль
+          </a>
+        </p>
+        <p style="color:#666;font-size:0.88rem">Ссылка действительна 1 час и работает один раз.<br>
+        Если вы не запрашивали смену пароля — просто проигнорируйте это письмо, пароль не изменится.</p>
+      </div>
+    `,
+  };
+}
+
 export function approvedEmail(to, communityName, keyString, downloadUrl) {
   return {
     to,

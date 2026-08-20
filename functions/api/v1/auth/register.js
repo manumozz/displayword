@@ -11,7 +11,7 @@ export async function onRequest({ request, env }) {
   let body;
   try { body = await request.json(); } catch { return json({ error: 'invalid_json' }, 400); }
 
-  const { email, password } = body ?? {};
+  const { email, password, name } = body ?? {};
 
   if (!email || !password) return json({ error: 'missing_fields' }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -20,6 +20,10 @@ export async function onRequest({ request, env }) {
   if (password.length < 8) {
     return json({ error: 'password_too_short', message: 'Минимум 8 символов' }, 400);
   }
+
+  const displayName = typeof name === 'string' ? name.trim() : '';
+  if (!displayName)            return json({ error: 'missing_name', message: 'Укажите имя' }, 400);
+  if (displayName.length > 80) return json({ error: 'name_too_long', message: 'Имя — до 80 символов' }, 400);
 
   const normalEmail = email.toLowerCase().trim();
 
@@ -36,8 +40,8 @@ export async function onRequest({ request, env }) {
   const now  = new Date().toISOString();
 
   await env.DB.prepare(
-    'INSERT INTO users (id, email, password_hash, created_at) VALUES (?, ?, ?, ?)',
-  ).bind(id, normalEmail, hash, now).run();
+    'INSERT INTO users (id, email, password_hash, display_name, created_at) VALUES (?, ?, ?, ?, ?)',
+  ).bind(id, normalEmail, hash, displayName, now).run();
 
   // Email verification token
   const token   = randomToken(32);

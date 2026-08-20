@@ -78,6 +78,24 @@
     .greeting-hint a { color: var(--accent); text-decoration: none; }
     .greeting-hint a:hover { text-decoration: underline; }
 
+    /* #115 — тёмные option и комбобокс страны */
+    .card-form select option { background: #0f1b2d; color: #fff; }
+    .combo { position: relative; }
+    .combo input { padding-right: 40px; }
+    .combo-toggle {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--gray); cursor: pointer;
+      font-size: 0.75rem; padding: 4px; line-height: 1;
+    }
+    .combo-list {
+      position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 60;
+      background: #0f1b2d; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
+      max-height: 260px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .combo-item { padding: 9px 14px; font-size: 0.92rem; cursor: pointer; }
+    .combo-item:hover, .combo-item.active { background: rgba(255,255,255,0.08); }
+    .combo-empty { padding: 9px 14px; color: var(--gray); font-size: 0.88rem; }
+
     /* #112 — раскладка с левым меню */
     body { padding-top: 60px; }
     .side {
@@ -160,9 +178,11 @@
             <input type="text" id="profCity" maxlength="80" autocomplete="off" />
 
             <label for="profCountry">Страна</label>
-            <select id="profCountry" autocomplete="off">
-              <option value="">— не указана —</option>
-            </select>
+            <div class="combo">
+              <input type="text" id="profCountry" autocomplete="off" placeholder="Начните вводить название" />
+              <button type="button" class="combo-toggle" id="countryToggle" tabindex="-1" aria-label="Показать список">▼</button>
+              <div class="combo-list" id="countryList" hidden></div>
+            </div>
 
             <label for="profRole">Роль</label>
             <select id="profRole" autocomplete="off">
@@ -239,7 +259,6 @@
 
       renderGreeting(me);
       populateProfileForm(me.profile || {});
-      populateCountries(me.profile || {});
 
       // Keys
       const keysRes = await fetch('/api/v1/keys', { credentials: 'same-origin' });
@@ -296,22 +315,104 @@
       document.getElementById('profCommunity').value = profile.community || '';
       document.getElementById('profCity').value      = profile.city      || '';
       document.getElementById('profRole').value      = profile.role      || '';
+      populateCountries(profile); // #115 — комбобокс страны
+    }
+
+    // #115 — страна: комбобокс с фильтрацией по вводу вместо select на 249 строк.
+    // Выбранное значение хранится кодом ISO в countryCode; в поле — русское название.
+    let countryCode = '';
+    const countryInput  = document.getElementById('profCountry');
+    const countryList   = document.getElementById('countryList');
+    const countryToggle = document.getElementById('countryToggle');
+
+    function countries() { return (typeof DW_COUNTRIES === 'undefined') ? [] : DW_COUNTRIES; }
+    function countryNameByCode(code) {
+      const c = countries().find(x => x.code === code);
+      return c ? c.name : '';
     }
 
     function populateCountries(profile) {
-      const sel = document.getElementById('profCountry');
-      // countries.js declares `const DW_COUNTRIES = […]` — top-level const does NOT
-      // create a property on `window` (only `var` does), so check the lexical binding.
-      if (typeof DW_COUNTRIES === 'undefined') return;
-      while (sel.options.length > 1) sel.remove(1);
-      for (const c of DW_COUNTRIES) {
-        const opt = document.createElement('option');
-        opt.value = c.code;
-        opt.textContent = c.name;
-        sel.appendChild(opt);
-      }
-      sel.value = profile.country || '';
+      countryCode = (profile && profile.country) || '';
+      countryInput.value = countryNameByCode(countryCode);
     }
+
+    function renderCountryList(query) {
+      const q = String(query || '').trim().toLowerCase();
+      const items = countries().filter(c =>
+        !q || c.name.toLowerCase().includes(q) || c.code.toLowerCase() === q);
+      countryList.textContent = '';
+      const none = document.createElement('div');
+      none.className = 'combo-item';
+      none.dataset.code = '';
+      none.textContent = '— не указана —';
+      countryList.appendChild(none);
+      for (const c of items) {
+        const el = document.createElement('div');
+        el.className = 'combo-item';
+        el.dataset.code = c.code;
+        el.textContent = c.name;
+        if (c.code === countryCode) el.classList.add('active');
+        countryList.appendChild(el);
+      }
+      if (!items.length) {
+        const e = document.createElement('div');
+        e.className = 'combo-empty';
+        e.textContent = 'Не найдено';
+        countryList.appendChild(e);
+      }
+      countryList.hidden = false;
+      const act = countryList.querySelector('.combo-item.active');
+      if (act) act.scrollIntoView({ block: 'nearest' });
+    }
+
+    function closeCountryList() {
+      countryList.hidden = true;
+      countryInput.value = countryNameByCode(countryCode);
+    }
+
+    countryInput.addEventListener('input', () => renderCountryList(countryInput.value));
+    countryInput.addEventListener('focus', () => renderCountryList(countryInput.value));
+    countryToggle.addEventListener('click', () => {
+      if (countryList.hidden) { countryInput.focus(); renderCountryList(''); }
+      else closeCountryList();
+    });
+    countryList.addEventListener('mousedown', (e) => {
+      const el = e.target.closest('.combo-item');
+      if (!el) return;
+      e.preventDefault();
+      countryCode = el.dataset.code || '';
+      closeCountryList();
+    });
+    countryInput.addEventListener('keydown', (e) => {
+      if (countryList.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        renderCountryList(countryInput.value); e.preventDefault(); return;
+      }
+      if (countryList.hidden) return;
+      const items = [...countryList.querySelectorAll('.combo-item')];
+      let i = items.findIndex(el => el.classList.contains('active'));
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        i = e.key === 'ArrowDown' ? Math.min(i + 1, items.length - 1) : Math.max(i - 1, 0);
+        items.forEach(el => el.classList.remove('active'));
+        if (items[i]) { items[i].classList.add('active'); items[i].scrollIntoView({ block: 'nearest' }); }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        // выбранный стрелками пункт; если стрелок не было и ровно одно совпадение — взять его
+        let el = items[i];
+        if (!el) {
+          const real = items.filter(x => x.dataset.code !== '');
+          if (real.length === 1) el = real[0];
+        }
+        if (el) countryCode = el.dataset.code || '';
+        closeCountryList();
+      } else if (e.key === 'Escape') {
+        closeCountryList();
+      }
+    });
+    countryInput.addEventListener('blur', () => {
+      // клик по пункту обрабатывается в mousedown до blur
+      setTimeout(closeCountryList, 100);
+    });
 
     document.getElementById('btnLogout').addEventListener('click', async () => {
       await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
@@ -329,7 +430,7 @@
         name:      document.getElementById('profName').value,
         community: document.getElementById('profCommunity').value,
         city:      document.getElementById('profCity').value,
-        country:   document.getElementById('profCountry').value,
+        country:   countryCode, // #115 — код из комбобокса
         role:      document.getElementById('profRole').value,
       };
 
@@ -344,7 +445,7 @@
         if (res.ok) {
           renderGreeting(data);
           populateProfileForm(data.profile || {});
-          document.getElementById('profCountry').value = (data.profile && data.profile.country) || '';
+          // #115 — страна обновляется внутри populateProfileForm → populateCountries
           showFormMsg('profileMsg', 'Сохранено', 'success');
           setTimeout(() => hideFormMsg('profileMsg'), 3000);
         } else {

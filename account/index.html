@@ -82,6 +82,7 @@
     body { padding-top: 60px; }
     .side {
       position: fixed; top: 60px; bottom: 0; left: 0; width: 220px;
+      display: block; height: auto;
       box-sizing: border-box; overflow-y: auto; z-index: 90;
       background: var(--navy2); border-right: 1px solid rgba(255,255,255,0.06);
       padding: 24px 0;
@@ -103,7 +104,8 @@
     @media (max-width: 1024px) {
       .side {
         position: sticky; top: 60px; bottom: auto; width: auto;
-        display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px;
+        display: flex; height: auto; align-items: center; justify-content: flex-start;
+        gap: 6px; overflow-x: auto; padding: 10px 12px;
         border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06);
       }
       .side-item { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; border-radius: 9px; padding: 9px 14px; }

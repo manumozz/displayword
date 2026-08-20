@@ -14,11 +14,10 @@
   <style>
     .topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(15,27,45,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 100; }
     .topbar-logo { font-size: 1rem; font-weight: 800; color: var(--gold); text-decoration: none; }
-    .topbar-nav { display: flex; gap: 20px; align-items: center; }
-    .topbar-nav a { color: var(--gray); text-decoration: none; font-size: 0.88rem; font-weight: 600; transition: color 0.2s; }
-    .topbar-nav a:hover, .topbar-nav a.active { color: var(--white); }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
     .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 6px 14px; border-radius: 7px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; }
-    main { padding: 90px 5% 60px; max-width: 1100px; margin: 0 auto; }
+    main { padding: 40px 5% 60px; max-width: 1100px; margin: 0 auto; }
+    h1, #welcomeSub { overflow-wrap: anywhere; } /* #111-style guard for long names (parity) */
     h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 32px; }
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
     .stat-card { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px 24px; }
@@ -56,19 +55,54 @@
     .btn-confirm:disabled { opacity: 0.45; }
     .key-output { font-family: monospace; font-size: 0.72rem; color: var(--green); word-break: break-all; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-top: 8px; display: none; }
     @media (max-width: 700px) { .stats { grid-template-columns: 1fr 1fr; } .app-row { flex-direction: column; align-items: flex-start; } }
+
+    /* #112 — раскладка с левым меню (без .pane / .side-item.admin — страницы разные) */
+    body { padding-top: 60px; }
+    .side {
+      position: fixed; top: 60px; bottom: 0; left: 0; width: 220px;
+      box-sizing: border-box; overflow-y: auto; z-index: 90;
+      background: var(--navy2); border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 0;
+    }
+    .side-item {
+      display: block; box-sizing: border-box; text-decoration: none;
+      color: var(--gray); font-size: 0.95rem; font-weight: 600;
+      padding: 11px 16px; border-left: 3px solid transparent;
+      border-radius: 0 9px 9px 0; transition: background 0.2s, color 0.2s;
+    }
+    .side-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+    .side-item.active { background: rgba(255,255,255,0.07); color: var(--white); border-left-color: var(--accent); }
+    .side-sep { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 16px; }
+    .content { padding-left: 220px; }
+    @media (max-width: 1024px) {
+      .side {
+        position: sticky; top: 60px; bottom: auto; width: auto;
+        display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px;
+        border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .side-item { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; border-radius: 9px; padding: 9px 14px; }
+      .side-item.active { border-left-color: transparent; border-bottom-color: var(--accent); }
+      .side-sep { display: none; }
+      .content { padding-left: 0; }
+    }
   </style>
 </head>
 <body>
   <div class="topbar">
     <a href="/admin/" class="topbar-logo">⚙ DisplayWord Admin</a>
-    <div class="topbar-nav">
-      <a href="/admin/" class="active">Заявки</a>
-      <a href="/admin/keys.html">Ключи</a>
-      <a href="/account/">Кабинет</a>
+    <div class="topbar-right">
       <button class="btn-logout" id="btnLogout">Выйти</button>
     </div>
   </div>
 
+  <nav class="side">
+    <a href="/admin/"          class="side-item active">Обзор</a>
+    <a href="/admin/keys.html" class="side-item">Ключи</a>
+    <div class="side-sep"></div>
+    <a href="/account/" class="side-item">Кабинет →</a>
+  </nav>
+
+  <div class="content">
   <main>
     <h1>Панель управления</h1>
 
@@ -84,6 +118,7 @@
     </div>
     <div id="appsList"><div class="empty">Загрузка…</div></div>
   </main>
+  </div>
 
   <!-- Approve modal -->
   <div class="modal-bg" id="modalApprove">

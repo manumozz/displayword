@@ -19,7 +19,7 @@
     .user-email { font-size: 0.85rem; color: var(--gray); }
     .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 6px 14px; border-radius: 7px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
     .btn-logout:hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
-    main { padding: 100px 5% 60px; max-width: 860px; margin: 0 auto; }
+    main { padding: 40px 5% 60px; max-width: 860px; margin: 0 auto; }
     h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
     .sub { color: var(--gray); margin-bottom: 40px; }
     h1, #welcomeSub { overflow-wrap: anywhere; } /* #111 — long names (no spaces) shouldn't blow out the page */
@@ -41,7 +41,7 @@
     .status-pending  { color: var(--gold); }
     .status-approved { color: var(--green); }
     .status-rejected { color: #f87171; }
-    .section { margin-bottom: 48px; }
+    .section { margin-bottom: 0; } /* #112 — one section per pane, no trailing whitespace */
     .loader { color: var(--gray); font-size: 0.9rem; }
 
     /* #106 — profile + change-password */
@@ -77,6 +77,40 @@
     .greeting-hint { display: block; margin-top: 8px; font-size: 0.9rem; color: var(--gray); }
     .greeting-hint a { color: var(--accent); text-decoration: none; }
     .greeting-hint a:hover { text-decoration: underline; }
+
+    /* #112 — раскладка с левым меню */
+    body { padding-top: 60px; }
+    .side {
+      position: fixed; top: 60px; bottom: 0; left: 0; width: 220px;
+      box-sizing: border-box; overflow-y: auto; z-index: 90;
+      background: var(--navy2); border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 0;
+    }
+    .side-item {
+      display: block; box-sizing: border-box; text-decoration: none;
+      color: var(--gray); font-size: 0.95rem; font-weight: 600;
+      padding: 11px 16px; border-left: 3px solid transparent;
+      border-radius: 0 9px 9px 0; transition: background 0.2s, color 0.2s;
+    }
+    .side-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+    .side-item.active { background: rgba(255,255,255,0.07); color: var(--white); border-left-color: var(--accent); }
+    .side-item.admin { color: var(--gold); }
+    .side-sep { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 16px; }
+    .content { padding-left: 220px; }
+    .pane { display: none; }
+    .pane.active { display: block; }
+
+    @media (max-width: 1024px) {
+      .side {
+        position: sticky; top: 60px; bottom: auto; width: auto;
+        display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px;
+        border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .side-item { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; border-radius: 9px; padding: 9px 14px; }
+      .side-item.active { border-left-color: transparent; border-bottom-color: var(--accent); }
+      .side-sep { display: none; }
+      .content { padding-left: 0; }
+    }
   </style>
 </head>
 <body>
@@ -88,77 +122,109 @@
     </div>
   </div>
 
-  <main>
-    <h1>Личный кабинет</h1>
-    <p class="sub" id="welcomeSub">Загрузка…</p>
+  <nav class="side">
+    <a href="#keys"     id="nav-keys"     class="side-item">Ключи</a>
+    <a href="#profile"  id="nav-profile"  class="side-item">Профиль</a>
+    <a href="#security" id="nav-security" class="side-item">Безопасность</a>
+    <div class="side-sep"></div>
+    <a href="/admin/" id="navAdmin" class="side-item admin" style="display:none">Админка →</a>
+  </nav>
 
-    <div class="section">
-      <div class="section-title">Лицензионные ключи</div>
-      <div id="keysContainer" class="loader">Загрузка…</div>
-    </div>
+  <div class="content">
+    <main>
+      <h1>Личный кабинет</h1>
+      <p class="sub" id="welcomeSub">Загрузка…</p>
 
-    <div class="section" id="profile">
-      <div class="section-title">Профиль</div>
-      <div class="card-form">
-        <div id="profileMsg" class="msg"></div>
-
-        <label for="profName">Имя</label>
-        <input type="text" id="profName" maxlength="80" placeholder="Как к вам обращаться" />
-
-        <label for="profCommunity">Собрание</label>
-        <input type="text" id="profCommunity" maxlength="120" placeholder="Название собрания" />
-
-        <label for="profCity">Город</label>
-        <input type="text" id="profCity" maxlength="80" />
-
-        <label for="profCountry">Страна</label>
-        <select id="profCountry">
-          <option value="">— не указана —</option>
-        </select>
-
-        <label for="profRole">Роль</label>
-        <select id="profRole">
-          <option value="">— не указана —</option>
-          <option value="pastor">Пастор</option>
-          <option value="worship">Лидер прославления</option>
-          <option value="operator">Оператор</option>
-          <option value="sound">Звукорежиссёр</option>
-          <option value="other">Другое</option>
-        </select>
-
-        <button type="button" class="btn-primary" id="profileSave">Сохранить</button>
+      <div class="pane" id="pane-keys">
+        <div class="section">
+          <div class="section-title">Лицензионные ключи</div>
+          <div id="keysContainer" class="loader">Загрузка…</div>
+        </div>
       </div>
-    </div>
 
-    <div class="section">
-      <div class="section-title">Смена пароля</div>
-      <div class="card-form">
-        <div id="pwMsg" class="msg"></div>
+      <div class="pane" id="pane-profile">
+        <div class="section">
+          <div class="section-title">Профиль</div>
+          <div class="card-form">
+            <div id="profileMsg" class="msg"></div>
 
-        <label for="pwCurrent">Текущий пароль</label>
-        <div class="pw-wrap">
-          <input type="password" id="pwCurrent" autocomplete="current-password" />
-          <button type="button" class="toggle-pw" onclick="togglePw('pwCurrent', this)" title="Показать пароль">👁</button>
+            <label for="profName">Имя</label>
+            <input type="text" id="profName" maxlength="80" placeholder="Как к вам обращаться" autocomplete="off" />
+
+            <label for="profCommunity">Собрание</label>
+            <input type="text" id="profCommunity" maxlength="120" placeholder="Название собрания" autocomplete="off" />
+
+            <label for="profCity">Город</label>
+            <input type="text" id="profCity" maxlength="80" autocomplete="off" />
+
+            <label for="profCountry">Страна</label>
+            <select id="profCountry" autocomplete="off">
+              <option value="">— не указана —</option>
+            </select>
+
+            <label for="profRole">Роль</label>
+            <select id="profRole" autocomplete="off">
+              <option value="">— не указана —</option>
+              <option value="pastor">Пастор</option>
+              <option value="worship">Лидер прославления</option>
+              <option value="operator">Оператор</option>
+              <option value="sound">Звукорежиссёр</option>
+              <option value="other">Другое</option>
+            </select>
+
+            <button type="button" class="btn-primary" id="profileSave">Сохранить</button>
+          </div>
         </div>
-
-        <label for="pwNew">Новый пароль</label>
-        <div class="pw-wrap">
-          <input type="password" id="pwNew" autocomplete="new-password" />
-          <button type="button" class="toggle-pw" onclick="togglePw('pwNew', this)" title="Показать пароль">👁</button>
-        </div>
-
-        <label for="pwNew2">Повторите новый пароль</label>
-        <div class="pw-wrap">
-          <input type="password" id="pwNew2" autocomplete="new-password" />
-          <button type="button" class="toggle-pw" onclick="togglePw('pwNew2', this)" title="Показать пароль">👁</button>
-        </div>
-
-        <button type="button" class="btn-primary" id="pwChange">Сменить пароль</button>
       </div>
-    </div>
-  </main>
+
+      <div class="pane" id="pane-security">
+        <div class="section">
+          <div class="section-title">Смена пароля</div>
+          <div class="card-form">
+            <div id="pwMsg" class="msg"></div>
+
+            <label for="pwCurrent">Текущий пароль</label>
+            <div class="pw-wrap">
+              <input type="password" id="pwCurrent" autocomplete="current-password" />
+              <button type="button" class="toggle-pw" onclick="togglePw('pwCurrent', this)" title="Показать пароль">👁</button>
+            </div>
+
+            <label for="pwNew">Новый пароль</label>
+            <div class="pw-wrap">
+              <input type="password" id="pwNew" autocomplete="new-password" />
+              <button type="button" class="toggle-pw" onclick="togglePw('pwNew', this)" title="Показать пароль">👁</button>
+            </div>
+
+            <label for="pwNew2">Повторите новый пароль</label>
+            <div class="pw-wrap">
+              <input type="password" id="pwNew2" autocomplete="new-password" />
+              <button type="button" class="toggle-pw" onclick="togglePw('pwNew2', this)" title="Показать пароль">👁</button>
+            </div>
+
+            <button type="button" class="btn-primary" id="pwChange">Сменить пароль</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
   <script>
+    // #112 — pane switching via address bar; sync at parse time so it doesn't flash
+    const PANES = ['keys', 'profile', 'security'];
+    function showPane(name) {
+      const target = PANES.indexOf(name) >= 0 ? name : 'keys';
+      for (const p of PANES) {
+        document.getElementById('pane-' + p).classList.toggle('active', p === target);
+        document.getElementById('nav-'  + p).classList.toggle('active', p === target);
+      }
+      window.scrollTo(0, 0);
+    }
+    function paneFromHash() {
+      return String(location.hash || '').replace(/^#/, '');
+    }
+    window.addEventListener('hashchange', function () { showPane(paneFromHash()); });
+    showPane(paneFromHash());
+
     async function load() {
       // Check auth
       const meRes = await fetch('/api/v1/me', { credentials: 'same-origin' });
@@ -166,6 +232,9 @@
       const me = await meRes.json();
 
       document.getElementById('userEmail').textContent = me.email;
+      // #112 — admin link moved to side menu; show only for admins
+      if (me.isAdmin) document.getElementById('navAdmin').style.display = 'block';
+
       renderGreeting(me);
       populateProfileForm(me.profile || {});
       populateCountries(me.profile || {});
@@ -199,28 +268,16 @@
       const h1 = document.querySelector('h1');
       const welcomeSub = document.getElementById('welcomeSub');
 
-      // h1: имя, если заполнено; иначе «Личный кабинет»
       if (profile.name) {
         h1.textContent = 'Здравствуйте, ' + profile.name + '!';
       } else {
         h1.textContent = 'Личный кабинет';
       }
 
-      // sub: чистим, потом строим заново
       welcomeSub.textContent = '';
       welcomeSub.append(me.email);
       if (profile.community) welcomeSub.append(' · ' + profile.community);
-      if (me.isAdmin) {
-        welcomeSub.append(' · ');
-        const a = document.createElement('a');
-        a.href = '/admin/';
-        a.style.color = 'var(--gold)';
-        a.style.textDecoration = 'none';
-        a.style.fontWeight = '700';
-        a.textContent = 'Перейти в админку →';
-        welcomeSub.appendChild(a);
-      }
-      // подсказка только если имени нет
+      // #112 — admin link is in the side menu, not in #welcomeSub anymore
       if (!profile.name) {
         const hint = document.createElement('span');
         hint.className = 'greeting-hint';
@@ -237,7 +294,6 @@
       document.getElementById('profCommunity').value = profile.community || '';
       document.getElementById('profCity').value      = profile.city      || '';
       document.getElementById('profRole').value      = profile.role      || '';
-      // country populated by populateCountries (depends on DW_COUNTRIES)
     }
 
     function populateCountries(profile) {
@@ -245,7 +301,6 @@
       // countries.js declares `const DW_COUNTRIES = […]` — top-level const does NOT
       // create a property on `window` (only `var` does), so check the lexical binding.
       if (typeof DW_COUNTRIES === 'undefined') return;
-      // Remove everything except the first empty option
       while (sel.options.length > 1) sel.remove(1);
       for (const c of DW_COUNTRIES) {
         const opt = document.createElement('option');

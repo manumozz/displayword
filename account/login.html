@@ -63,6 +63,8 @@
       showMsg('Email подтверждён. Теперь можно войти.', 'success');
     } else if (params.get('error') === 'token_expired') {
       showMsg('Ссылка подтверждения истекла. Зарегистрируйтесь снова.', 'error');
+    } else if (params.get('error') === 'server') {
+      showMsg('Не удалось подтвердить email — ошибка на сервере. Попробуйте ещё раз позже.', 'error');
     } else if (params.get('error')) {
       showMsg('Ссылка недействительна.', 'error');
     }

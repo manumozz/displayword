@@ -22,6 +22,7 @@
     main { padding: 100px 5% 60px; max-width: 860px; margin: 0 auto; }
     h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
     .sub { color: var(--gray); margin-bottom: 40px; }
+    h1, #welcomeSub { overflow-wrap: anywhere; } /* #111 — long names (no spaces) shouldn't blow out the page */
     .section-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
     .empty-card { background: var(--navy2); border: 1px dashed rgba(255,255,255,0.1); border-radius: 14px; padding: 40px; text-align: center; color: var(--gray); }
     .empty-card p { margin-bottom: 20px; font-size: 0.95rem; }
@@ -241,10 +242,12 @@
 
     function populateCountries(profile) {
       const sel = document.getElementById('profCountry');
-      if (!window.DW_COUNTRIES) return; // countries.js not loaded — leave only the empty option
+      // countries.js declares `const DW_COUNTRIES = […]` — top-level const does NOT
+      // create a property on `window` (only `var` does), so check the lexical binding.
+      if (typeof DW_COUNTRIES === 'undefined') return;
       // Remove everything except the first empty option
       while (sel.options.length > 1) sel.remove(1);
-      for (const c of window.DW_COUNTRIES) {
+      for (const c of DW_COUNTRIES) {
         const opt = document.createElement('option');
         opt.value = c.code;
         opt.textContent = c.name;

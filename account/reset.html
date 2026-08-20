@@ -29,6 +29,21 @@
     .footer-link { text-align: center; margin-top: 24px; font-size: 0.88rem; color: var(--gray); }
     .footer-link a { color: var(--accent); text-decoration: none; }
     .footer-link a:hover { text-decoration: underline; }
+
+    /* #116 — нативные виджеты в тёмной теме и перекраска автозаполнения */
+    :root { color-scheme: dark; }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0 1000px #212b3f inset;
+      -webkit-text-fill-color: var(--white);
+      caret-color: var(--white);
+    }
+    input:autofill {
+      box-shadow: 0 0 0 1000px #212b3f inset;
+      -webkit-text-fill-color: var(--white);
+      filter: none;
+    }
   </style>
 </head>
 <body>

@@ -44,6 +44,21 @@
     .footer-link a { color: var(--accent); text-decoration: none; }
     .footer-link a:hover { text-decoration: underline; }
     .hint { font-size: 0.8rem; color: var(--gray); margin-top: -12px; margin-bottom: 18px; }
+
+    /* #116 — нативные виджеты в тёмной теме и перекраска автозаполнения */
+    :root { color-scheme: dark; }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0 1000px #212b3f inset;
+      -webkit-text-fill-color: var(--white);
+      caret-color: var(--white);
+    }
+    input:autofill {
+      box-shadow: 0 0 0 1000px #212b3f inset;
+      -webkit-text-fill-color: var(--white);
+      filter: none;
+    }
   </style>
 </head>
 <body>
@@ -56,7 +71,9 @@
 
     <form id="form" novalidate>
       <label for="name">Имя</label>
-      <input type="text" id="name" name="name" autocomplete="off" maxlength="80" required />
+      <div class="input-wrap">
+        <input type="text" id="name" name="name" autocomplete="off" maxlength="80" required />
+      </div>
 
       <label for="email">Email</label>
       <div class="input-wrap">

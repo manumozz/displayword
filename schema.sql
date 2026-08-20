@@ -30,3 +30,11 @@ ALTER TABLE license_keys ADD COLUMN recipient_email TEXT;
 
 -- #062 edition on license key (connect | team); apply once via wrangler d1 --remote with author OK
 ALTER TABLE license_keys ADD COLUMN edition TEXT;
+
+-- #105 профиль пользователя (apply once via wrangler d1 --remote with author OK)
+ALTER TABLE users ADD COLUMN display_name       TEXT;  -- как обращаться, до 80 символов
+ALTER TABLE users ADD COLUMN community_name     TEXT;  -- название собрания, до 120
+ALTER TABLE users ADD COLUMN city               TEXT;  -- город, до 80
+ALTER TABLE users ADD COLUMN country            TEXT;  -- ISO 3166-1 alpha-2
+ALTER TABLE users ADD COLUMN role               TEXT;  -- pastor|worship|operator|sound|other
+ALTER TABLE users ADD COLUMN profile_updated_at TEXT;  -- ISO 8601, когда профиль трогали

@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../style.css" />
+  <script src="/countries.js"></script>
   <style>
     .topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(15,27,45,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 100; }
     .topbar-logo { font-size: 1rem; font-weight: 800; color: var(--accent); text-decoration: none; }
@@ -26,6 +27,7 @@
     .empty-card p { margin-bottom: 20px; font-size: 0.95rem; }
     .btn-primary { display: inline-block; background: var(--accent); color: #fff; padding: 11px 24px; border-radius: 9px; font-size: 0.92rem; font-weight: 700; text-decoration: none; transition: opacity 0.2s; border: none; cursor: pointer; font-family: inherit; }
     .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
     .key-card { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 24px 28px; margin-bottom: 14px; }
     .key-community { font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
     .key-string { font-family: monospace; font-size: 0.78rem; color: var(--gray); word-break: break-all; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 6px; margin: 10px 0; }
@@ -40,6 +42,40 @@
     .status-rejected { color: #f87171; }
     .section { margin-bottom: 48px; }
     .loader { color: var(--gray); font-size: 0.9rem; }
+
+    /* #106 — profile + change-password */
+    .card-form { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px; }
+    .card-form label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; margin-top: 18px; }
+    .card-form label:first-of-type { margin-top: 0; }
+    .card-form input[type=text], .card-form input[type=password], .card-form select {
+      width: 100%; box-sizing: border-box;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 11px 14px;
+      color: var(--white); font-size: 0.95rem; font-family: inherit;
+      outline: none; transition: border-color 0.2s;
+    }
+    .card-form input:focus, .card-form select:focus { border-color: var(--accent); }
+    .card-form .btn-primary { margin-top: 24px; width: 100%; }
+    .card-form select {
+      appearance: none; -webkit-appearance: none; padding-right: 36px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23a0aec0' d='M6 8L0 0h12z'/></svg>");
+      background-repeat: no-repeat; background-position: right 14px center; background-size: 12px;
+    }
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 44px; }
+    .toggle-pw {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--gray);
+      padding: 4px; line-height: 1; font-size: 1rem;
+      transition: color 0.2s;
+    }
+    .toggle-pw:hover { color: var(--white); }
+    .msg { font-size: 0.88rem; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: none; }
+    .msg.error   { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .msg.success { background: rgba(74,222,128,0.1);  color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .greeting-hint { display: block; margin-top: 8px; font-size: 0.9rem; color: var(--gray); }
+    .greeting-hint a { color: var(--accent); text-decoration: none; }
+    .greeting-hint a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -59,6 +95,66 @@
       <div class="section-title">Лицензионные ключи</div>
       <div id="keysContainer" class="loader">Загрузка…</div>
     </div>
+
+    <div class="section" id="profile">
+      <div class="section-title">Профиль</div>
+      <div class="card-form">
+        <div id="profileMsg" class="msg"></div>
+
+        <label for="profName">Имя</label>
+        <input type="text" id="profName" maxlength="80" placeholder="Как к вам обращаться" />
+
+        <label for="profCommunity">Собрание</label>
+        <input type="text" id="profCommunity" maxlength="120" placeholder="Название собрания" />
+
+        <label for="profCity">Город</label>
+        <input type="text" id="profCity" maxlength="80" />
+
+        <label for="profCountry">Страна</label>
+        <select id="profCountry">
+          <option value="">— не указана —</option>
+        </select>
+
+        <label for="profRole">Роль</label>
+        <select id="profRole">
+          <option value="">— не указана —</option>
+          <option value="pastor">Пастор</option>
+          <option value="worship">Лидер прославления</option>
+          <option value="operator">Оператор</option>
+          <option value="sound">Звукорежиссёр</option>
+          <option value="other">Другое</option>
+        </select>
+
+        <button type="button" class="btn-primary" id="profileSave">Сохранить</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Смена пароля</div>
+      <div class="card-form">
+        <div id="pwMsg" class="msg"></div>
+
+        <label for="pwCurrent">Текущий пароль</label>
+        <div class="pw-wrap">
+          <input type="password" id="pwCurrent" autocomplete="current-password" />
+          <button type="button" class="toggle-pw" onclick="togglePw('pwCurrent', this)" title="Показать пароль">👁</button>
+        </div>
+
+        <label for="pwNew">Новый пароль</label>
+        <div class="pw-wrap">
+          <input type="password" id="pwNew" autocomplete="new-password" />
+          <button type="button" class="toggle-pw" onclick="togglePw('pwNew', this)" title="Показать пароль">👁</button>
+        </div>
+
+        <label for="pwNew2">Повторите новый пароль</label>
+        <div class="pw-wrap">
+          <input type="password" id="pwNew2" autocomplete="new-password" />
+          <button type="button" class="toggle-pw" onclick="togglePw('pwNew2', this)" title="Показать пароль">👁</button>
+        </div>
+
+        <button type="button" class="btn-primary" id="pwChange">Сменить пароль</button>
+      </div>
+    </div>
   </main>
 
   <script>
@@ -69,12 +165,9 @@
       const me = await meRes.json();
 
       document.getElementById('userEmail').textContent = me.email;
-      document.getElementById('welcomeSub').textContent = 'Добро пожаловать, ' + me.email;
-
-      if (me.isAdmin) {
-        document.getElementById('welcomeSub').innerHTML +=
-          ' · <a href="/admin/" style="color:var(--gold);text-decoration:none;font-weight:700">Перейти в админку →</a>';
-      }
+      renderGreeting(me);
+      populateProfileForm(me.profile || {});
+      populateCountries(me.profile || {});
 
       // Keys
       const keysRes = await fetch('/api/v1/keys', { credentials: 'same-origin' });
@@ -100,10 +193,171 @@
       }
     }
 
+    function renderGreeting(me) {
+      const profile = me.profile || {};
+      const h1 = document.querySelector('h1');
+      const welcomeSub = document.getElementById('welcomeSub');
+
+      // h1: имя, если заполнено; иначе «Личный кабинет»
+      if (profile.name) {
+        h1.textContent = 'Здравствуйте, ' + profile.name + '!';
+      } else {
+        h1.textContent = 'Личный кабинет';
+      }
+
+      // sub: чистим, потом строим заново
+      welcomeSub.textContent = '';
+      welcomeSub.append(me.email);
+      if (profile.community) welcomeSub.append(' · ' + profile.community);
+      if (me.isAdmin) {
+        welcomeSub.append(' · ');
+        const a = document.createElement('a');
+        a.href = '/admin/';
+        a.style.color = 'var(--gold)';
+        a.style.textDecoration = 'none';
+        a.style.fontWeight = '700';
+        a.textContent = 'Перейти в админку →';
+        welcomeSub.appendChild(a);
+      }
+      // подсказка только если имени нет
+      if (!profile.name) {
+        const hint = document.createElement('span');
+        hint.className = 'greeting-hint';
+        const link = document.createElement('a');
+        link.href = '#profile';
+        link.textContent = 'Расскажите, как к вам обращаться →';
+        hint.appendChild(link);
+        welcomeSub.appendChild(hint);
+      }
+    }
+
+    function populateProfileForm(profile) {
+      document.getElementById('profName').value      = profile.name      || '';
+      document.getElementById('profCommunity').value = profile.community || '';
+      document.getElementById('profCity').value      = profile.city      || '';
+      document.getElementById('profRole').value      = profile.role      || '';
+      // country populated by populateCountries (depends on DW_COUNTRIES)
+    }
+
+    function populateCountries(profile) {
+      const sel = document.getElementById('profCountry');
+      if (!window.DW_COUNTRIES) return; // countries.js not loaded — leave only the empty option
+      // Remove everything except the first empty option
+      while (sel.options.length > 1) sel.remove(1);
+      for (const c of window.DW_COUNTRIES) {
+        const opt = document.createElement('option');
+        opt.value = c.code;
+        opt.textContent = c.name;
+        sel.appendChild(opt);
+      }
+      sel.value = profile.country || '';
+    }
+
     document.getElementById('btnLogout').addEventListener('click', async () => {
       await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
       window.location.href = '/account/login';
     });
+
+    // Profile save
+    document.getElementById('profileSave').addEventListener('click', async () => {
+      const btn = document.getElementById('profileSave');
+      const oldText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Сохраняем…';
+
+      const body = {
+        name:      document.getElementById('profName').value,
+        community: document.getElementById('profCommunity').value,
+        city:      document.getElementById('profCity').value,
+        country:   document.getElementById('profCountry').value,
+        role:      document.getElementById('profRole').value,
+      };
+
+      try {
+        const res = await fetch('/api/v1/me', {
+          method: 'PATCH',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          renderGreeting(data);
+          populateProfileForm(data.profile || {});
+          document.getElementById('profCountry').value = (data.profile && data.profile.country) || '';
+          showFormMsg('profileMsg', 'Сохранено', 'success');
+          setTimeout(() => hideFormMsg('profileMsg'), 3000);
+        } else {
+          showFormMsg('profileMsg', data.message || 'Ошибка сохранения', 'error');
+        }
+      } catch {
+        showFormMsg('profileMsg', 'Ошибка сети. Попробуйте ещё раз.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = oldText;
+      }
+    });
+
+    // Password change
+    document.getElementById('pwChange').addEventListener('click', async () => {
+      const cur = document.getElementById('pwCurrent').value;
+      const neu = document.getElementById('pwNew').value;
+      const rep = document.getElementById('pwNew2').value;
+      if (!cur || !neu || !rep) {
+        showFormMsg('pwMsg', 'Заполните все три поля', 'error'); return;
+      }
+      if (neu.length < 8) {
+        showFormMsg('pwMsg', 'Новый пароль — минимум 8 символов', 'error'); return;
+      }
+      if (neu !== rep) {
+        showFormMsg('pwMsg', 'Новые пароли не совпадают', 'error'); return;
+      }
+      const btn = document.getElementById('pwChange');
+      const oldText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Меняем…';
+      try {
+        const res = await fetch('/api/v1/auth/change-password', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ currentPassword: cur, newPassword: neu }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('pwCurrent').value = '';
+          document.getElementById('pwNew').value = '';
+          document.getElementById('pwNew2').value = '';
+          const n = (data && typeof data.sessionsClosed === 'number') ? data.sessionsClosed : 0;
+          showFormMsg('pwMsg', 'Пароль изменён. Другие устройства отключены (закрыто сессий: ' + n + ')', 'success');
+        } else if (res.status === 403) {
+          showFormMsg('pwMsg', (data && data.message) || 'Текущий пароль неверен', 'error');
+        } else {
+          showFormMsg('pwMsg', (data && data.message) || 'Ошибка смены пароля', 'error');
+        }
+      } catch {
+        showFormMsg('pwMsg', 'Ошибка сети. Попробуйте ещё раз.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = oldText;
+      }
+    });
+
+    function togglePw(id, el) {
+      const inp = document.getElementById(id);
+      if (inp.type === 'password') { inp.type = 'text'; el.style.opacity = '1'; }
+      else { inp.type = 'password'; el.style.opacity = '0.5'; }
+    }
+
+    function showFormMsg(id, text, type) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = 'msg ' + type;
+      el.style.display = 'block';
+    }
+    function hideFormMsg(id) {
+      document.getElementById(id).style.display = 'none';
+    }
 
     function esc(s) {
       return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');

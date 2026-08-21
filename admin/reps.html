@@ -222,7 +222,8 @@
         line.style.padding = '3px 0';
         line.textContent = (c.community_name || '—') + ' · ' + c.email +
           (c.city ? ' · ' + c.city : '') + (c.country ? ' (' + c.country + ')' : '') +
-          ' · с ' + (c.rep_set_at ? c.rep_set_at.slice(0, 10) : '—');
+          ' · с ' + (c.rep_set_at ? c.rep_set_at.slice(0, 10) : '—') +
+          (c.partners ? ' · вместе с: ' + c.partners : '');
         box.appendChild(line);
       }
       row.after(box);
@@ -245,17 +246,27 @@
 
       const head = document.createElement('div');
       head.style.cssText = 'margin-bottom:10px; font-size:0.9rem;';
+      const names = (d.user.reps || []).map(r => r.name);
       head.textContent = (d.user.community || '—') + ' · ' + d.user.email +
-        ' · помогал: ' + (d.user.repName || 'Никто, нашли сами') +
+        ' · помогали: ' + (names.length ? names.join(', ') : 'Никто, нашли сами') +
         (d.user.repSetAt ? ' (с ' + d.user.repSetAt.slice(0, 10) + ')' : '');
       box.appendChild(head);
+
+      // #127 — состав до трёх: плашки с крестиком, список и «Добавить».
+      // Крестик правит только черновик; в базу и журнал пишет «Сохранить».
+      const MAX_REPS = 3;
+      const chosen = (d.user.reps || []).map(r => ({ id: r.id, name: r.name }));
+
+      const chips = document.createElement('div');
+      chips.style.cssText = 'display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;';
+      box.appendChild(chips);
 
       const controls = document.createElement('div');
       controls.style.cssText = 'display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;';
       const sel = document.createElement('select');
       sel.style.cssText = 'flex:1; min-width:0; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:9px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;';
       const none = document.createElement('option');
-      none.value = ''; none.textContent = 'Никто, нашли сами';
+      none.value = ''; none.textContent = '— выберите имя —';
       sel.appendChild(none);
       const repsRes = await fetch('/api/v1/admin/representatives', { credentials: 'same-origin' });
       if (repsRes.ok) {
@@ -267,7 +278,18 @@
           sel.appendChild(o);
         }
       }
-      sel.value = d.user.repId || '';
+      const add = document.createElement('button');
+      add.className = 'btn-cancel';
+      add.textContent = 'Добавить';
+      add.addEventListener('click', () => {
+        const id = sel.value;
+        if (!id) return;
+        if (chosen.length >= MAX_REPS) return;
+        if (chosen.some(r => r.id === id)) return;
+        chosen.push({ id, name: sel.options[sel.selectedIndex].textContent });
+        sel.value = '';
+        renderChosen();
+      });
       const save = document.createElement('button');
       save.className = 'btn-confirm';
       save.textContent = 'Сохранить';
@@ -275,12 +297,50 @@
         const res2 = await fetch('/api/v1/admin/rep-assign', {
           method: 'POST', credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: d.user.email, repId: sel.value }),
+          body: JSON.stringify({ email: d.user.email, repIds: chosen.map(r => r.id) }),
         });
         if (res2.ok) findUser(); else alert('Не удалось сохранить');
       });
-      controls.appendChild(sel); controls.appendChild(save);
+      controls.appendChild(sel); controls.appendChild(add); controls.appendChild(save);
       box.appendChild(controls);
+
+      const hint = document.createElement('div');
+      hint.style.cssText = 'font-size:0.83rem; color:var(--gray); margin-bottom:12px;';
+      hint.textContent = 'До трёх человек. Крестик убирает из состава, «Сохранить» записывает изменения в журнал.';
+      box.appendChild(hint);
+
+      function renderChosen() {
+        chips.textContent = '';
+        if (!chosen.length) {
+          const empty = document.createElement('span');
+          empty.style.cssText = 'font-size:0.9rem; color:var(--gray);';
+          empty.textContent = 'Никто, нашли сами';
+          chips.appendChild(empty);
+        }
+        for (const rep of chosen) {
+          const chip = document.createElement('span');
+          chip.style.cssText = 'display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:6px 8px 6px 14px; font-size:0.9rem;';
+          const nm = document.createElement('span');
+          nm.textContent = rep.name;
+          const x = document.createElement('button');
+          x.type = 'button';
+          x.textContent = '×';
+          x.setAttribute('aria-label', 'Убрать ' + rep.name);
+          x.style.cssText = 'background:none; border:none; color:inherit; font-size:1.15rem; line-height:1; cursor:pointer; padding:0 6px; opacity:0.7;';
+          x.addEventListener('click', () => {
+            const i = chosen.findIndex(r => r.id === rep.id);
+            if (i >= 0) chosen.splice(i, 1);
+            renderChosen();
+          });
+          chip.appendChild(nm);
+          chip.appendChild(x);
+          chips.appendChild(chip);
+        }
+        const full = chosen.length >= MAX_REPS;
+        add.disabled = full;
+        sel.disabled = full;
+      }
+      renderChosen();
 
       if (d.log.length) {
         const logTitle = document.createElement('div');

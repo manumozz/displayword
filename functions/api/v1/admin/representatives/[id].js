@@ -51,24 +51,24 @@ export async function onRequest({ request, env, params }) {
     }
     updates.push('active = ?'); binds.push(body.active);
   }
-  // #128 — почта: пустая строка снимает привязку, и раздел в кабинете у человека пропадает
+  // #130 — почта обязательна: пустую не принимаем. Человека, который больше не помогает,
+  // убирают из списка кнопкой «Убрать из списка», а не стиранием почты.
   if ('email' in body) {
     const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
     if (email === '') {
-      updates.push('email = NULL');
-    } else {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return json({ error: 'invalid_email', message: 'Неверный формат email' }, 400);
-      }
-      if (email.length > 120) {
-        return json({ error: 'email_too_long', message: 'Email — до 120 символов' }, 400);
-      }
-      const taken = await env.DB.prepare(
-        'SELECT id FROM representatives WHERE email = ? AND id <> ?',
-      ).bind(email, repId).first();
-      if (taken) return json({ error: 'email_taken', message: 'Эта почта уже есть в списке' }, 409);
-      updates.push('email = ?'); binds.push(email);
+      return json({ error: 'missing_email', message: 'Укажите почту' }, 400);
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return json({ error: 'invalid_email', message: 'Неверный формат email' }, 400);
+    }
+    if (email.length > 120) {
+      return json({ error: 'email_too_long', message: 'Email — до 120 символов' }, 400);
+    }
+    const taken = await env.DB.prepare(
+      'SELECT id FROM representatives WHERE email = ? AND id <> ?',
+    ).bind(email, repId).first();
+    if (taken) return json({ error: 'email_taken', message: 'Эта почта уже есть в списке' }, 409);
+    updates.push('email = ?'); binds.push(email);
   }
   if (!updates.length) return json({ ok: true, rep });
 

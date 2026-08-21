@@ -106,11 +106,11 @@
     <div style="display:flex; gap:10px; margin-bottom:8px; flex-wrap:wrap;">
       <input type="text" id="newRepName" maxlength="80" placeholder="Имя нового человека"
              style="flex:2; min-width:200px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
-      <input type="email" id="newRepEmail" maxlength="120" placeholder="Почта (необязательно)"
+      <input type="email" id="newRepEmail" maxlength="120" placeholder="Почта"
              style="flex:2; min-width:200px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
       <button class="btn-confirm" id="btnAddRep">Добавить</button>
     </div>
-    <div style="font-size:0.83rem; color:var(--gray); margin-bottom:16px;">Имя увидят собрания в списке. Почта нужна только для того, чтобы человек видел свои собрания в личном кабинете, — собраниям она не показывается.</div>
+    <div style="font-size:0.83rem; color:var(--gray); margin-bottom:16px;">Имя увидят собрания в списке. Почта — та же, которой человек входит на сайт: по ней открывается его раздел «Мои собрания». Собраниям она не показывается.</div>
     <div id="repsList" class="empty">Загрузка…</div>
 
     <div class="section-header" style="margin-top:40px;">
@@ -181,7 +181,7 @@
       const inpEm = document.getElementById('newRepEmail');
       const name  = inp.value.trim();
       const email = inpEm.value.trim();
-      if (!name) return;
+      if (!name || !email) return;
       const res = await fetch('/api/v1/admin/representatives', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -204,7 +204,7 @@
 
     // #128 — почта для входа в свой раздел кабинета; пустое значение убирает привязку
     async function setRepEmail(rep) {
-      const email = prompt('Почта этого человека (пусто — убрать):', rep.email || '');
+      const email = prompt('Почта этого человека — та же, которой он входит на сайт:', rep.email || '');
       if (email === null) return;
       const res = await fetch('/api/v1/admin/representatives/' + rep.id, {
         method: 'PATCH', credentials: 'same-origin',

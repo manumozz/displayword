@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Представители — DisplayWord</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="icon" type="image/png" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(15,27,45,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 100; }
+    .topbar-logo { font-size: 1rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 6px 14px; border-radius: 7px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    main { padding: 40px 5% 60px; max-width: 1100px; margin: 0 auto; }
+    h1, #welcomeSub { overflow-wrap: anywhere; }
+    h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 32px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
+    .app-row { background: var(--navy2); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 22px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .app-row:hover { border-color: rgba(255,255,255,0.15); }
+    .app-info { flex: 1; min-width: 0; }
+    .app-info strong { display: block; margin-bottom: 4px; }
+    .app-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .btn-cancel { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--gray); padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-confirm { background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .btn-confirm:disabled { opacity: 0.45; }
+    .empty { color: var(--gray); font-size: 0.9rem; padding: 20px 0; }
+    @media (max-width: 700px) { .app-row { flex-direction: column; align-items: flex-start; } }
+
+    /* #112 — раскладка с левым меню (без .pane / .side-item.admin — страницы разные) */
+    body { padding-top: 60px; }
+    .side {
+      position: fixed; top: 60px; bottom: 0; left: 0; width: 220px;
+      display: block; height: auto;
+      box-sizing: border-box; overflow-y: auto; z-index: 90;
+      background: var(--navy2); border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 0;
+    }
+    .side-item {
+      display: block; box-sizing: border-box; text-decoration: none;
+      color: var(--gray); font-size: 0.95rem; font-weight: 600;
+      padding: 11px 16px; border-left: 3px solid transparent;
+      border-radius: 0 9px 9px 0; transition: background 0.2s, color 0.2s;
+    }
+    .side-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+    .side-item.active { background: rgba(255,255,255,0.07); color: var(--white); border-left-color: var(--accent); }
+    .side-sep { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 16px; }
+    .content { padding-left: 220px; }
+    @media (max-width: 1024px) {
+      .side {
+        position: sticky; top: 60px; bottom: auto; width: auto;
+        display: flex; height: auto; align-items: center; justify-content: flex-start;
+        gap: 6px; overflow-x: auto; padding: 10px 12px;
+        border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .side-item { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; border-radius: 9px; padding: 9px 14px; }
+      .side-item.active { border-left-color: transparent; border-bottom-color: var(--accent); }
+      .side-sep { display: none; }
+      .content { padding-left: 0; }
+    }
+
+    /* #116 — нативные виджеты в тёмной теме и перекраска автозаполнения */
+    :root { color-scheme: dark; }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0 1000px #212b3f inset;
+      -webkit-text-fill-color: var(--white);
+      caret-color: var(--white);
+    }
+    input:autofill {
+      box-shadow: 0 0 0 1000px #212b3f inset;
+      -webkit-text-fill-color: var(--white);
+      filter: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="/admin/" class="topbar-logo">⚙ DisplayWord Admin</a>
+    <div class="topbar-right">
+      <button class="btn-logout" id="btnLogout">Выйти</button>
+    </div>
+  </div>
+
+  <nav class="side">
+    <a href="/admin/"               class="side-item">Обзор</a>
+    <a href="/admin/keys.html"      class="side-item">Ключи</a>
+    <a href="/admin/reps.html"      class="side-item active">Представители</a>
+    <div class="side-sep"></div>
+    <a href="/account/" class="side-item">Кабинет →</a>
+  </nav>
+
+  <div class="content">
+  <main>
+    <h1>Представители</h1>
+
+    <div class="section-header">
+      <div class="section-title">Справочник</div>
+    </div>
+    <div style="display:flex; gap:10px; margin-bottom:16px;">
+      <input type="text" id="newRepName" maxlength="80" placeholder="Имя нового представителя"
+             style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
+      <button class="btn-confirm" id="btnAddRep">Добавить</button>
+    </div>
+    <div id="repsList" class="empty">Загрузка…</div>
+
+    <div class="section-header" style="margin-top:40px;">
+      <div class="section-title">Представитель общины</div>
+    </div>
+    <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+      <input type="email" id="assignEmail" placeholder="Email пользователя"
+             style="flex:1; min-width:240px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
+      <button class="btn-confirm" id="btnFindUser">Найти</button>
+    </div>
+    <div id="assignBox" class="empty" style="display:none;"></div>
+  </main>
+  </div>
+
+  <script>
+    // ── гард админа ──
+    fetch('/api/v1/me', { credentials: 'same-origin' })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(me => { if (!me.isAdmin) location.href = '/account/'; })
+      .catch(() => { location.href = '/account/login'; });
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      location.href = '/account/login';
+    });
+
+    // ── справочник ──
+    async function loadReps() {
+      const el = document.getElementById('repsList');
+      try {
+        const res = await fetch('/api/v1/admin/representatives', { credentials: 'same-origin' });
+        if (!res.ok) throw new Error(res.status);
+        const d = await res.json();
+        if (!d.reps.length) { el.textContent = 'Справочник пуст — добавьте первого представителя.'; return; }
+        el.textContent = ''; el.className = '';
+        for (const rep of d.reps) {
+          const row = document.createElement('div');
+          row.className = 'app-row';
+          const info = document.createElement('div');
+          info.className = 'app-info';
+          const strong = document.createElement('strong');
+          strong.textContent = rep.name + (rep.active ? '' : ' (неактивен)');
+          const span = document.createElement('span');
+          span.textContent = 'общин: ' + rep.communities;
+          info.appendChild(strong); info.appendChild(span);
+          const actions = document.createElement('div');
+          actions.className = 'app-actions';
+          actions.appendChild(mkBtn('Общины', () => toggleCommunities(rep, row)));
+          actions.appendChild(mkBtn('Переименовать', () => renameRep(rep)));
+          actions.appendChild(mkBtn(rep.active ? 'Деактивировать' : 'Вернуть', () => toggleRep(rep)));
+          row.appendChild(info); row.appendChild(actions);
+          el.appendChild(row);
+        }
+      } catch { el.textContent = 'Ошибка загрузки справочника.'; }
+    }
+
+    function mkBtn(label, fn) {
+      const b = document.createElement('button');
+      b.className = 'btn-cancel';
+      b.textContent = label;
+      b.addEventListener('click', fn);
+      return b;
+    }
+
+    document.getElementById('btnAddRep').addEventListener('click', async () => {
+      const inp = document.getElementById('newRepName');
+      const name = inp.value.trim();
+      if (!name) return;
+      const res = await fetch('/api/v1/admin/representatives', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      if (res.ok) { inp.value = ''; loadReps(); }
+      else alert('Не удалось добавить');
+    });
+
+    async function renameRep(rep) {
+      const name = prompt('Новое имя представителя:', rep.name);
+      if (!name || !name.trim() || name.trim() === rep.name) return;
+      const res = await fetch('/api/v1/admin/representatives/' + rep.id, {
+        method: 'PATCH', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim() }),
+      });
+      if (res.ok) loadReps(); else alert('Не удалось переименовать');
+    }
+
+    async function toggleRep(rep) {
+      const next = rep.active ? 0 : 1;
+      if (next === 0 && !confirm('Деактивировать «' + rep.name + '»? Новым общинам он показываться не будет; у старых останется.')) return;
+      const res = await fetch('/api/v1/admin/representatives/' + rep.id, {
+        method: 'PATCH', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ active: next }),
+      });
+      if (res.ok) loadReps(); else alert('Не удалось изменить');
+    }
+
+    async function toggleCommunities(rep, row) {
+      const existing = row.nextElementSibling;
+      if (existing && existing.dataset.communitiesFor === rep.id) { existing.remove(); return; }
+      const res = await fetch('/api/v1/admin/representatives/' + rep.id, { credentials: 'same-origin' });
+      if (!res.ok) return;
+      const d = await res.json();
+      const box = document.createElement('div');
+      box.dataset.communitiesFor = rep.id;
+      box.style.cssText = 'margin: -4px 0 10px; padding: 10px 22px; font-size: 0.85rem; color: var(--gray);';
+      if (!d.communities.length) box.textContent = 'Общин пока нет.';
+      for (const c of d.communities) {
+        const line = document.createElement('div');
+        line.style.padding = '3px 0';
+        line.textContent = (c.community_name || '—') + ' · ' + c.email +
+          (c.city ? ' · ' + c.city : '') + (c.country ? ' (' + c.country + ')' : '') +
+          ' · с ' + (c.rep_set_at ? c.rep_set_at.slice(0, 10) : '—');
+        box.appendChild(line);
+      }
+      row.after(box);
+    }
+
+    // ── представитель общины ──
+    document.getElementById('btnFindUser').addEventListener('click', findUser);
+
+    async function findUser() {
+      const email = document.getElementById('assignEmail').value.trim();
+      const box = document.getElementById('assignBox');
+      if (!email) return;
+      box.style.display = 'block';
+      box.className = '';
+      box.textContent = 'Ищем…';
+      const res = await fetch('/api/v1/admin/rep-assign?email=' + encodeURIComponent(email), { credentials: 'same-origin' });
+      if (!res.ok) { box.textContent = res.status === 404 ? 'Пользователь не найден.' : 'Ошибка поиска.'; return; }
+      const d = await res.json();
+      box.textContent = '';
+
+      const head = document.createElement('div');
+      head.style.cssText = 'margin-bottom:10px; font-size:0.9rem;';
+      head.textContent = (d.user.community || '—') + ' · ' + d.user.email +
+        ' · представитель: ' + (d.user.repName || 'Никто, нашли сами') +
+        (d.user.repSetAt ? ' (с ' + d.user.repSetAt.slice(0, 10) + ')' : '');
+      box.appendChild(head);
+
+      const controls = document.createElement('div');
+      controls.style.cssText = 'display:flex; gap:10px; margin-bottom:12px;';
+      const sel = document.createElement('select');
+      sel.style.cssText = 'flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:9px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;';
+      const none = document.createElement('option');
+      none.value = ''; none.textContent = 'Никто, нашли сами';
+      sel.appendChild(none);
+      const repsRes = await fetch('/api/v1/admin/representatives', { credentials: 'same-origin' });
+      if (repsRes.ok) {
+        const rd = await repsRes.json();
+        for (const rep of rd.reps) {
+          const o = document.createElement('option');
+          o.value = rep.id;
+          o.textContent = rep.name + (rep.active ? '' : ' (неактивен)');
+          sel.appendChild(o);
+        }
+      }
+      sel.value = d.user.repId || '';
+      const save = document.createElement('button');
+      save.className = 'btn-confirm';
+      save.textContent = 'Сохранить';
+      save.addEventListener('click', async () => {
+        const res2 = await fetch('/api/v1/admin/rep-assign', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: d.user.email, repId: sel.value }),
+        });
+        if (res2.ok) findUser(); else alert('Не удалось сохранить');
+      });
+      controls.appendChild(sel); controls.appendChild(save);
+      box.appendChild(controls);
+
+      if (d.log.length) {
+        const logTitle = document.createElement('div');
+        logTitle.className = 'section-title';
+        logTitle.style.marginBottom = '8px';
+        logTitle.textContent = 'Журнал изменений';
+        box.appendChild(logTitle);
+        for (const l of d.log) {
+          const line = document.createElement('div');
+          line.style.cssText = 'font-size:0.83rem; color:var(--gray); padding:2px 0;';
+          line.textContent = l.ts.slice(0, 16).replace('T', ' ') + ' · ' +
+            (l.old_name || 'Никто') + ' → ' + (l.new_name || 'Никто') +
+            ' · ' + (l.admin_email || 'сам пользователь') + ' · ' + l.source;
+          box.appendChild(line);
+        }
+      }
+    }
+
+    loadReps();
+  </script>
+</body>
+</html>

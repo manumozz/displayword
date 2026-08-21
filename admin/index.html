@@ -134,6 +134,16 @@
       <div class="section-title">Входящие заявки</div>
     </div>
     <div id="appsList"><div class="empty">Загрузка…</div></div>
+
+    <div class="section-header" style="margin-top: 40px;">
+      <div class="section-title">Скачивания программы</div>
+    </div>
+    <div class="stats" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+      <div class="stat-card"><div class="stat-label">За 7 дней</div><div class="stat-value" id="dl7">—</div></div>
+      <div class="stat-card"><div class="stat-label">За 30 дней</div><div class="stat-value" id="dl30">—</div></div>
+      <div class="stat-card"><div class="stat-label">Всего</div><div class="stat-value" id="dlTotal">—</div></div>
+    </div>
+    <div id="dlPlaces" class="empty">Загрузка…</div>
   </main>
   </div>
 
@@ -327,6 +337,42 @@
 
     function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function fmt(iso) { return iso ? new Date(iso).toLocaleDateString('ru-RU', { day:'numeric', month:'short', year:'numeric' }) : '—'; }
+
+    // #118 — статистика скачиваний
+    async function loadDownloads() {
+      const el = document.getElementById('dlPlaces');
+      try {
+        const res = await fetch('/api/v1/admin/downloads', { credentials: 'same-origin' });
+        if (!res.ok) throw new Error(res.status);
+        const d = await res.json();
+        document.getElementById('dl7').textContent     = d.last7;
+        document.getElementById('dl30').textContent    = d.last30;
+        document.getElementById('dlTotal').textContent = d.total;
+        if (!d.byPlace.length) {
+          el.textContent = 'Скачиваний пока нет — счёт идёт с момента включения (№118).';
+          return;
+        }
+        el.textContent = '';
+        el.className = '';
+        for (const p of d.byPlace) {
+          const row  = document.createElement('div');
+          row.className = 'app-row';
+          const info = document.createElement('div');
+          info.className = 'app-info';
+          const strong = document.createElement('strong');
+          strong.textContent = (p.country || '??') + (p.city ? ' · ' + p.city : '');
+          const span = document.createElement('span');
+          span.textContent = 'скачиваний: ' + p.n;
+          info.appendChild(strong);
+          info.appendChild(span);
+          row.appendChild(info);
+          el.appendChild(row);
+        }
+      } catch {
+        el.textContent = 'Ошибка загрузки статистики.';
+      }
+    }
+    loadDownloads();
 
     load();
   </script>

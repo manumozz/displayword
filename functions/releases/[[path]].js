@@ -26,7 +26,8 @@
  *   legacy unversioned assets      → max-age=300 (immutable only with version in name)
  */
 
-export async function onRequest({ request, env, params }) {
+export async function onRequest(context) {
+  const { request, env, params } = context;
   // Handle CORS preflight
   if (request.method === 'OPTIONS') {
     return new Response(null, {
@@ -47,6 +48,29 @@ export async function onRequest({ request, env, params }) {
       { status: 503, headers: { 'content-type': 'application/json', ...corsHeaders() } }
     );
   }
+
+  // #118 — счёт человеческих скачиваний (Setup/Portable). Страна и город из
+  // request.cf (геолокация Cloudflare), IP не читается и не хранится.
+  // Докачки не считаются: только запрос без Range либо первый кусок (bytes=0-).
+  try {
+    if (request.method === 'GET' && env.DB && /-(Setup\.exe|Portable\.zip)$/i.test(r2Key)) {
+      const rangeHdr = request.headers.get('range');
+      if (!rangeHdr || /^\s*bytes=0-/i.test(rangeHdr)) {
+        const cf = request.cf || {};
+        context.waitUntil(
+          env.DB.prepare(
+            'INSERT INTO download_log (id, ts, file, country, city) VALUES (?, ?, ?, ?, ?)',
+          ).bind(
+            crypto.randomUUID(),
+            new Date().toISOString(),
+            r2Key.split('/').pop(),
+            cf.country || null,
+            cf.city || null,
+          ).run().catch(e => console.error('[dl-log]', e.message)),
+        );
+      }
+    }
+  } catch (e) { console.error('[dl-log]', e.message); }
 
   try {
     if (request.method === 'HEAD') {
@@ -207,7 +231,14 @@ function buildHeaders(object, r2Key) {
   } else if (isVersionedAsset(r2Key)) {
     const cc = 'public, max-age=31536000, immutable';
     headers.set('cache-control', cc);
-    headers.set('cdn-cache-control', cc);
+    if (/-(Setup\.exe|Portable\.zip)$/i.test(baseName)) {
+      // #118 — Setup/Portable не кэшируются на КРАЮ, чтобы каждый скачивающий
+      // доходил до функции и попадал в счёт. Кэш браузера остаётся immutable.
+      // Фидов, nupkg и прямой двери releases.displayword.com это не касается.
+      headers.set('cdn-cache-control', 'no-store');
+    } else {
+      headers.set('cdn-cache-control', cc);
+    }
   } else {
     // Legacy unversioned Setup.exe / Portable.zip etc.
     const cc = 'public, max-age=300';

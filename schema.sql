@@ -1,5 +1,8 @@
 -- DisplayWord D1 schema additions (apply via Cloudflare D1 console when noted in assignments).
 
+-- #118 (21.08.2026): счёт скачиваний установщиков — страна/город, БЕЗ IP
+-- CREATE TABLE download_log (id TEXT PRIMARY KEY, ts TEXT NOT NULL, file TEXT NOT NULL, country TEXT, city TEXT);  -- применено 21.08.2026
+
 CREATE TABLE IF NOT EXISTS key_access_log (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   key_id        TEXT NOT NULL,

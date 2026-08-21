@@ -298,7 +298,12 @@
         if (!res.ok) return;
         d = await res.json();
       } catch { return; }
-      if (!d || !d.isHelper) return;
+      if (!d || !d.isHelper) {
+        // #131 — не помогающему раздел не положен: если он попал по прямой ссылке
+        // на #communities, уводим его на «Ключи», чтобы не висело «Загрузка…»
+        if (paneFromHash() === 'communities') { location.hash = '#keys'; }
+        return;
+      }
 
       document.getElementById('nav-communities').style.display = 'block';
       const box = document.getElementById('myCommunities');

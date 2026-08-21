@@ -205,9 +205,13 @@
               <option value="pastor">Пастор</option>
               <option value="worship">Лидер прославления</option>
               <option value="operator">Оператор</option>
-              <option value="sound">Звукорежиссёр</option>
+              <option value="sound">Звукооператор</option>
               <option value="other">Другое</option>
             </select>
+            <div id="roleCustomWrap" style="display:none">
+              <label for="profRoleCustom">Какая роль?</label>
+              <input type="text" id="profRoleCustom" maxlength="60" autocomplete="off" placeholder="Напишите свою роль" />
+            </div>
 
             <button type="button" class="btn-primary" id="profileSave">Сохранить</button>
           </div>
@@ -330,8 +334,18 @@
       document.getElementById('profCommunity').value = profile.community || '';
       document.getElementById('profCity').value      = profile.city      || '';
       document.getElementById('profRole').value      = profile.role      || '';
+      document.getElementById('profRoleCustom').value = profile.roleCustom || '';
+      syncRoleCustom();
       populateCountries(profile); // #115 — комбобокс страны
     }
+
+    // #117 — вписка роли при «Другое»
+    const roleSelect = document.getElementById('profRole');
+    const roleCustomWrap = document.getElementById('roleCustomWrap');
+    function syncRoleCustom() {
+      roleCustomWrap.style.display = roleSelect.value === 'other' ? 'block' : 'none';
+    }
+    roleSelect.addEventListener('change', syncRoleCustom);
 
     // #115 — страна: комбобокс с фильтрацией по вводу вместо select на 249 строк.
     // Выбранное значение хранится кодом ISO в countryCode; в поле — русское название.
@@ -447,6 +461,7 @@
         city:      document.getElementById('profCity').value,
         country:   countryCode, // #115 — код из комбобокса
         role:      document.getElementById('profRole').value,
+        roleCustom: document.getElementById('profRoleCustom').value,
       };
 
       try {

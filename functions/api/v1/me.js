@@ -44,16 +44,17 @@ async function buildMeResponse(db, session) {
 
 async function loadProfile(db, userId) {
   const row = await db.prepare(`
-    SELECT display_name, community_name, city, country, role, profile_updated_at
+    SELECT display_name, community_name, city, country, role, role_custom, profile_updated_at
     FROM users WHERE id = ?
   `).bind(userId).first();
   return {
-    name:      row?.display_name       ?? null,
-    community: row?.community_name     ?? null,
-    city:      row?.city               ?? null,
-    country:   row?.country            ?? null,
-    role:      row?.role               ?? null,
-    updatedAt: row?.profile_updated_at ?? null,
+    name:       row?.display_name       ?? null,
+    community:  row?.community_name     ?? null,
+    city:       row?.city               ?? null,
+    country:    row?.country            ?? null,
+    role:       row?.role               ?? null,
+    roleCustom: row?.role_custom        ?? null,
+    updatedAt:  row?.profile_updated_at ?? null,
   };
 }
 
@@ -111,6 +112,28 @@ async function patchProfile(request, env, session) {
       updates.push(`${col} = ?`);
       binds.push(trimmed);
     }
+  }
+
+  // #117 — вписка роли: хранится только при role = 'other'.
+  const roleInBody = typeof body.role === 'string' ? body.role.trim() : undefined;
+  if ('roleCustom' in body) {
+    const raw = body.roleCustom;
+    if (typeof raw !== 'string') {
+      errors.push({ field: 'roleCustom', code: 'invalid_field', message: 'Поле roleCustom должно быть строкой' });
+    } else {
+      const trimmed = raw.trim();
+      if (trimmed.length > 60) {
+        errors.push({ field: 'roleCustom', code: 'too_long', message: 'Максимум 60 символов' });
+      } else if (trimmed === '' || (roleInBody !== undefined && roleInBody !== 'other')) {
+        updates.push('role_custom = NULL');
+      } else {
+        updates.push('role_custom = ?');
+        binds.push(trimmed);
+      }
+    }
+  } else if (roleInBody !== undefined && roleInBody !== 'other') {
+    // роль сменили с «другое» на обычную, вписку не прислали — гасим осиротевшую
+    updates.push('role_custom = NULL');
   }
 
   if (errors.length > 0) {

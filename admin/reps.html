@@ -103,11 +103,14 @@
     <div class="section-header">
       <div class="section-title">Наша команда</div>
     </div>
-    <div style="display:flex; gap:10px; margin-bottom:16px;">
+    <div style="display:flex; gap:10px; margin-bottom:8px; flex-wrap:wrap;">
       <input type="text" id="newRepName" maxlength="80" placeholder="Имя нового человека"
-             style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
+             style="flex:2; min-width:200px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
+      <input type="email" id="newRepEmail" maxlength="120" placeholder="Почта (необязательно)"
+             style="flex:2; min-width:200px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
       <button class="btn-confirm" id="btnAddRep">Добавить</button>
     </div>
+    <div style="font-size:0.83rem; color:var(--gray); margin-bottom:16px;">Имя увидят собрания в списке. Почта нужна только для того, чтобы человек видел свои собрания в личном кабинете, — собраниям она не показывается.</div>
     <div id="repsList" class="empty">Загрузка…</div>
 
     <div class="section-header" style="margin-top:40px;">
@@ -151,12 +154,13 @@
           const strong = document.createElement('strong');
           strong.textContent = rep.name + (rep.active ? '' : ' (не в списке)');
           const span = document.createElement('span');
-          span.textContent = 'собраний: ' + rep.communities;
+          span.textContent = 'собраний: ' + rep.communities + ' · ' + (rep.email || 'почта не указана');
           info.appendChild(strong); info.appendChild(span);
           const actions = document.createElement('div');
           actions.className = 'app-actions';
           actions.appendChild(mkBtn('Собрания', () => toggleCommunities(rep, row)));
           actions.appendChild(mkBtn('Переименовать', () => renameRep(rep)));
+          actions.appendChild(mkBtn('Почта', () => setRepEmail(rep)));
           actions.appendChild(mkBtn(rep.active ? 'Убрать из списка' : 'Вернуть в список', () => toggleRep(rep)));
           row.appendChild(info); row.appendChild(actions);
           el.appendChild(row);
@@ -173,16 +177,18 @@
     }
 
     document.getElementById('btnAddRep').addEventListener('click', async () => {
-      const inp = document.getElementById('newRepName');
-      const name = inp.value.trim();
+      const inp   = document.getElementById('newRepName');
+      const inpEm = document.getElementById('newRepEmail');
+      const name  = inp.value.trim();
+      const email = inpEm.value.trim();
       if (!name) return;
       const res = await fetch('/api/v1/admin/representatives', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, email }),
       });
-      if (res.ok) { inp.value = ''; loadReps(); }
-      else alert('Не удалось добавить');
+      if (res.ok) { inp.value = ''; inpEm.value = ''; loadReps(); }
+      else { const d = await res.json().catch(() => ({})); alert(d.message || 'Не удалось добавить'); }
     });
 
     async function renameRep(rep) {
@@ -194,6 +200,19 @@
         body: JSON.stringify({ name: name.trim() }),
       });
       if (res.ok) loadReps(); else alert('Не удалось переименовать');
+    }
+
+    // #128 — почта для входа в свой раздел кабинета; пустое значение убирает привязку
+    async function setRepEmail(rep) {
+      const email = prompt('Почта этого человека (пусто — убрать):', rep.email || '');
+      if (email === null) return;
+      const res = await fetch('/api/v1/admin/representatives/' + rep.id, {
+        method: 'PATCH', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      if (res.ok) loadReps();
+      else { const d = await res.json().catch(() => ({})); alert(d.message || 'Не удалось сохранить почту'); }
     }
 
     async function toggleRep(rep) {

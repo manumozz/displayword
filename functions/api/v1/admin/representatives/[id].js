@@ -13,7 +13,7 @@ export async function onRequest({ request, env, params }) {
 
   const repId = params.id;
   const rep = await env.DB.prepare(
-    'SELECT id, name, active FROM representatives WHERE id = ?',
+    'SELECT id, name, email, active FROM representatives WHERE id = ?',
   ).bind(repId).first();
   if (!rep) return json({ error: 'not_found' }, 404);
 
@@ -50,6 +50,25 @@ export async function onRequest({ request, env, params }) {
       return json({ error: 'invalid_field', message: 'active — 0 или 1' }, 400);
     }
     updates.push('active = ?'); binds.push(body.active);
+  }
+  // #128 — почта: пустая строка снимает привязку, и раздел в кабинете у человека пропадает
+  if ('email' in body) {
+    const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+    if (email === '') {
+      updates.push('email = NULL');
+    } else {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return json({ error: 'invalid_email', message: 'Неверный формат email' }, 400);
+      }
+      if (email.length > 120) {
+        return json({ error: 'email_too_long', message: 'Email — до 120 символов' }, 400);
+      }
+      const taken = await env.DB.prepare(
+        'SELECT id FROM representatives WHERE email = ? AND id <> ?',
+      ).bind(email, repId).first();
+      if (taken) return json({ error: 'email_taken', message: 'Эта почта уже есть в списке' }, 409);
+      updates.push('email = ?'); binds.push(email);
+    }
   }
   if (!updates.length) return json({ ok: true, rep });
 

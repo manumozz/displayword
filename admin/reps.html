@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Представители — DisplayWord</title>
+  <title>Установка и обучение — DisplayWord</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="icon" type="image/png" href="/favicon.ico" />
@@ -91,27 +91,27 @@
   <nav class="side">
     <a href="/admin/"               class="side-item">Обзор</a>
     <a href="/admin/keys.html"      class="side-item">Ключи</a>
-    <a href="/admin/reps.html"      class="side-item active">Представители</a>
+    <a href="/admin/reps.html"      class="side-item active">Установка и обучение</a>
     <div class="side-sep"></div>
     <a href="/account/" class="side-item">Кабинет →</a>
   </nav>
 
   <div class="content">
   <main>
-    <h1>Представители</h1>
+    <h1>Установка и обучение</h1>
 
     <div class="section-header">
-      <div class="section-title">Справочник</div>
+      <div class="section-title">Наша команда</div>
     </div>
     <div style="display:flex; gap:10px; margin-bottom:16px;">
-      <input type="text" id="newRepName" maxlength="80" placeholder="Имя нового представителя"
+      <input type="text" id="newRepName" maxlength="80" placeholder="Имя нового человека"
              style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; color:var(--white); font-family:inherit; font-size:0.9rem;" />
       <button class="btn-confirm" id="btnAddRep">Добавить</button>
     </div>
     <div id="repsList" class="empty">Загрузка…</div>
 
     <div class="section-header" style="margin-top:40px;">
-      <div class="section-title">Представитель общины</div>
+      <div class="section-title">Кто помогал собранию</div>
     </div>
     <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
       <input type="email" id="assignEmail" placeholder="Email пользователя"
@@ -141,7 +141,7 @@
         const res = await fetch('/api/v1/admin/representatives', { credentials: 'same-origin' });
         if (!res.ok) throw new Error(res.status);
         const d = await res.json();
-        if (!d.reps.length) { el.textContent = 'Справочник пуст — добавьте первого представителя.'; return; }
+        if (!d.reps.length) { el.textContent = 'Список пуст — добавьте первого человека из команды.'; return; }
         el.textContent = ''; el.className = '';
         for (const rep of d.reps) {
           const row = document.createElement('div');
@@ -149,15 +149,15 @@
           const info = document.createElement('div');
           info.className = 'app-info';
           const strong = document.createElement('strong');
-          strong.textContent = rep.name + (rep.active ? '' : ' (неактивен)');
+          strong.textContent = rep.name + (rep.active ? '' : ' (не в списке)');
           const span = document.createElement('span');
-          span.textContent = 'общин: ' + rep.communities;
+          span.textContent = 'собраний: ' + rep.communities;
           info.appendChild(strong); info.appendChild(span);
           const actions = document.createElement('div');
           actions.className = 'app-actions';
-          actions.appendChild(mkBtn('Общины', () => toggleCommunities(rep, row)));
+          actions.appendChild(mkBtn('Собрания', () => toggleCommunities(rep, row)));
           actions.appendChild(mkBtn('Переименовать', () => renameRep(rep)));
-          actions.appendChild(mkBtn(rep.active ? 'Деактивировать' : 'Вернуть', () => toggleRep(rep)));
+          actions.appendChild(mkBtn(rep.active ? 'Убрать из списка' : 'Вернуть в список', () => toggleRep(rep)));
           row.appendChild(info); row.appendChild(actions);
           el.appendChild(row);
         }
@@ -186,7 +186,7 @@
     });
 
     async function renameRep(rep) {
-      const name = prompt('Новое имя представителя:', rep.name);
+      const name = prompt('Новое имя:', rep.name);
       if (!name || !name.trim() || name.trim() === rep.name) return;
       const res = await fetch('/api/v1/admin/representatives/' + rep.id, {
         method: 'PATCH', credentials: 'same-origin',
@@ -198,7 +198,7 @@
 
     async function toggleRep(rep) {
       const next = rep.active ? 0 : 1;
-      if (next === 0 && !confirm('Деактивировать «' + rep.name + '»? Новым общинам он показываться не будет; у старых останется.')) return;
+      if (next === 0 && !confirm('Убрать «' + rep.name + '» из списка? Новым собраниям он показываться не будет; у тех, кто уже выбрал, имя останется.')) return;
       const res = await fetch('/api/v1/admin/representatives/' + rep.id, {
         method: 'PATCH', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -216,7 +216,7 @@
       const box = document.createElement('div');
       box.dataset.communitiesFor = rep.id;
       box.style.cssText = 'margin: -4px 0 10px; padding: 10px 22px; font-size: 0.85rem; color: var(--gray);';
-      if (!d.communities.length) box.textContent = 'Общин пока нет.';
+      if (!d.communities.length) box.textContent = 'Собраний пока нет.';
       for (const c of d.communities) {
         const line = document.createElement('div');
         line.style.padding = '3px 0';
@@ -228,7 +228,7 @@
       row.after(box);
     }
 
-    // ── представитель общины ──
+    // ── кто помогал собранию ──
     document.getElementById('btnFindUser').addEventListener('click', findUser);
 
     async function findUser() {
@@ -246,7 +246,7 @@
       const head = document.createElement('div');
       head.style.cssText = 'margin-bottom:10px; font-size:0.9rem;';
       head.textContent = (d.user.community || '—') + ' · ' + d.user.email +
-        ' · представитель: ' + (d.user.repName || 'Никто, нашли сами') +
+        ' · помогал: ' + (d.user.repName || 'Никто, нашли сами') +
         (d.user.repSetAt ? ' (с ' + d.user.repSetAt.slice(0, 10) + ')' : '');
       box.appendChild(head);
 
@@ -263,7 +263,7 @@
         for (const rep of rd.reps) {
           const o = document.createElement('option');
           o.value = rep.id;
-          o.textContent = rep.name + (rep.active ? '' : ' (неактивен)');
+          o.textContent = rep.name + (rep.active ? '' : ' (не в списке)');
           sel.appendChild(o);
         }
       }

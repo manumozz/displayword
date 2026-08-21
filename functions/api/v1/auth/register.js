@@ -31,7 +31,7 @@ export async function onRequest({ request, env }) {
     const rep = await env.DB.prepare(
       'SELECT id FROM representatives WHERE id = ? AND active = 1',
     ).bind(repId.trim()).first();
-    if (!rep) return json({ error: 'invalid_rep', message: 'Неизвестный представитель' }, 400);
+    if (!rep) return json({ error: 'invalid_rep', message: 'Этого имени нет в списке' }, 400);
     repIdValue = rep.id;
   }
 

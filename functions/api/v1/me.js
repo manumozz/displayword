@@ -172,7 +172,7 @@ async function patchProfile(request, env, session) {
         'SELECT id FROM representatives WHERE id = ? AND active = 1',
       ).bind(raw.trim()).first();
       if (!rep) {
-        return json({ error: 'invalid_rep', message: 'Неизвестный представитель' }, 400);
+        return json({ error: 'invalid_rep', message: 'Этого имени нет в списке' }, 400);
       }
       const ts = new Date().toISOString();
       updates.push('rep_id = ?');    binds.push(rep.id);

@@ -94,11 +94,16 @@
       </div>
 
       <label for="repSelect">Установка и обучение</label>
-      <div class="input-wrap">
-        <select id="repSelect">
-          <option value="">Никто, нашли сами</option>
-        </select>
+      <div style="display:flex; gap:8px; align-items:flex-start; flex-wrap:wrap;">
+        <div class="input-wrap" style="flex:1; min-width:180px; margin-bottom:0;">
+          <select id="repSelect" style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:11px 14px; color:var(--white); font-size:0.95rem; font-family:inherit; outline:none;">
+            <option value="">Никто, нашли сами</option>
+          </select>
+        </div>
+        <button type="button" class="btn" id="repAdd" style="width:auto; margin-top:0; padding:11px 18px;">Добавить</button>
       </div>
+      <div id="repChips" style="display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 0;"></div>
+      <div id="repHint" style="font-size:0.82rem; color:var(--gray); margin:8px 0 18px;">Можно указать до трёх человек. Если ставили сами — оставьте «Никто, нашли сами».</div>
 
       <button type="submit" class="btn" id="btn">Создать аккаунт</button>
     </form>
@@ -131,7 +136,11 @@
       else { inp.type = 'password'; el.style.opacity = '0.5'; }
     }
 
-    // #120 — список представителей; при ошибке остаётся только «Никто, нашли сами»
+    // #126 — установка и обучение: до трёх человек. Выбрал в списке → «Добавить» →
+    // имя встаёт плашкой с крестиком. Крестики живут только пока форма не отправлена.
+    const REP_MAX = 3;
+    const repChosen = [];
+
     fetch('/api/v1/representatives')
       .then(r => r.ok ? r.json() : { reps: [] })
       .then(d => {
@@ -144,6 +153,47 @@
         }
       })
       .catch(() => {});
+
+    function renderRepChips() {
+      const box = document.getElementById('repChips');
+      box.textContent = '';
+      for (const rep of repChosen) {
+        const chip = document.createElement('span');
+        chip.style.cssText = 'display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:6px 8px 6px 14px; font-size:0.9rem;';
+        const nm = document.createElement('span');
+        nm.textContent = rep.name;
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.textContent = '×';
+        x.setAttribute('aria-label', 'Убрать ' + rep.name);
+        x.style.cssText = 'background:none; border:none; color:inherit; font-size:1.15rem; line-height:1; cursor:pointer; padding:0 6px; opacity:0.7;';
+        x.addEventListener('click', () => {
+          const i = repChosen.findIndex(r => r.id === rep.id);
+          if (i >= 0) repChosen.splice(i, 1);
+          renderRepChips();
+        });
+        chip.appendChild(nm);
+        chip.appendChild(x);
+        box.appendChild(chip);
+      }
+      const full = repChosen.length >= REP_MAX;
+      document.getElementById('repAdd').disabled = full;
+      document.getElementById('repSelect').disabled = full;
+      document.getElementById('repHint').textContent = full
+        ? 'Указаны трое — это максимум.'
+        : 'Можно указать до трёх человек. Если ставили сами — оставьте «Никто, нашли сами».';
+    }
+
+    document.getElementById('repAdd').addEventListener('click', () => {
+      const sel = document.getElementById('repSelect');
+      const id  = sel.value;
+      if (!id) return;
+      if (repChosen.length >= REP_MAX) return;
+      if (repChosen.some(r => r.id === id)) return;
+      repChosen.push({ id, name: sel.options[sel.selectedIndex].textContent });
+      sel.value = '';
+      renderRepChips();
+    });
 
     function showMsg(text, type) {
       msg.textContent = text;
@@ -170,7 +220,7 @@
         const res  = await fetch('/api/v1/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password: pw1, name: document.getElementById('name').value, repId: document.getElementById('repSelect').value }),
+          body: JSON.stringify({ email, password: pw1, name: document.getElementById('name').value, repIds: repChosen.map(r => r.id) }),
         });
         const data = await res.json();
 

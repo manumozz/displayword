@@ -216,9 +216,16 @@
             <div id="repWrap" style="display:none">
               <label for="repSelectCab">Установка и обучение</label>
               <div id="repFrozen" style="display:none; font-size: 0.95rem; padding: 4px 0 0;"></div>
-              <select id="repSelectCab" style="display:none">
-                <option value="">Никто, нашли сами</option>
-              </select>
+              <div id="repPick" style="display:none">
+                <div style="display:flex; gap:8px; align-items:flex-start; flex-wrap:wrap;">
+                  <select id="repSelectCab" style="flex:1; min-width:180px;">
+                    <option value="">Никто, нашли сами</option>
+                  </select>
+                  <button type="button" class="btn-primary" id="repAddCab" style="width:auto; margin-top:0; padding:11px 18px;">Добавить</button>
+                </div>
+                <div id="repChipsCab" style="display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 0;"></div>
+                <div id="repHintCab" style="font-size:0.82rem; color:var(--gray); margin-top:8px;">Можно указать до трёх человек. Выбор делается один раз — потом состав меняет только администратор.</div>
+              </div>
             </div>
 
             <button type="button" class="btn-primary" id="profileSave">Сохранить</button>
@@ -356,20 +363,69 @@
     }
     roleSelect.addEventListener('change', syncRoleCustom);
 
-    // #120 — представитель: если выбран — только показываем; если нет и окно
-    // 30 дней открыто — даём выбрать один раз; иначе показываем «Никто».
+    // #126 — установка и обучение: до трёх человек. Если состав уже задан — только показываем;
+    // если пуст и окно 30 дней открыто — даём выбрать (список + «Добавить» + плашки с крестиком);
+    // иначе показываем «Никто, нашли сами». Крестики живут только до сохранения.
+    const REP_MAX_CAB = 3;
+    const repChosenCab = [];
+
+    function renderRepChipsCab() {
+      const box = document.getElementById('repChipsCab');
+      box.textContent = '';
+      for (const rep of repChosenCab) {
+        const chip = document.createElement('span');
+        chip.style.cssText = 'display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:6px 8px 6px 14px; font-size:0.9rem;';
+        const nm = document.createElement('span');
+        nm.textContent = rep.name;
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.textContent = '×';
+        x.setAttribute('aria-label', 'Убрать ' + rep.name);
+        x.style.cssText = 'background:none; border:none; color:inherit; font-size:1.15rem; line-height:1; cursor:pointer; padding:0 6px; opacity:0.7;';
+        x.addEventListener('click', () => {
+          const i = repChosenCab.findIndex(r => r.id === rep.id);
+          if (i >= 0) repChosenCab.splice(i, 1);
+          renderRepChipsCab();
+        });
+        chip.appendChild(nm);
+        chip.appendChild(x);
+        box.appendChild(chip);
+      }
+      const full = repChosenCab.length >= REP_MAX_CAB;
+      document.getElementById('repAddCab').disabled = full;
+      document.getElementById('repSelectCab').disabled = full;
+      document.getElementById('repHintCab').textContent = full
+        ? 'Указаны трое — это максимум.'
+        : 'Можно указать до трёх человек. Выбор делается один раз — потом состав меняет только администратор.';
+    }
+
+    document.getElementById('repAddCab').addEventListener('click', () => {
+      const sel = document.getElementById('repSelectCab');
+      const id  = sel.value;
+      if (!id) return;
+      if (repChosenCab.length >= REP_MAX_CAB) return;
+      if (repChosenCab.some(r => r.id === id)) return;
+      repChosenCab.push({ id, name: sel.options[sel.selectedIndex].textContent });
+      sel.value = '';
+      renderRepChipsCab();
+    });
+
     function syncRep(profile) {
       const wrap   = document.getElementById('repWrap');
       const frozen = document.getElementById('repFrozen');
-      const sel    = document.getElementById('repSelectCab');
+      const pick   = document.getElementById('repPick');
       wrap.style.display = 'block';
-      if (profile.repName) {
-        frozen.textContent = 'Вас сопровождает: ' + profile.repName;
+      const chosen = Array.isArray(profile.reps) && profile.reps.length
+        ? profile.reps
+        : (profile.repName ? [{ id: profile.repId, name: profile.repName }] : []);
+      if (chosen.length) {
+        frozen.textContent = 'Вам помогали: ' + chosen.map(r => r.name).join(', ');
         frozen.style.display = 'block';
-        sel.style.display = 'none';
+        pick.style.display = 'none';
       } else if (profile.repCanChoose) {
         frozen.style.display = 'none';
-        sel.style.display = 'block';
+        pick.style.display = 'block';
+        const sel = document.getElementById('repSelectCab');
         if (sel.options.length === 1) {
           fetch('/api/v1/representatives')
             .then(r => r.ok ? r.json() : { reps: [] })
@@ -383,10 +439,11 @@
             })
             .catch(() => {});
         }
+        renderRepChipsCab();
       } else {
         frozen.textContent = 'Никто, нашли сами';
         frozen.style.display = 'block';
-        sel.style.display = 'none';
+        pick.style.display = 'none';
       }
     }
 
@@ -505,7 +562,7 @@
         country:   countryCode, // #115 — код из комбобокса
         role:      document.getElementById('profRole').value,
         roleCustom: document.getElementById('profRoleCustom').value,
-        repId:     document.getElementById('repSelectCab').value,
+        repIds:    repChosenCab.map(r => r.id),
       };
 
       try {

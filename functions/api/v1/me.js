@@ -33,18 +33,31 @@ export async function onRequest({ request, env }) {
 }
 
 async function buildMeResponse(db, session) {
+  const profile = await loadProfile(db, session.user_id);
+  // #120 — имя представителя и окно однократного выбора
+  profile.repName = null;
+  if (profile.repId) {
+    const rep = await db.prepare('SELECT name FROM representatives WHERE id = ?')
+      .bind(profile.repId).first();
+    profile.repName = rep?.name ?? null;
+  }
+  const within30 = profile.createdAt
+    ? (Date.now() - new Date(profile.createdAt).getTime()) < 30 * 86400000
+    : false;
+  profile.repCanChoose = !profile.repId && within30;
   return {
     ok: true,
     email: session.email,
     isAdmin: !!session.is_admin,
     emailVerified: !!session.email_verified,
-    profile: await loadProfile(db, session.user_id),
+    profile,
   };
 }
 
 async function loadProfile(db, userId) {
   const row = await db.prepare(`
-    SELECT display_name, community_name, city, country, role, role_custom, profile_updated_at
+    SELECT display_name, community_name, city, country, role, role_custom,
+           rep_id, rep_set_at, created_at, profile_updated_at
     FROM users WHERE id = ?
   `).bind(userId).first();
   return {
@@ -54,6 +67,9 @@ async function loadProfile(db, userId) {
     country:    row?.country            ?? null,
     role:       row?.role               ?? null,
     roleCustom: row?.role_custom        ?? null,
+    repId:      row?.rep_id             ?? null,
+    repSetAt:   row?.rep_set_at         ?? null,
+    createdAt:  row?.created_at         ?? null,
     updatedAt:  row?.profile_updated_at ?? null,
   };
 }
@@ -134,6 +150,37 @@ async function patchProfile(request, env, session) {
   } else if (roleInBody !== undefined && roleInBody !== 'other') {
     // роль сменили с «другое» на обычную, вписку не прислали — гасим осиротевшую
     updates.push('role_custom = NULL');
+  }
+
+  // #120 — представитель: пользователь может выбрать ОДИН раз в течение 30 дней
+  // с регистрации; смена выбранного — только администратором (№121).
+  if ('repId' in body) {
+    const raw = body.repId;
+    if (typeof raw !== 'string' || raw.trim() === '') {
+      // пустое значение молча игнорируем: «снять» представителя нельзя
+    } else {
+      const row = await env.DB.prepare(
+        'SELECT rep_id, created_at FROM users WHERE id = ?',
+      ).bind(session.user_id).first();
+      const within30 = row?.created_at
+        ? (Date.now() - new Date(row.created_at).getTime()) < 30 * 86400000
+        : false;
+      if (row?.rep_id || !within30) {
+        return json({ error: 'rep_locked', message: 'Изменить может только администратор — напишите нам' }, 403);
+      }
+      const rep = await env.DB.prepare(
+        'SELECT id FROM representatives WHERE id = ? AND active = 1',
+      ).bind(raw.trim()).first();
+      if (!rep) {
+        return json({ error: 'invalid_rep', message: 'Неизвестный представитель' }, 400);
+      }
+      const ts = new Date().toISOString();
+      updates.push('rep_id = ?');    binds.push(rep.id);
+      updates.push('rep_set_at = ?'); binds.push(ts);
+      await env.DB.prepare(
+        'INSERT INTO rep_change_log (id, ts, admin_email, user_id, old_rep_id, new_rep_id, source) VALUES (?, ?, NULL, ?, NULL, ?, ?)',
+      ).bind(crypto.randomUUID(), ts, session.user_id, rep.id, 'cabinet').run();
+    }
   }
 
   if (errors.length > 0) {

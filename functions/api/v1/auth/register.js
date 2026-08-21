@@ -11,7 +11,7 @@ export async function onRequest({ request, env }) {
   let body;
   try { body = await request.json(); } catch { return json({ error: 'invalid_json' }, 400); }
 
-  const { email, password, name } = body ?? {};
+  const { email, password, name, repId } = body ?? {};
 
   if (!email || !password) return json({ error: 'missing_fields' }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -24,6 +24,16 @@ export async function onRequest({ request, env }) {
   const displayName = typeof name === 'string' ? name.trim() : '';
   if (!displayName)            return json({ error: 'missing_name', message: 'Укажите имя' }, 400);
   if (displayName.length > 80) return json({ error: 'name_too_long', message: 'Имя — до 80 символов' }, 400);
+
+  // #120 — представитель: необязателен; пустая строка = «Никто, нашли сами»
+  let repIdValue = null;
+  if (typeof repId === 'string' && repId.trim() !== '') {
+    const rep = await env.DB.prepare(
+      'SELECT id FROM representatives WHERE id = ? AND active = 1',
+    ).bind(repId.trim()).first();
+    if (!rep) return json({ error: 'invalid_rep', message: 'Неизвестный представитель' }, 400);
+    repIdValue = rep.id;
+  }
 
   const normalEmail = email.toLowerCase().trim();
 
@@ -40,8 +50,14 @@ export async function onRequest({ request, env }) {
   const now  = new Date().toISOString();
 
   await env.DB.prepare(
-    'INSERT INTO users (id, email, password_hash, display_name, created_at) VALUES (?, ?, ?, ?, ?)',
-  ).bind(id, normalEmail, hash, displayName, now).run();
+    'INSERT INTO users (id, email, password_hash, display_name, rep_id, rep_set_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+  ).bind(id, normalEmail, hash, displayName, repIdValue, repIdValue ? now : null, now).run();
+
+  if (repIdValue) {
+    await env.DB.prepare(
+      'INSERT INTO rep_change_log (id, ts, admin_email, user_id, old_rep_id, new_rep_id, source) VALUES (?, ?, NULL, ?, NULL, ?, ?)',
+    ).bind(crypto.randomUUID(), now, id, repIdValue, 'registration').run();
+  }
 
   // Email verification token
   const token   = randomToken(32);

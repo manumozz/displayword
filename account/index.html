@@ -213,6 +213,14 @@
               <input type="text" id="profRoleCustom" maxlength="60" autocomplete="off" placeholder="Напишите свою роль" />
             </div>
 
+            <div id="repWrap" style="display:none">
+              <label for="repSelectCab">Кто помогал вам с установкой</label>
+              <div id="repFrozen" style="display:none; font-size: 0.95rem; padding: 4px 0 0;"></div>
+              <select id="repSelectCab" style="display:none">
+                <option value="">Никто, нашли сами</option>
+              </select>
+            </div>
+
             <button type="button" class="btn-primary" id="profileSave">Сохранить</button>
           </div>
         </div>
@@ -337,6 +345,7 @@
       document.getElementById('profRoleCustom').value = profile.roleCustom || '';
       syncRoleCustom();
       populateCountries(profile); // #115 — комбобокс страны
+      syncRep(profile); // #120 — представитель
     }
 
     // #117 — вписка роли при «Другое»
@@ -346,6 +355,40 @@
       roleCustomWrap.style.display = roleSelect.value === 'other' ? 'block' : 'none';
     }
     roleSelect.addEventListener('change', syncRoleCustom);
+
+    // #120 — представитель: если выбран — только показываем; если нет и окно
+    // 30 дней открыто — даём выбрать один раз; иначе показываем «Никто».
+    function syncRep(profile) {
+      const wrap   = document.getElementById('repWrap');
+      const frozen = document.getElementById('repFrozen');
+      const sel    = document.getElementById('repSelectCab');
+      wrap.style.display = 'block';
+      if (profile.repName) {
+        frozen.textContent = 'Вас сопровождает: ' + profile.repName;
+        frozen.style.display = 'block';
+        sel.style.display = 'none';
+      } else if (profile.repCanChoose) {
+        frozen.style.display = 'none';
+        sel.style.display = 'block';
+        if (sel.options.length === 1) {
+          fetch('/api/v1/representatives')
+            .then(r => r.ok ? r.json() : { reps: [] })
+            .then(d => {
+              for (const rep of (d.reps || [])) {
+                const o = document.createElement('option');
+                o.value = rep.id;
+                o.textContent = rep.name;
+                sel.appendChild(o);
+              }
+            })
+            .catch(() => {});
+        }
+      } else {
+        frozen.textContent = 'Никто, нашли сами';
+        frozen.style.display = 'block';
+        sel.style.display = 'none';
+      }
+    }
 
     // #115 — страна: комбобокс с фильтрацией по вводу вместо select на 249 строк.
     // Выбранное значение хранится кодом ISO в countryCode; в поле — русское название.
@@ -462,6 +505,7 @@
         country:   countryCode, // #115 — код из комбобокса
         role:      document.getElementById('profRole').value,
         roleCustom: document.getElementById('profRoleCustom').value,
+        repId:     document.getElementById('repSelectCab').value,
       };
 
       try {

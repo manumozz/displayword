@@ -6,6 +6,12 @@
 -- #117 (21.08.2026): вписка роли при «Другое»
 -- ALTER TABLE users ADD COLUMN role_custom TEXT;  -- применено 21.08.2026
 
+-- #120 (21.08.2026): представитель («Кто помогал вам с установкой»)
+-- CREATE TABLE representatives (id TEXT PRIMARY KEY, name TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL);  -- применено 21.08.2026
+-- ALTER TABLE users ADD COLUMN rep_id TEXT;  -- применено 21.08.2026
+-- ALTER TABLE users ADD COLUMN rep_set_at TEXT;  -- применено 21.08.2026
+-- CREATE TABLE rep_change_log (id TEXT PRIMARY KEY, ts TEXT NOT NULL, admin_email TEXT, user_id TEXT NOT NULL, old_rep_id TEXT, new_rep_id TEXT, source TEXT NOT NULL);  -- применено 21.08.2026
+
 CREATE TABLE IF NOT EXISTS key_access_log (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   key_id        TEXT NOT NULL,

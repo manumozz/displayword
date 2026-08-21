@@ -25,15 +25,28 @@ export async function onRequest({ request, env }) {
   if (!displayName)            return json({ error: 'missing_name', message: 'Укажите имя' }, 400);
   if (displayName.length > 80) return json({ error: 'name_too_long', message: 'Имя — до 80 символов' }, 400);
 
-  // #120 — представитель: необязателен; пустая строка = «Никто, нашли сами»
-  let repIdValue = null;
-  if (typeof repId === 'string' && repId.trim() !== '') {
+  // #124 — установка и обучение: до трёх человек; пустой список = «Никто, нашли сами».
+  // Принимаем и новый repIds (массив), и старый repId (строка) — интерфейс переедет в №126.
+  const MAX_REPS = 3;
+  const rawReps = Array.isArray(body?.repIds)
+    ? body.repIds
+    : (typeof repId === 'string' && repId.trim() !== '' ? [repId] : []);
+  const repIds = [];
+  for (const r of rawReps) {
+    if (typeof r !== 'string') continue;
+    const v = r.trim();
+    if (v !== '' && !repIds.includes(v)) repIds.push(v);
+  }
+  if (repIds.length > MAX_REPS) {
+    return json({ error: 'too_many_reps', message: 'Не больше трёх' }, 400);
+  }
+  for (const v of repIds) {
     const rep = await env.DB.prepare(
       'SELECT id FROM representatives WHERE id = ? AND active = 1',
-    ).bind(repId.trim()).first();
+    ).bind(v).first();
     if (!rep) return json({ error: 'invalid_rep', message: 'Этого имени нет в списке' }, 400);
-    repIdValue = rep.id;
   }
+  const repIdValue = repIds[0] ?? null;
 
   const normalEmail = email.toLowerCase().trim();
 
@@ -53,10 +66,13 @@ export async function onRequest({ request, env }) {
     'INSERT INTO users (id, email, password_hash, display_name, rep_id, rep_set_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
   ).bind(id, normalEmail, hash, displayName, repIdValue, repIdValue ? now : null, now).run();
 
-  if (repIdValue) {
+  for (const v of repIds) {
+    await env.DB.prepare(
+      'INSERT OR IGNORE INTO user_reps (user_id, rep_id) VALUES (?, ?)',
+    ).bind(id, v).run();
     await env.DB.prepare(
       'INSERT INTO rep_change_log (id, ts, admin_email, user_id, old_rep_id, new_rep_id, source) VALUES (?, ?, NULL, ?, NULL, ?, ?)',
-    ).bind(crypto.randomUUID(), now, id, repIdValue, 'registration').run();
+    ).bind(crypto.randomUUID(), now, id, v, 'registration').run();
   }
 
   // Email verification token

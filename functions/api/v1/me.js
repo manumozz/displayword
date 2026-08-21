@@ -34,17 +34,22 @@ export async function onRequest({ request, env }) {
 
 async function buildMeResponse(db, session) {
   const profile = await loadProfile(db, session.user_id);
-  // #120 — имя представителя и окно однократного выбора
-  profile.repName = null;
-  if (profile.repId) {
-    const rep = await db.prepare('SELECT name FROM representatives WHERE id = ?')
-      .bind(profile.repId).first();
-    profile.repName = rep?.name ?? null;
-  }
+  // #124 — установка и обучение: до трёх человек. reps — полный список,
+  // repId/repName оставлены для совместимости со старым интерфейсом (первый по алфавиту).
+  const { results: repRows } = await db.prepare(`
+    SELECT r.id, r.name
+    FROM user_reps ur
+    JOIN representatives r ON r.id = ur.rep_id
+    WHERE ur.user_id = ?
+    ORDER BY r.name
+  `).bind(session.user_id).all();
+  profile.reps    = repRows ?? [];
+  profile.repId   = profile.reps[0]?.id   ?? null;
+  profile.repName = profile.reps[0]?.name ?? null;
   const within30 = profile.createdAt
     ? (Date.now() - new Date(profile.createdAt).getTime()) < 30 * 86400000
     : false;
-  profile.repCanChoose = !profile.repId && within30;
+  profile.repCanChoose = profile.reps.length === 0 && within30;
   return {
     ok: true,
     email: session.email,
@@ -152,34 +157,55 @@ async function patchProfile(request, env, session) {
     updates.push('role_custom = NULL');
   }
 
-  // #120 — представитель: пользователь может выбрать ОДИН раз в течение 30 дней
-  // с регистрации; смена выбранного — только администратором (№121).
-  if ('repId' in body) {
-    const raw = body.repId;
-    if (typeof raw !== 'string' || raw.trim() === '') {
-      // пустое значение молча игнорируем: «снять» представителя нельзя
+  // #124 — установка и обучение: выбор ОДИН раз в течение 30 дней с регистрации,
+  // до трёх человек; смена состава дальше — только администратором.
+  if ('repIds' in body || 'repId' in body) {
+    const MAX_REPS = 3;
+    const rawReps = Array.isArray(body.repIds)
+      ? body.repIds
+      : (typeof body.repId === 'string' && body.repId.trim() !== '' ? [body.repId] : []);
+    const wanted = [];
+    for (const r of rawReps) {
+      if (typeof r !== 'string') continue;
+      const v = r.trim();
+      if (v !== '' && !wanted.includes(v)) wanted.push(v);
+    }
+    if (wanted.length === 0) {
+      // пустой список молча игнорируем: «снять» выбор пользователь не может
+    } else if (wanted.length > MAX_REPS) {
+      return json({ error: 'too_many_reps', message: 'Не больше трёх' }, 400);
     } else {
       const row = await env.DB.prepare(
-        'SELECT rep_id, created_at FROM users WHERE id = ?',
+        'SELECT created_at FROM users WHERE id = ?',
+      ).bind(session.user_id).first();
+      const have = await env.DB.prepare(
+        'SELECT COUNT(*) AS n FROM user_reps WHERE user_id = ?',
       ).bind(session.user_id).first();
       const within30 = row?.created_at
         ? (Date.now() - new Date(row.created_at).getTime()) < 30 * 86400000
         : false;
-      if (row?.rep_id || !within30) {
+      if ((have?.n ?? 0) > 0 || !within30) {
         return json({ error: 'rep_locked', message: 'Изменить может только администратор — напишите нам' }, 403);
       }
-      const rep = await env.DB.prepare(
-        'SELECT id FROM representatives WHERE id = ? AND active = 1',
-      ).bind(raw.trim()).first();
-      if (!rep) {
-        return json({ error: 'invalid_rep', message: 'Этого имени нет в списке' }, 400);
+      for (const v of wanted) {
+        const rep = await env.DB.prepare(
+          'SELECT id FROM representatives WHERE id = ? AND active = 1',
+        ).bind(v).first();
+        if (!rep) {
+          return json({ error: 'invalid_rep', message: 'Этого имени нет в списке' }, 400);
+        }
       }
       const ts = new Date().toISOString();
-      updates.push('rep_id = ?');    binds.push(rep.id);
+      for (const v of wanted) {
+        await env.DB.prepare(
+          'INSERT OR IGNORE INTO user_reps (user_id, rep_id) VALUES (?, ?)',
+        ).bind(session.user_id, v).run();
+        await env.DB.prepare(
+          'INSERT INTO rep_change_log (id, ts, admin_email, user_id, old_rep_id, new_rep_id, source) VALUES (?, ?, NULL, ?, NULL, ?, ?)',
+        ).bind(crypto.randomUUID(), ts, session.user_id, v, 'cabinet').run();
+      }
+      updates.push('rep_id = ?');     binds.push(wanted[0]);
       updates.push('rep_set_at = ?'); binds.push(ts);
-      await env.DB.prepare(
-        'INSERT INTO rep_change_log (id, ts, admin_email, user_id, old_rep_id, new_rep_id, source) VALUES (?, ?, NULL, ?, NULL, ?, ?)',
-      ).bind(crypto.randomUUID(), ts, session.user_id, rep.id, 'cabinet').run();
     }
   }
 

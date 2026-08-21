@@ -19,10 +19,16 @@ export async function onRequest({ request, env, params }) {
 
   if (request.method === 'GET') {
     const { results } = await env.DB.prepare(`
-      SELECT email, display_name, community_name, city, country, rep_set_at
-      FROM users WHERE rep_id = ?
-      ORDER BY rep_set_at
-    `).bind(repId).all();
+      SELECT u.email, u.display_name, u.community_name, u.city, u.country, u.rep_set_at,
+             (SELECT GROUP_CONCAT(r2.name, ', ')
+                FROM user_reps ur2
+                JOIN representatives r2 ON r2.id = ur2.rep_id
+               WHERE ur2.user_id = u.id AND ur2.rep_id <> ?) AS partners
+      FROM user_reps ur
+      JOIN users u ON u.id = ur.user_id
+      WHERE ur.rep_id = ?
+      ORDER BY u.rep_set_at
+    `).bind(repId, repId).all();
     return json({ ok: true, rep, communities: results ?? [] });
   }
 

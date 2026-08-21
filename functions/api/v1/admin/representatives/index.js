@@ -14,7 +14,7 @@ export async function onRequest({ request, env }) {
   if (request.method === 'GET') {
     const { results } = await env.DB.prepare(`
       SELECT r.id, r.name, r.active, r.created_at,
-             (SELECT COUNT(*) FROM users u WHERE u.rep_id = r.id) AS communities
+             (SELECT COUNT(*) FROM user_reps ur WHERE ur.rep_id = r.id) AS communities
       FROM representatives r
       ORDER BY r.active DESC, r.name
     `).all();

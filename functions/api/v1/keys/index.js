@@ -1,5 +1,6 @@
 /**
- * GET /api/v1/keys — list license keys linked to the current user's applications
+ * GET /api/v1/keys — license keys of the current user: by owner (license_keys.user_id)
+ * or, when the owner is not set, by recipient_email matching the verified account email.
  *
  * Returns keys where the user has an approved application with matching community_name,
  * plus activation counts from the activations table.
@@ -15,9 +16,15 @@ export async function onRequest(ctx) {
   const session = await getSession(ctx.env.DB, ctx.request);
   if (!session) return json({ error: 'unauthorized' }, 401);
 
-  // Keys are linked via user_id stored on the key at issuance time (phase 5).
-  // For now, join through approved applications: application.community_name = key.community_name
-  // and application.user_id = session.user_id.
+  // #135 — ключи ищутся двумя способами: по владельцу (license_keys.user_id) и, если владелец
+  // не проставлен, по совпадению почты получателя с почтой аккаунта. Таблица заявок больше
+  // не используется (отменена в №101), join через неё раньше давал пустой список всем.
+  // Совпадение по почте работает только для подтверждённой почты: иначе чужой ключ увидел бы
+  // всякий, кто завёл аккаунт на чужой адрес и не открывал письмо.
+  const emailForMatch = session.email_verified
+    ? String(session.email || '').trim().toLowerCase()
+    : null;
+
   const rows = await ctx.env.DB.prepare(
     `SELECT
        lk.key_id,
@@ -31,16 +38,20 @@ export async function onRequest(ctx) {
        lk.owner_title,
        COUNT(ac.id) AS activations
      FROM license_keys lk
-     INNER JOIN applications ap
-       ON ap.community_name = lk.community_name
-      AND ap.user_id = ?
-      AND ap.status = 'approved'
      LEFT JOIN activations ac
        ON ac.key_id = lk.key_id
      WHERE lk.status != 'deleted'
+       AND (
+             lk.user_id = ?
+             OR (
+                  lk.user_id IS NULL
+                  AND ? IS NOT NULL
+                  AND lower(lk.recipient_email) = ?
+                )
+           )
      GROUP BY lk.key_id
      ORDER BY lk.issued_at DESC`
-  ).bind(session.user_id).all();
+  ).bind(session.user_id, emailForMatch, emailForMatch).all();
 
   return json(rows.results ?? [], 200, cors());
 }
